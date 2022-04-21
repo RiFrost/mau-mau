@@ -1,1 +1,1 @@
-# mau-mau
+# M(i)AU - M(i)AU

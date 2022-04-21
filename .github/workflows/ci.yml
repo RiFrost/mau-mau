@@ -17,8 +17,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Change wrapper permissions
-          working-directory: ./
-          run: chmod +x ./mvnw
+        run: chmod +x ./mvnw
       - name: Run Tests
         run: ./mvnw test
       - name: Build with Maven

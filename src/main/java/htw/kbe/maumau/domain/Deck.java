@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Deck {
 
-    private Long totalAmount;
     private List<Card> cards;
+    private Long totalAmount;
 
 }

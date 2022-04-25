@@ -6,6 +6,8 @@ public class Game {
 
     private List<Player> players;
     private Deck cardDeck;
+    private String showRules;
+    private boolean reset;
 
 
 }

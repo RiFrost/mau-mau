@@ -5,6 +5,6 @@ import java.util.List;
 public class Deck {
 
     private List<Card> cards;
-    private Long totalAmount;
+    private long totalAmount;
 
 }

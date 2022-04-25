@@ -5,6 +5,6 @@ import java.util.List;
 public class DiscardPile {
 
     private List<Card> cards;
-    private Boolean shuffle;
+    private boolean shuffle;
 
 }

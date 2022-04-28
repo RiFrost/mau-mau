@@ -9,7 +9,7 @@ public interface MauMau {
      * @param amount amount of cards that will get drawn
      * @return list of cards that will be drawn
      */
-    List<Card> drawCards(int amount);
+    List<Card> initialCardDealing(int amount);
 
     /**
      * shuffles the deck
@@ -48,27 +48,33 @@ public interface MauMau {
 
     /**
      * active player wishes a suit when the card was a jack
+     * @return Suit
      */
-    void wish();
+    Suit wish();
 
     /**
      * next player is suspended for this round
+     * @return suspended Player
      */
-    void mustSuspend();
+    Player suspend();
 
     /**
      * when card is a SEVEN next player must draw 2 cards or play another SEVEN
+     * @return Cards
      */
-    void mustDraw();
+    Card draw();
 
     /**
-     * player must "say" mau when he has one card left otherwise must draw one card
+     * method checks if player "said" mau when he has one card left in his hand
+     * @param mauState either true or false
      */
-    void saidMau();
+    void saidMau(boolean mauState);
 
     /**
      * makes next player in line the active player
+     * @param activePlayer Player who took his turn
+     * @return Player who his next in line
      */
-    void nextplayer();
+    Player nextplayer(Player activePlayer);
 
 }

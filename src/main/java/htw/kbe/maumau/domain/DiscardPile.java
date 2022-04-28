@@ -5,5 +5,6 @@ import java.util.List;
 public class DiscardPile {
 
     private List<Card> cards;
+    private Card lastCard;
     
 }

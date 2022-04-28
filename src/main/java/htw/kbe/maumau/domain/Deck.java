@@ -43,6 +43,7 @@ public class Deck implements IDeck {
             try {
                 returnList.add(cards.remove(0));
             } catch(Exception e) {
+                // TODO get cards from DiscardPile, put them back into the Deck, shuffle and draw the remaining cards
                 System.out.println("error deck is empty");
             }
 

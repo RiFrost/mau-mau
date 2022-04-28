@@ -1,6 +1,6 @@
 package htw.kbe.maumau.domain;
 
-public class Card implements ICard {
+public class Card {
 
     private Suit suit;
     private Value value;

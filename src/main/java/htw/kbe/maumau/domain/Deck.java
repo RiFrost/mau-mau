@@ -3,13 +3,14 @@ package htw.kbe.maumau.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Deck implements IDeck {
+public class Deck {
 
-    private List<Card> cards;
+    private List<Card> deckCards;
     private long totalAmount;
+    private List<Card> discardPile;
 
     private Deck(List<Card> cards) {
-        this.cards = cards;
+        this.deckCards = cards;
         this.totalAmount = cards.stream().count();
     }
 
@@ -25,43 +26,29 @@ public class Deck implements IDeck {
         return new Deck(cards);
     }
 
-    @Override
     public void shuffle() {
-        for(int i = 0; i < this.cards.size(); i++) {
-            int randomIndex = (int) (Math.random() * this.cards.size());
-            Card newCard = this.cards.get(randomIndex);
-            this.cards.set(randomIndex, this.cards.get(i));
-            this.cards.set(i, newCard);
+        for(int i = 0; i < this.deckCards.size(); i++) {
+            int randomIndex = (int) (Math.random() * this.deckCards.size());
+            Card newCard = this.deckCards.get(randomIndex);
+            this.deckCards.set(randomIndex, this.deckCards.get(i));
+            this.deckCards.set(i, newCard);
         }
     }
 
-    @Override
-    public List<Card> drawCards(int amount) {
-        List<Card> returnList = new ArrayList<Card>();
-
-        while(amount > 0) {
-            try {
-                returnList.add(cards.remove(0));
-            } catch(Exception e) {
-                // TODO get cards from DiscardPile, put them back into the Deck, shuffle and draw the remaining cards
-                System.out.println("error deck is empty");
-            }
-
-            amount--;
-        }
-
-        return returnList;
+    public Card draw() {
+        if(this.deckCards.size() > 0) return this.deckCards.remove(0);
+        return null;
     }
 
     public Card getCard(int index) {
-        return cards.get(index);
+        return this.deckCards.get(index);
     }
 
     public List<Card> getCards() {
-        return this.cards;
+        return this.deckCards;
     }
 
     public long getTotalAmount() {
-        return this.cards.stream().count();
+        return this.deckCards.stream().count();
     }
 }

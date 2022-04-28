@@ -53,6 +53,10 @@ public class Deck implements IDeck {
         return returnList;
     }
 
+    public Card getCard(int index) {
+        return cards.get(index);
+    }
+
     public List<Card> getCards() {
         return this.cards;
     }

@@ -5,7 +5,7 @@ import java.util.List;
 public interface MauMau {
 
     /**
-     * Draws the given amount of cards
+     * draws the given amount of cards at the beginning of a game
      * @param amount amount of cards that will get drawn
      * @return list of cards that will be drawn
      */
@@ -17,64 +17,82 @@ public interface MauMau {
     void shuffle();
 
     /**
-     * saves the last played card when deck is empty
-     * @return the card that was on top of the discardpile
+     * saves the last played card that was on top of the discard pile when deck is empty
      */
-    Card saveLastCard();
+    void bookmarkTopCard();
 
     /**
-     * starts a new game of mau mau
+     * initialise a new deck
+     * @return Deck for a new game
      */
-    void startGame();
+    Deck startGame();
 
     /**
-     * ends a game
+     * calls the winner of the game when a player has no more cards and said correctly 'mau mau'
+     * @return Player who won the game
      */
-    void endGame();
+    Player callWinner();
 
     /**
-     * checks if the card from hand can be played
-     * @param card card from hand
-     * @param discardedCard card from top of the discardpile
-     * @return boolean
+     * player selects a card to discard
+     * @return Card that the player wants to discard
+     */
+    Card playCard();
+
+    /**
+     * checks if the card is allowed to be discarded by the player
+     * @param card from player's hand
+     * @param discardedCard card from top of the discard pile
+     * @return boolean either true if the card is valid or false if not
      */
     boolean canBePlayed(Card card, Card discardedCard);
 
     /**
-     *
-     * method checks if special rules need to be applied
+     * checks whether a rule must be applied and calls the corresponding rule
+     * @param card that is played
      */
-    void applyRules(Card card);
+    void applyRule(Card card);
 
     /**
      * active player wishes a suit when the card was a jack
-     * @return Suit
+     * @return Suit that the player wishes
      */
     Suit wish();
 
     /**
      * next player is suspended for this round
-     * @return suspended Player
+     * @return Player who must suspend
      */
     Player suspend();
 
     /**
-     * when card is a SEVEN next player must draw 2 cards or play another SEVEN
-     * @return Cards
+     * when the top card on the discard pile is a SEVEN, the player must draw at least two cards
+     * @param cards List of cards that has to be drawn
      */
-    Card draw();
+    void drawCards(List<Card> cards);
 
     /**
-     * method checks if player "said" mau when he has one card left in his hand
-     * @param mauState either true or false
+     * player draws one card
+     * @param card that has to be drawn
      */
-    void saidMau(boolean mauState);
+    void drawCard(Card card);
+
+    /**
+     * player can say 'mau mau'
+     */
+    void sayMauMau();
+
+    /**
+     * checks if player said 'mau mau' when player has one card left in his hand
+     * @param mauState either true if the 'mau mau' from the player is valid or false if not
+     */
+    void saidMauMau(boolean mauState);
 
     /**
      * makes next player in line the active player
      * @param activePlayer Player who took his turn
-     * @return Player who his next in line
+     * @return Player who is next in line
      */
-    Player nextplayer(Player activePlayer);
+    Player getNextPlayer(Player activePlayer);
 
 }

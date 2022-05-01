@@ -6,6 +6,6 @@ public class Game {
 
     private List<Player> players;
     private Deck cardDeck;
-    private String rules;
+    private boolean isCanceled;
 
 }

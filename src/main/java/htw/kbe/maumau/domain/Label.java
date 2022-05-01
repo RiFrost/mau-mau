@@ -1,6 +1,6 @@
 package htw.kbe.maumau.domain;
 
-public enum Value {
+public enum Label {
     ASS,
     KING,
     QUEEN,

@@ -7,7 +7,6 @@ public class Player {
     private long id;
     private String name;
     private List<Card> handCards;
-    private long startNumOfCards;
     private boolean isActive;
     private boolean mustDraw;
     private long numOfDrawCards;

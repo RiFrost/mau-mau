@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-05-01T16:04:14.205Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36" etag="AiiSJhYuTWLLBvEA1kKa" version="17.5.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-05-01T18:38:05.601Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36" etag="rV-cVJEvkxWcRUP0KVwb" version="17.5.0" type="github">
   <diagram id="bj6Q8kGTr0pkgQq6tZRm" name="Seite-1">
-    <mxGraphModel dx="1221" dy="756" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1153" dy="714" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -75,9 +75,9 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="S1vb69_Zerg-ERHGtHPL-17" value="32" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="77sjMMR5Yvf_XChXpcGN-48" vertex="1" connectable="0">
+        <mxCell id="S1vb69_Zerg-ERHGtHPL-17" value="1 .. 32" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="77sjMMR5Yvf_XChXpcGN-48" vertex="1" connectable="0">
           <mxGeometry x="0.7524" y="-1" relative="1" as="geometry">
-            <mxPoint x="3" y="-15" as="offset" />
+            <mxPoint x="16" y="-15" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="LWqvd5Fts955x7SQUY-z-18" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;" parent="1" source="77sjMMR5Yvf_XChXpcGN-44" target="77sjMMR5Yvf_XChXpcGN-31" edge="1">
@@ -90,7 +90,7 @@
         </mxCell>
         <mxCell id="S1vb69_Zerg-ERHGtHPL-5" value="2..4" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="LWqvd5Fts955x7SQUY-z-18" vertex="1" connectable="0">
           <mxGeometry x="0.682" y="3" relative="1" as="geometry">
-            <mxPoint x="28" y="-1" as="offset" />
+            <mxPoint x="17" y="-1" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="S1vb69_Zerg-ERHGtHPL-6" value="1" style="endArrow=open;html=1;endSize=12;startArrow=diamondThin;startSize=14;startFill=1;edgeStyle=orthogonalEdgeStyle;align=left;verticalAlign=bottom;rounded=0;" parent="1" source="77sjMMR5Yvf_XChXpcGN-44" target="77sjMMR5Yvf_XChXpcGN-37" edge="1">
@@ -136,11 +136,11 @@
         <mxCell id="DhQfvevI-bPjPN9J5ntj-7" value="UML Class diagram - Mau-Mau Card game" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=18;" vertex="1" parent="1">
           <mxGeometry x="170" y="80" width="390" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="DhQfvevI-bPjPN9J5ntj-8" value="0 .. 28" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="240" y="470" width="50" height="20" as="geometry" />
+        <mxCell id="DhQfvevI-bPjPN9J5ntj-8" value="0 .. n" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="240" y="469" width="40" height="20" as="geometry" />
         </mxCell>
         <mxCell id="DhQfvevI-bPjPN9J5ntj-10" value="0 .. 1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="565" y="630" width="40" height="20" as="geometry" />
+          <mxGeometry x="570" y="630" width="40" height="20" as="geometry" />
         </mxCell>
         <mxCell id="DhQfvevI-bPjPN9J5ntj-12" value="Discard pile" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="330" y="429" width="80" height="20" as="geometry" />
@@ -184,8 +184,8 @@
         <mxCell id="DhQfvevI-bPjPN9J5ntj-24" value="4" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="280" y="367" width="20" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="DhQfvevI-bPjPN9J5ntj-25" value="1 .. 31" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="300" y="445" width="50" height="20" as="geometry" />
+        <mxCell id="DhQfvevI-bPjPN9J5ntj-25" value="1 .. n" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="300" y="445" width="40" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

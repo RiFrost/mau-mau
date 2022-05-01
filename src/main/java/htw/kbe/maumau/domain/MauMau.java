@@ -34,6 +34,11 @@ public interface MauMau {
     Player callWinner();
 
     /**
+     * when game is canceled by a player then the game status is reset
+     */
+    void cancelGame();
+
+    /**
      * player selects a card to discard
      * @return Card that the player wants to discard
      */

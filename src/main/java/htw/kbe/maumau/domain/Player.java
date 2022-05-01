@@ -11,6 +11,7 @@ public class Player {
     private boolean mustDraw;
     private long numOfDrawCards;
     private boolean mustSuspend;
+    private boolean hasGivenUp;
     private Suit suitWish;
     private boolean hasSaidMauMau;
 

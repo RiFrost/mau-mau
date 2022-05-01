@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-05-01T14:58:55.033Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36" etag="Hoku4s9NzaN5OR00d8k2" version="17.5.0" type="github">
+<mxfile host="app.diagrams.net" modified="2022-05-01T15:22:01.933Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36" etag="xGbHE-v6_8lCX2O8lXh-" version="17.5.0" type="github">
   <diagram id="bj6Q8kGTr0pkgQq6tZRm" name="Seite-1">
-    <mxGraphModel dx="1038" dy="643" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="944" dy="585" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -50,7 +50,7 @@
           <mxGeometry y="26" width="140" height="26" as="geometry" />
         </mxCell>
         <mxCell id="77sjMMR5Yvf_XChXpcGN-42" value="DiscardPile" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=26;fillColor=none;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-          <mxGeometry x="360" y="533" width="140" height="52" as="geometry" />
+          <mxGeometry x="360" y="540" width="140" height="52" as="geometry" />
         </mxCell>
         <mxCell id="77sjMMR5Yvf_XChXpcGN-43" value="+ cards: List" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="77sjMMR5Yvf_XChXpcGN-42" vertex="1">
           <mxGeometry y="26" width="140" height="26" as="geometry" />
@@ -139,7 +139,7 @@
           </mxGeometry>
         </mxCell>
         <object label="" dvdv="" id="DhQfvevI-bPjPN9J5ntj-6">
-          <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;endArrow=open;endFill=0;" edge="1" parent="1" source="S1vb69_Zerg-ERHGtHPL-10" target="77sjMMR5Yvf_XChXpcGN-28">
+          <mxCell style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;startArrow=none;startFill=0;endArrow=open;endFill=0;endSize=12;" edge="1" parent="1" source="S1vb69_Zerg-ERHGtHPL-10" target="77sjMMR5Yvf_XChXpcGN-28">
             <mxGeometry relative="1" as="geometry" />
           </mxCell>
         </object>
@@ -149,7 +149,7 @@
         <mxCell id="DhQfvevI-bPjPN9J5ntj-8" value="0 .. 28" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="240" y="470" width="50" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="DhQfvevI-bPjPN9J5ntj-10" value="Text" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
+        <mxCell id="DhQfvevI-bPjPN9J5ntj-10" value="0 .. 1" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="490" y="630" width="40" height="20" as="geometry" />
         </mxCell>
       </root>

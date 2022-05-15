@@ -25,4 +25,9 @@ public class Card {
     public void setLabel(Label label) {
         this.label = label;
     }
+
+    @Override
+    public String toString() {
+        return suit + " " + label;
+    }
 }

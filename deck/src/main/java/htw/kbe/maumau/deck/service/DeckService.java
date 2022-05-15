@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DeckService {
 
-    List<Card> shuffle(Deck deck);
+    List<Card> shuffleDiscardPile(Deck deck);
 
     Deck createDeck(List<Card> cards);
 

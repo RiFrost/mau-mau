@@ -1,7 +1,7 @@
-package htw.kbe.maumau.game.deck.service;
+package htw.kbe.maumau.deck.service;
 
 import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.game.deck.domain.Deck;
+import htw.kbe.maumau.deck.domain.Deck;
 
 import java.util.List;
 

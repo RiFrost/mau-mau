@@ -1,4 +1,4 @@
-package htw.kbe.maumau.game.deck.domain;
+package htw.kbe.maumau.deck.domain;
 
 import htw.kbe.maumau.card.domain.Card;
 

@@ -1,4 +1,4 @@
-package htw.kbe.maumau.game.rule.domain;
+package htw.kbe.maumau.rule.domain;
 
 public class Rule {
 

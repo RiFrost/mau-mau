@@ -1,7 +1,8 @@
 package htw.kbe.maumau.game.domain;
 
-import htw.kbe.maumau.game.player.domain.Player;
-import htw.kbe.maumau.game.deck.domain.Deck;
+
+import htw.kbe.maumau.deck.domain.Deck;
+import htw.kbe.maumau.player.domain.Player;
 
 import java.util.List;
 

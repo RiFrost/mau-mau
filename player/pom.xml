@@ -7,15 +7,22 @@
         <groupId>htw.kbe</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>player</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>htw.kbe</groupId>
             <artifactId>card</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

@@ -1,8 +1,8 @@
-package htw.kbe.maumau.game.rule.service;
+package htw.kbe.maumau.rule.service;
 
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.game.rule.domain.Rule;
+import htw.kbe.maumau.rule.domain.Rule;
 import htw.kbe.maumau.player.domain.Player;
 
 public class RulesServiceImpl implements RulesService {

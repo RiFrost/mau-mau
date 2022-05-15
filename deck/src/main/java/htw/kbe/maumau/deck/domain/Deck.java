@@ -8,9 +8,10 @@ public class Deck {
 
     private List<Card> drawPile;
     private List<Card> discardPile;
-    private long totalAmount = 32;
+    private long limitOfCardStack = 32;
 
     public Deck(List<Card> drawPile) {
+
         this.drawPile = drawPile;
     }
 
@@ -30,11 +31,12 @@ public class Deck {
         this.discardPile = discardPile;
     }
 
-    public long getTotalAmount() {
-        return totalAmount;
+    public long getLimitOfCardStack() {
+        return limitOfCardStack;
     }
 
-    public void setTotalAmount(long totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setLimitOfCardStack(long limitOfCardStack) {
+        this.limitOfCardStack = limitOfCardStack;
     }
+
 }

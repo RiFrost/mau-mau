@@ -8,11 +8,10 @@ public class Deck {
 
     private List<Card> drawPile;
     private List<Card> discardPile;
-    private long totalAmount;
+    private long totalAmount = 32;
 
-    public Deck(List<Card> drawPile, long totalAmount) {
+    public Deck(List<Card> drawPile) {
         this.drawPile = drawPile;
-        this.totalAmount = totalAmount;
     }
 
     public List<Card> getDrawPile() {

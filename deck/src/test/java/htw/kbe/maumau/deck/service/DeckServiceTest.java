@@ -27,16 +27,15 @@ public class DeckServiceTest {
         List<Card> cards = new ArrayList<>();
         List<Suit> suits = Suit.getSuits();
         List<Label> labels = Label.getLabels();
-        for (Suit suit : suits) {
-            for (Label label : labels) {
-                cards.add(new Card(suit, label));
-            }
-        }
-        Deck deck = new Deck(new ArrayList<>(cards), 32);
+        suits.stream().forEach(suit -> {
+            labels.stream().forEach(label -> cards.add((new Card(suit, label))));
+        });
 
-        List <Card> actualDrawPile = service.shuffleDiscardPile(deck);
+        Deck deck = new Deck(new ArrayList<>());
+        deck.setDiscardPile(new ArrayList<>(cards));
+        List <Card> actualDiscardPile = service.shuffleDiscardPile(deck);
 
-        Assert.assertNotEquals(cards, actualDrawPile);
+        Assert.assertNotEquals(cards, actualDiscardPile);
     }
 
 }

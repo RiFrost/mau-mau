@@ -2,9 +2,13 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-		<groupId>htw.kbe</groupId>
-		<artifactId>maumau</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>htw.kbe</groupId>
+	<artifactId>maumau</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>mau-mau</name>
+	<description>KBE Mau-Mau Project</description>
 
 	<modules>
 		<module>game</module>
@@ -14,14 +18,6 @@
 		<module>player</module>
 	</modules>
 
-	<modelVersion>4.0.0</modelVersion>
-	<name>mau-mau</name>
-	<description>KBE Mau-Mau Project</description>
-
-	<properties>
-		<java.version>17</java.version>
-	</properties>
-
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -30,19 +26,22 @@
 				<version>4.13.2</version>
 				<scope>test</scope>
 			</dependency>
-			<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.2</version>
-			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
-	<packaging>pom</packaging>
-
 	<build>
-		<plugins>
-		</plugins>
+			<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.10.1</version>
+					<configuration>
+						<release>17</release>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
 
 </project>

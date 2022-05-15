@@ -7,7 +7,7 @@ import htw.kbe.maumau.player.domain.Player;
 
 public interface RulesService {
 
-    boolean iJoker(Card card, Rule rule);
+    boolean isJoker(Card card, Rule rule);
 
     boolean isSeven(Card card, Rule rule);
 

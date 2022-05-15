@@ -6,7 +6,7 @@ import htw.kbe.maumau.rule.domain.Rule;
 import htw.kbe.maumau.player.domain.Player;
 
 public class RulesServiceImpl implements RulesService {
-    public boolean iJoker(Card card, Rule rule) {
+    public boolean isJoker(Card card, Rule rule) {
         return false;
     }
 

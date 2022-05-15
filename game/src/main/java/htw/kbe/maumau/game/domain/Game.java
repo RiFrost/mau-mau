@@ -11,6 +11,7 @@ public class Game {
     private List<Player> players;
     private Deck cardDeck;
     private boolean isCanceled;
+    private long amountOfPlayers;
 
     public Game(List<Player> players, Deck cardDeck) {
         this.players = players;
@@ -39,5 +40,13 @@ public class Game {
 
     public void setCanceled(boolean canceled) {
         isCanceled = canceled;
+    }
+
+    public long getAmountOfPlayers() {
+        return amountOfPlayers;
+    }
+
+    public void setAmountOfPlayers(long amountOfPlayers) {
+        this.amountOfPlayers = amountOfPlayers;
     }
 }

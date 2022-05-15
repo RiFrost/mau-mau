@@ -1,7 +1,20 @@
 package htw.kbe.maumau.game.service;
 
+import htw.kbe.maumau.deck.domain.Deck;
+import htw.kbe.maumau.game.domain.Game;
+import htw.kbe.maumau.player.domain.Player;
+
+import java.util.List;
+
 public interface GameService {
 
+    Game startGame(List<Player> players, Deck deck);
+
+    Player switchToNewPlayer(List<Player> players);
+
+    Player callWinner(List<Player> players);
+
+    boolean isGameCancelled(List<Player> players);
 //    /**
 //     * draws the given amount of cards at the beginning of a game
 //     * @param amount amount of cards that will get drawn

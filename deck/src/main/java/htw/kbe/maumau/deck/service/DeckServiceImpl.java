@@ -3,15 +3,19 @@ package htw.kbe.maumau.deck.service;
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.service.CardService;
+import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
-
 import java.util.*;
 
-import static htw.kbe.maumau.card.domain.Label.getLabels;
-import static htw.kbe.maumau.card.domain.Suit.getSuits;
-
 public class DeckServiceImpl implements DeckService {
+
+    private CardService cardService;    // can be annotated with @Autowired if we use Spring
+
+    public DeckServiceImpl() {
+        this.cardService = new CardServiceImpl();
+    }
 
     @Override
     public List<Card> shuffleDiscardPile(Deck deck) {
@@ -43,8 +47,8 @@ public class DeckServiceImpl implements DeckService {
             throw new IllegalDeckSizeException("The number of cards for the deck fall below the limit of " + deck.getLimitOfCardStack());
         }
 
-        List<Label> labels = getLabels();
-        List<Suit> suits = getSuits();
+        List<Label> labels = cardService.getLabels();
+        List<Suit> suits = cardService.getSuits();
         Map<Suit, Integer> numberPerSuit = new HashMap<>();
         Map<Label, Integer> numberPerLabel = new HashMap<>();
         suits.stream().forEach(suit -> {

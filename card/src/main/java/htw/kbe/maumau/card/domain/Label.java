@@ -12,16 +12,5 @@ public enum Label {
     TEN,
     NINE,
     EIGHT,
-    SEVEN;
-
-    public static List getLabels() {
-        return new ArrayList<>(Arrays. asList(ASS,
-                KING,
-                QUEEN,
-                JACK,
-                TEN,
-                NINE,
-                EIGHT,
-                SEVEN));
-    }
+    SEVEN
 }

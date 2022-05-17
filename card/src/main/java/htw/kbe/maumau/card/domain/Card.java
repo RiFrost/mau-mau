@@ -14,20 +14,12 @@ public class Card {
         return suit;
     }
 
-    public void setSuit(Suit suit) {
-        this.suit = suit;
-    }
-
     public Label getLabel() {
         return label;
     }
 
-    public void setLabel(Label label) {
-        this.label = label;
-    }
-
     @Override
     public String toString() {
-        return suit + " " + label;
+        return String.format("%s of %s", label, suit);
     }
 }

@@ -34,8 +34,4 @@ jobs:
         id: test-results
         uses: EnricoMi/publish-unit-test-result-action/composite@master
         with:
-          commit: ${{ github.event.workflow_run.head_sha }}
-          check_name: Test Results
-          event_file: artifacts/Event File/event.json
-          event_name: ${{ github.event.workflow_run.event }}
-          files: "artifacts/**/*.xml"
+          files: "**/target/surefire-reports/*.xml"

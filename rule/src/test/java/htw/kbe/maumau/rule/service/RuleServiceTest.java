@@ -2,7 +2,7 @@ package htw.kbe.maumau.rule.service;
 
 import org.junit.jupiter.api.Test;
 
-public class RuleService {
+public class RuleServiceTest {
 
     @Test
     public void testMethod() {

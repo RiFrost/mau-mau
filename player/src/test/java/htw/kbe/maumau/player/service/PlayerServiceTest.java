@@ -1,6 +1,6 @@
 package htw.kbe.maumau.player.service;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PlayerServiceTest {
 

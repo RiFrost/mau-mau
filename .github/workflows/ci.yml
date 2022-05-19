@@ -5,6 +5,10 @@ on: push
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      checks: write
+      pull-requests: write
     steps:
         - uses: actions/checkout@v3
         - name: Set up JDK 17
@@ -17,22 +21,12 @@ jobs:
           run: chmod +x ./mvnw
         - name: Run Tests
           run: ./mvnw test -ntp
-  test-results:
-    name: Test Results
-    if: github.event.workflow_run.conclusion != 'skipped'
-    needs: test
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      checks: write
-      pull-requests: write
-    steps:
-      - name: Publish Test Results
-        id: test-results
-        uses: EnricoMi/publish-unit-test-result-action/composite@master
-        with:
-          files: |
-            **/target/surefire-reports/**.xml
+        - name: Publish Test Results
+            id: test-results
+            uses: EnricoMi/publish-unit-test-result-action/composite@master
+            with:
+              files: |
+                **/target/surefire-reports/**.xml
   build:
     runs-on: ubuntu-latest
     needs: test

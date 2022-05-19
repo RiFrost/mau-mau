@@ -22,11 +22,11 @@ jobs:
         - name: Run Tests
           run: ./mvnw test -ntp
         - name: Publish Test Results
-            id: test-results
-            uses: EnricoMi/publish-unit-test-result-action/composite@master
-            with:
-              files: |
-                **/target/surefire-reports/**.xml
+          id: test-results
+          uses: EnricoMi/publish-unit-test-result-action/composite@master
+          with:
+            files: |
+              **/target/surefire-reports/**.xml
   build:
     runs-on: ubuntu-latest
     needs: test

@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface DeckService {
 
-    List<Card> shuffleDiscardPile(Deck deck);
-
     Deck createDeck(List<Card> cards) throws IllegalDeckSizeException;
 
-    Card getTopCard(Deck deck);
+    List<Card> initialCardDealing(Deck deck);
 
-    List<Card> initialCardDealing(int amount);
+    List<Card> getCardsFromDrawPile(Deck deck, int numberOfDrawCards);
+
+    Card setCardToTopCard(Deck deck, Card discardedCard);
 }

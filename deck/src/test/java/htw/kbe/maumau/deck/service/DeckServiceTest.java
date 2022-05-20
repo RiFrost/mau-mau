@@ -3,6 +3,7 @@ package htw.kbe.maumau.deck.service;
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.fixtures.CardsFixture;
@@ -10,6 +11,9 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 
 import java.util.*;
 
@@ -18,13 +22,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckServiceTest {
 
+    @InjectMocks
     private DeckService service;
     private List<Card> cards;
+
+    @Mock
+    private CardService cardService;
+
 
     @BeforeEach
     public void setUp() {
         this.service = new DeckServiceImpl();
         this.cards = CardsFixture.cards();
+        this.cardService = Mockito.mock(CardService.class);
+        this.service.setCardService(this.cardService);
+        Mockito.when(cardService.getSuits()).thenReturn(CardsFixture.suits);
+        Mockito.when(cardService.getLabels()).thenReturn(CardsFixture.labels);
     }
 
     @Test
@@ -33,7 +46,7 @@ public class DeckServiceTest {
         Deck deck = new Deck();
         deck.setDrawPile(cards);
 
-        Deck actualDeck = service.createDeck(cards); // maybe have to mock cardservice because it is used from validateDeck (to test component isolated)
+        Deck actualDeck = service.createDeck(cards);
 
         assertAll(
                 () -> assertEquals(31, actualDeck.getDrawPile().size()),

@@ -1,6 +1,7 @@
 package htw.kbe.maumau.deck.service;
 
 import htw.kbe.maumau.card.domain.Card;
+import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 
@@ -15,4 +16,6 @@ public interface DeckService {
     List<Card> getCardsFromDrawPile(Deck deck, int numberOfDrawCards);
 
     Card setCardToTopCard(Deck deck, Card discardedCard);
+
+    void setCardService(CardService cardService);
 }

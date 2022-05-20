@@ -13,10 +13,6 @@ public class DeckServiceImpl implements DeckService {
 
     private CardService cardService;    // can be annotated with @Autowired if we use Spring
 
-    public DeckServiceImpl() {   //jut for now until we implement spring
-        this.cardService = new CardServiceImpl();
-    }
-
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {
         Deck deck = new Deck();
@@ -88,5 +84,9 @@ public class DeckServiceImpl implements DeckService {
         if (!(isAmountOfSuitsValid && isAmountOfLabelsValid)) {
             throw new IllegalDeckSizeException("Ratio of Suit and Label is not valid");
         }
+    }
+
+    public void setCardService(CardService cardService) {
+        this.cardService = cardService;
     }
 }

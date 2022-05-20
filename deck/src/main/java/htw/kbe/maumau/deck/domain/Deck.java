@@ -2,6 +2,7 @@ package htw.kbe.maumau.deck.domain;
 
 import htw.kbe.maumau.card.domain.Card;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Deck {
@@ -9,10 +10,12 @@ public class Deck {
     private List<Card> drawPile;
     private List<Card> discardPile;
     private long limitOfCardStack = 32;
+    private int numberOfInitialCardsPerPlayer = 5;
+    private Card topCard;
 
-    public Deck(List<Card> drawPile) {
-
-        this.drawPile = drawPile;
+    public Deck() {
+        this.drawPile = new ArrayList<>();
+        this.discardPile = new ArrayList<>();
     }
 
     public List<Card> getDrawPile() {
@@ -35,8 +38,16 @@ public class Deck {
         return limitOfCardStack;
     }
 
-    public void setLimitOfCardStack(long limitOfCardStack) {
-        this.limitOfCardStack = limitOfCardStack;
+    public Card getTopCard() {
+        return topCard;
+    }
+
+    public void setTopCard(Card topCard) {
+        this.topCard = topCard;
+    }
+
+    public int getNumberOfInitialCardsPerPlayer() {
+        return numberOfInitialCardsPerPlayer;
     }
 
 }

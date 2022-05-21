@@ -24,7 +24,7 @@ class RuleServiceTest {
     private final Card clubsNine = new Card(Suit.CLUBS, Label.NINE);
     private final Card heartsAss = new Card(Suit.HEARTS, Label.ASS);
     private final Player player = new Player(2, "Uwe");
-    private final Suit userWish = Suit.CLUBS;
+    private final Suit userWish = Suit.HEARTS;
     private final Suit userWish2 = null;
     int drawCardCounter = 0;
 
@@ -61,21 +61,21 @@ class RuleServiceTest {
     @Test
     @DisplayName("checks if wished suit is played")
     void checkSuitWish() {
-        assertTrue(rulesService.isCardValid(clubsSeven, clubsJack, userWish));
+        assertTrue(rulesService.isCardValid(heartsAss, clubsJack, userWish));
     }
 
     @Test
     @DisplayName("checks drawCounter when SEVEN is played")
     void checkCounterWithSeven() {
 
-        assertEquals(2, rulesService.drawTwo(drawCardCounter, clubsSeven));
+        assertEquals(2, rulesService.drawTwoCards(drawCardCounter, clubsSeven));
     }
 
     @Test
-    @DisplayName("checks drawCounter when one card SEVEN is played")
+    @DisplayName("checks drawCounter when no SEVEN is played")
     void checkCounterWithoutSeven() {
 
-        assertEquals(0, rulesService.drawTwo(drawCardCounter, heartsAss));
+        assertEquals(0, rulesService.drawTwoCards(drawCardCounter, heartsAss));
     }
 
     @Test

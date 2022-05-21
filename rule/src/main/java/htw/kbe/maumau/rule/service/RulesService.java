@@ -20,7 +20,7 @@ public interface RulesService {
      * @param topCard card on top of discardpile
      * @return number of cards that need to be drawn
      */
-    int drawTwo(int drawCardCounter, Card topCard);
+    int drawTwoCards(int drawCardCounter, Card topCard);
 
     /**
      * Checks if next player is suspended for one round

@@ -5,30 +5,25 @@ import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.player.domain.Player;
 
+import java.util.Objects;
+
 public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean isCardValid(Card userCard, Card topCard, Suit userWish) {
-
-        if (topCard.getLabel().equals(Label.JACK)) {
-            if (topCard.getLabel().equals(userCard.getLabel())) {
-                return false;
-            } else {
-                return userCard.getSuit().equals(userWish);
-            }
-        } else {
-            if (topCard.getLabel().equals(userCard.getLabel())) {
-                return true;
-
-            } else return topCard.getSuit().equals(userCard.getSuit());
+        if (Objects.nonNull(userWish)) {
+            return userCard.getSuit().equals(userWish);
         }
+        if (topCard.getLabel().equals(userCard.getLabel()) && topCard.getLabel().equals(Label.JACK)) {
+            return false;
+        }
+        return topCard.getLabel().equals(userCard.getLabel()) || topCard.getSuit().equals(userCard.getSuit());
     }
 
 
     @Override
-    public int drawTwo(int drawCardCounter, Card topCard) {
-        int numberOfDrawCards = drawCardCounter;
-        return topCard.getLabel().equals(Label.SEVEN) ? numberOfDrawCards + 2 : numberOfDrawCards;
+    public int drawTwoCards(int drawCardCounter, Card topCard) {
+        return topCard.getLabel().equals(Label.SEVEN) ? drawCardCounter + 2 : drawCardCounter;
     }
 
     @Override
@@ -48,6 +43,6 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean isPlayersMauValid(Player player) {
-        return player.isHasSaidMau();
+        return player.hasSaidMau();
     }
 }

@@ -36,25 +36,25 @@ class RuleServiceTest {
     @Test
     @DisplayName("checks if card can be played when suit is the same")
     void checkSuitValid() {
-        assertTrue(rulesService.isSuitWishValid(clubsSeven, clubsEight));
+        assertTrue(rulesService.isCardValid(clubsSeven, clubsEight));
     }
 
     @Test
     @DisplayName("checks if card can be played when label is the same")
     void checkLabelValid() {
-        assertTrue(rulesService.isSuitWishValid(clubsSeven, spadesSeven));
+        assertTrue(rulesService.isCardValid(clubsSeven, spadesSeven));
     }
 
     @Test
     @DisplayName("false when label and suit is not the same")
     void checkLabelinvalid() {
-        assertFalse(rulesService.isSuitWishValid(clubsSeven, heartsAss));
+        assertFalse(rulesService.isCardValid(clubsSeven, heartsAss));
     }
 
     @Test
     @DisplayName("false when jack is played on jack")
     void checkJackOnJack() {
-        assertFalse(rulesService.isSuitWishValid(clubsJack, spadesJack));
+        assertFalse(rulesService.isCardValid(clubsJack, spadesJack));
     }
 
     @Test
@@ -67,14 +67,14 @@ class RuleServiceTest {
     @DisplayName("checks drawCounter when SEVEN is played")
     void checkCounterWithSeven() {
 
-        assertEquals(2, rulesService.isCardSeven(drawCardCounter, clubsSeven));
+        assertEquals(2, rulesService.drawTwo(drawCardCounter, clubsSeven));
     }
 
     @Test
     @DisplayName("checks drawCounter when one card SEVEN is played")
     void checkCounterWithoutSeven() {
 
-        assertEquals(0, rulesService.isCardSeven(drawCardCounter, heartsAss));
+        assertEquals(0, rulesService.drawTwo(drawCardCounter, heartsAss));
     }
 
     @Test

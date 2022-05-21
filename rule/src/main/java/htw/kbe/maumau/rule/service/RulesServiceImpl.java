@@ -8,7 +8,7 @@ import htw.kbe.maumau.player.domain.Player;
 public class RulesServiceImpl implements RulesService {
 
     @Override
-    public boolean isSuitWishValid(Card userCard, Card topCard) {
+    public boolean isCardValid(Card userCard, Card topCard) {
 
         if (topCard.getLabel().equals(Label.JACK)) {
             if (topCard.getLabel().equals(userCard.getLabel())) {
@@ -30,7 +30,7 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public int isCardSeven(int drawCardCounter, Card topCard) {
+    public int drawTwo(int drawCardCounter, Card topCard) {
         int numberOfDrawCards = drawCardCounter;
         return topCard.getLabel().equals(Label.SEVEN) ? numberOfDrawCards + 2 : numberOfDrawCards;
     }

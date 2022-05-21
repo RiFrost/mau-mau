@@ -6,11 +6,11 @@ import htw.kbe.maumau.player.domain.Player;
 
 public interface RulesService {
 
-    boolean isSuitWishValid(Card userCard, Card topCard);
+    boolean isCardValid(Card userCard, Card topCard);
 
     boolean isSuitWishValid(Card userCard, Suit userWish);
 
-    int isCardSeven(int drawCardCounter, Card topCard);
+    int drawTwo(int drawCardCounter, Card topCard);
 
     boolean isSuspended(Card topCard);
 

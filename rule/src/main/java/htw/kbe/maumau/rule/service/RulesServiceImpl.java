@@ -8,13 +8,13 @@ import htw.kbe.maumau.player.domain.Player;
 public class RulesServiceImpl implements RulesService {
 
     @Override
-    public boolean isCardValid(Card userCard, Card topCard) {
+    public boolean isCardValid(Card userCard, Card topCard, Suit userWish) {
 
         if (topCard.getLabel().equals(Label.JACK)) {
             if (topCard.getLabel().equals(userCard.getLabel())) {
                 return false;
             } else {
-                return true;
+                return userCard.getSuit().equals(userWish);
             }
         } else {
             if (topCard.getLabel().equals(userCard.getLabel())) {
@@ -24,10 +24,6 @@ public class RulesServiceImpl implements RulesService {
         }
     }
 
-    @Override
-    public boolean isSuitWishValid(Card userCard, Suit userWish) {
-        return userCard.getSuit().equals(userWish);
-    }
 
     @Override
     public int drawTwo(int drawCardCounter, Card topCard) {

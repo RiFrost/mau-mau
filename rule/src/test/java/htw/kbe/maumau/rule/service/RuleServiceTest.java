@@ -25,6 +25,7 @@ class RuleServiceTest {
     private final Card heartsAss = new Card(Suit.HEARTS, Label.ASS);
     private final Player player = new Player(2, "Uwe");
     private final Suit userWish = Suit.CLUBS;
+    private final Suit userWish2 = null;
     int drawCardCounter = 0;
 
     @BeforeEach
@@ -36,31 +37,31 @@ class RuleServiceTest {
     @Test
     @DisplayName("checks if card can be played when suit is the same")
     void checkSuitValid() {
-        assertTrue(rulesService.isCardValid(clubsSeven, clubsEight));
+        assertTrue(rulesService.isCardValid(clubsSeven, clubsEight, userWish2));
     }
 
     @Test
     @DisplayName("checks if card can be played when label is the same")
     void checkLabelValid() {
-        assertTrue(rulesService.isCardValid(clubsSeven, spadesSeven));
+        assertTrue(rulesService.isCardValid(clubsSeven, spadesSeven, userWish2));
     }
 
     @Test
     @DisplayName("false when label and suit is not the same")
     void checkLabelinvalid() {
-        assertFalse(rulesService.isCardValid(clubsSeven, heartsAss));
+        assertFalse(rulesService.isCardValid(clubsSeven, heartsAss, userWish2));
     }
 
     @Test
     @DisplayName("false when jack is played on jack")
     void checkJackOnJack() {
-        assertFalse(rulesService.isCardValid(clubsJack, spadesJack));
+        assertFalse(rulesService.isCardValid(clubsJack, spadesJack, userWish2));
     }
 
     @Test
     @DisplayName("checks if wished suit is played")
     void checkSuitWish() {
-        assertTrue(rulesService.isSuitWishValid(clubsSeven, userWish));
+        assertTrue(rulesService.isCardValid(clubsSeven, clubsJack, userWish));
     }
 
     @Test

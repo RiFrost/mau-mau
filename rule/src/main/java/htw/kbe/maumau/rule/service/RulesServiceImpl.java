@@ -1,32 +1,61 @@
 package htw.kbe.maumau.rule.service;
 
 import htw.kbe.maumau.card.domain.Card;
+import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.rule.domain.Rule;
 import htw.kbe.maumau.player.domain.Player;
 
 public class RulesServiceImpl implements RulesService {
-    public boolean isJoker(Card card, Rule rule) {
-        return false;
+
+    @Override
+    public boolean isCardValid(Card userCard, Card topCard) {
+
+        if (topCard.getLabel().equals(Label.JACK)) {
+            if (topCard.getLabel().equals(userCard.getLabel())) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            if (topCard.getLabel().equals(userCard.getLabel())) {
+                return true;
+
+            } else return topCard.getSuit().equals(userCard.getSuit());
+        }
     }
 
-    public boolean isSeven(Card card, Rule rule) {
-        return false;
+    @Override
+    public boolean isCardValid(Card userCard, Suit userWish) {
+        return userCard.getSuit().equals(userWish);
     }
 
-    public boolean isAss(Card card, Rule rule) {
-        return false;
+    @Override
+    public int isCardSeven(int drawCardCounter, Card topCard) {
+        int drawCardamount = drawCardCounter;
+        if (topCard.getLabel().equals(Label.SEVEN)) {
+            drawCardamount = drawCardamount + 2;
+            return drawCardamount;
+        }
+        return drawCardamount;
     }
 
-    public boolean isCardValid(Card userCard, Card topCard, Rule rule) {
-        return false;
+    @Override
+    public boolean isCardEight(Card topCard) {
+        return topCard.getLabel().equals(Label.EIGHT);
     }
 
-    public boolean isCardValid(Card userCard, Card topCard, Suit userWish, Rule rule) {
-        return false;
+    @Override
+    public boolean isCardJack(Card topCard) {
+        return topCard.getLabel().equals(Label.JACK);
     }
 
-    public boolean isPlayersMauMauValid(Player player, Rule rule) {
-        return false;
+    @Override
+    public boolean isCardNine(Card topCard) {
+        return topCard.getLabel().equals(Label.NINE);
+    }
+
+    @Override
+    public boolean isPlayersMauMauValid(Player player) {
+        return player.isHasSaidMauMau();
     }
 }

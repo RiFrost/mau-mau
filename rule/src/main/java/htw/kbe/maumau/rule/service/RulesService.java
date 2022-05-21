@@ -2,20 +2,22 @@ package htw.kbe.maumau.rule.service;
 
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.rule.domain.Rule;
 import htw.kbe.maumau.player.domain.Player;
 
 public interface RulesService {
 
-    boolean isJoker(Card card, Rule rule);
+    boolean isCardValid(Card userCard, Card topCard);
 
-    boolean isSeven(Card card, Rule rule);
+    boolean isCardValid(Card userCard, Suit userWish);
 
-    boolean isAss(Card card, Rule rule);
+    int isCardSeven(int drawCardCounter, Card topCard);
 
-    boolean isCardValid(Card userCard, Card topCard, Rule rule);
+    boolean isCardEight(Card topCard);
 
-    boolean isCardValid(Card userCard, Card topCard, Suit userWish, Rule rule);
+    boolean isCardJack(Card topCard);
 
-    boolean isPlayersMauMauValid(Player player, Rule rule);
+    boolean isCardNine(Card topCard);
+
+    boolean isPlayersMauMauValid(Player player);
+
 }

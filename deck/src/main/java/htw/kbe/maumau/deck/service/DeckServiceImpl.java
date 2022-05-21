@@ -13,62 +13,80 @@ public class DeckServiceImpl implements DeckService {
 
     private CardService cardService;    // can be annotated with @Autowired if we use Spring
 
-    public DeckServiceImpl() {
-        this.cardService = new CardServiceImpl();
-    }
-
-    @Override
-    public List<Card> shuffleDiscardPile(Deck deck) {
-        List<Card> cards = deck.getDiscardPile();
-        Collections.shuffle(cards);
-        return cards;
-    }
-
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {
-        Deck deck = new Deck(new ArrayList<>());
-        validateCardStack(cards, deck);
+        Deck deck = new Deck();
+        validateCardStack(cards, deck.getLimitOfCardStack());
+        Collections.shuffle(cards);
+        setTopCard(cards, deck);
+        deck.setDrawPile(cards);
+        return deck;
+    }
 
-        return new Deck(cards);
+    private void setTopCard(List<Card> cards, Deck deck) {
+        Card lastCard = cards.get((cards.size()-1));
+        deck.setTopCard(lastCard);
+        cards.remove(lastCard);
     }
 
     @Override
-    public Card getTopCard(Deck deck) {
-        return null;
+    public List<Card> initialCardDealing(Deck deck) {
+        List <Card> drawPile = deck.getDrawPile();
+        ArrayList<Card> initialCardsForPlayer = new ArrayList<>(drawPile.subList(0, deck.getNumberOfInitialCardsPerPlayer()));
+        drawPile.removeAll(initialCardsForPlayer);
+        return initialCardsForPlayer;
     }
 
     @Override
-    public List<Card> initialCardDealing(int amount) {
-        return null;
+    public List<Card> getCardsFromDrawPile(Deck deck, int numberOfDrawCards) {
+        List<Card> drawPile = deck.getDrawPile();
+        List<Card> drawnCards = new ArrayList<>();
+        if(drawPile.size() <= numberOfDrawCards) {
+            drawPile.addAll(deck.getDiscardPile());
+            deck.getDiscardPile().removeAll(deck.getDiscardPile());
+            Collections.shuffle(drawPile);
+        }
+        drawnCards.addAll(drawPile.subList(0, numberOfDrawCards));
+        drawPile.removeAll(drawnCards);
+        return drawnCards;
     }
 
-    private void validateCardStack(List<Card> cards, Deck deck) throws IllegalDeckSizeException {
-        if (cards.isEmpty()) {
-            throw new IllegalDeckSizeException("The number of cards for the deck fall below the limit of " + deck.getLimitOfCardStack());
+    @Override
+    public Card setCardToTopCard(Deck deck, Card discardedCard) {
+        deck.getDiscardPile().add(deck.getTopCard());
+        deck.setTopCard(discardedCard);
+        return deck.getTopCard();
+    }
+
+    private void validateCardStack(List<Card> cards, long limitOfCardStack) throws IllegalDeckSizeException {
+        if (cards.isEmpty() || cards.size() != limitOfCardStack) {
+            throw new IllegalDeckSizeException("The number of cards does not match with " + limitOfCardStack);
         }
 
-        List<Label> labels = cardService.getLabels();
-        List<Suit> suits = cardService.getSuits();
         Map<Suit, Integer> numberPerSuit = new HashMap<>();
         Map<Label, Integer> numberPerLabel = new HashMap<>();
-        suits.stream().forEach(suit -> {
+
+        cardService.getSuits().stream().forEach(suit -> {
             numberPerSuit.put(suit, 0);
-            labels.stream().forEach(label -> numberPerLabel.put(label, 0));
+            cardService.getLabels().stream().forEach(label -> numberPerLabel.put(label, 0));
         });
 
-        cards.stream().forEach(
+         cards.stream().forEach(
                 card -> {
                     numberPerSuit.computeIfPresent(card.getSuit(), (k, v) -> v + 1);
                     numberPerLabel.computeIfPresent(card.getLabel(), (k, v) -> v + 1);
                 }
         );
 
-        boolean isAmountOfSuitsValid = numberPerSuit.values().stream().allMatch(x -> x == 8);
-        boolean isAmountOfLabelsValid = numberPerLabel.values().stream().allMatch(x -> x == 4);
+        boolean isAmountOfSuitsValid = numberPerSuit.values().stream().allMatch(x -> x == cardService.getLabels().size());
+        boolean isAmountOfLabelsValid = numberPerLabel.values().stream().allMatch(x -> x == cardService.getSuits().size());
 
         if (!(isAmountOfSuitsValid && isAmountOfLabelsValid)) {
             throw new IllegalDeckSizeException("Ratio of Suit and Label is not valid");
         }
     }
 
+    public void setCardService(CardService cardService) {
+        this.cardService = cardService;
+    }
 }

@@ -8,7 +8,7 @@ import htw.kbe.maumau.player.domain.Player;
 public class RulesServiceImpl implements RulesService {
 
     @Override
-    public boolean isCardValid(Card userCard, Card topCard) {
+    public boolean isSuitWishValid(Card userCard, Card topCard) {
 
         if (topCard.getLabel().equals(Label.JACK)) {
             if (topCard.getLabel().equals(userCard.getLabel())) {
@@ -25,23 +25,19 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public boolean isCardValid(Card userCard, Suit userWish) {
+    public boolean isSuitWishValid(Card userCard, Suit userWish) {
         return userCard.getSuit().equals(userWish);
     }
 
     @Override
     public int isCardSeven(int drawCardCounter, Card topCard) {
-        int drawCardamount = drawCardCounter;
-        if (topCard.getLabel().equals(Label.SEVEN)) {
-            drawCardamount = drawCardamount + 2;
-            return drawCardamount;
-        }
-        return drawCardamount;
+        int numberOfDrawCards = drawCardCounter;
+        return topCard.getLabel().equals(Label.SEVEN) ? numberOfDrawCards + 2 : numberOfDrawCards;
     }
 
     @Override
-    public boolean isCardEight(Card topCard) {
-        return topCard.getLabel().equals(Label.EIGHT);
+    public boolean isSuspended(Card topCard) {
+        return topCard.getLabel().equals(Label.ASS);
     }
 
     @Override
@@ -50,12 +46,12 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public boolean isCardNine(Card topCard) {
+    public boolean changeGameDirection(Card topCard) {
         return topCard.getLabel().equals(Label.NINE);
     }
 
     @Override
-    public boolean isPlayersMauMauValid(Player player) {
-        return player.isHasSaidMauMau();
+    public boolean isPlayersMauValid(Player player) {
+        return player.isHasSaidMau();
     }
 }

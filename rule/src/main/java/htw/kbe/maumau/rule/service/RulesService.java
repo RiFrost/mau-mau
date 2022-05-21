@@ -6,18 +6,18 @@ import htw.kbe.maumau.player.domain.Player;
 
 public interface RulesService {
 
-    boolean isCardValid(Card userCard, Card topCard);
+    boolean isSuitWishValid(Card userCard, Card topCard);
 
-    boolean isCardValid(Card userCard, Suit userWish);
+    boolean isSuitWishValid(Card userCard, Suit userWish);
 
     int isCardSeven(int drawCardCounter, Card topCard);
 
-    boolean isCardEight(Card topCard);
+    boolean isSuspended(Card topCard);
 
     boolean isCardJack(Card topCard);
 
-    boolean isCardNine(Card topCard);
+    boolean changeGameDirection(Card topCard);
 
-    boolean isPlayersMauMauValid(Player player);
+    boolean isPlayersMauValid(Player player);
 
 }

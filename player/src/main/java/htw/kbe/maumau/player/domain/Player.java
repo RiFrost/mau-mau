@@ -95,7 +95,7 @@ public class Player {
         this.suitWish = suitWish;
     }
 
-    public boolean isHasSaidMauMau() {
+    public boolean hasSaidMau() {
         return hasSaidMauMau;
     }
 

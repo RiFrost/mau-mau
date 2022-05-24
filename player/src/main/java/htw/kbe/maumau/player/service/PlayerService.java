@@ -15,7 +15,7 @@ public interface PlayerService {
      * @return player who is ready to play
      * @throws IllegalPlayerSizeException when the team is already full (size of max. 4 Players)
      */
-    Player createNewPlayer(String id, String name) throws IllegalPlayerSizeException;
+    Player createNewPlayer(Long id, String name) throws IllegalPlayerSizeException;
 
     /**
      * cards that are drawn by a player
@@ -28,9 +28,10 @@ public interface PlayerService {
     /**
      * card that is played by a player and will be discarded
      * @param player active player
+     * @param card card which will be discarded
      * @return card that is played
      */
-    Card playCard(Player player);
+    Card playCard(Player player, Card card);
 
     /**
      * a message by a player, who only has one card left in hand

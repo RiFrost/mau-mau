@@ -1,32 +1,48 @@
 package htw.kbe.maumau.rule.service;
 
 import htw.kbe.maumau.card.domain.Card;
+import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.rule.domain.Rule;
 import htw.kbe.maumau.player.domain.Player;
 
+import java.util.Objects;
+
 public class RulesServiceImpl implements RulesService {
-    public boolean isJoker(Card card, Rule rule) {
-        return false;
+
+    @Override
+    public boolean isCardValid(Card userCard, Card topCard, Suit userWish) {
+        if (Objects.nonNull(userWish)) {
+            return userCard.getSuit().equals(userWish);
+        }
+        if (topCard.getLabel().equals(userCard.getLabel()) && topCard.getLabel().equals(Label.JACK)) {
+            return false;
+        }
+        return topCard.getLabel().equals(userCard.getLabel()) || topCard.getSuit().equals(userCard.getSuit());
     }
 
-    public boolean isSeven(Card card, Rule rule) {
-        return false;
+
+    @Override
+    public int drawTwoCards(int drawCardCounter, Card topCard) {
+        return topCard.getLabel().equals(Label.SEVEN) ? drawCardCounter + 2 : drawCardCounter;
     }
 
-    public boolean isAss(Card card, Rule rule) {
-        return false;
+    @Override
+    public boolean isSuspended(Card topCard) {
+        return topCard.getLabel().equals(Label.ASS);
     }
 
-    public boolean isCardValid(Card userCard, Card topCard, Rule rule) {
-        return false;
+    @Override
+    public boolean isCardJack(Card topCard) {
+        return topCard.getLabel().equals(Label.JACK);
     }
 
-    public boolean isCardValid(Card userCard, Card topCard, Suit userWish, Rule rule) {
-        return false;
+    @Override
+    public boolean changeGameDirection(Card topCard) {
+        return topCard.getLabel().equals(Label.NINE);
     }
 
-    public boolean isPlayersMauMauValid(Player player, Rule rule) {
-        return false;
+    @Override
+    public boolean isPlayersMauValid(Player player) {
+        return player.hasSaidMau();
     }
 }

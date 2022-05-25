@@ -18,7 +18,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player sayMauMau(Player player) {
-        if(!player.isHasSaidMauMau()) {
+        if(!player.hasSaidMau()) {
             player.setMustDraw(true);
         }
         else
@@ -35,10 +35,13 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public Player drawCards(Player player, List<Card> cards) {
-//        cardList = player.getHandCards();
-//        cardList.add(card);             // Prüfung Listengröße
-//        player.setHandCards(cards);
+    public Player drawCards(Player player, Card card) {     // Paramter card sinvoll?
+        cardList = player.getHandCards();
+        long numberOfDrawnCards = player.getNumOfDrawCards();
+        for (int i = 0; i == numberOfDrawnCards; i++) {
+            cardList.add(card);
+        }
+        player.setHandCards(cardList);
         return player;
     }
 }

@@ -18,12 +18,12 @@ public interface PlayerService {
     Player createNewPlayer(Long id, String name) throws IllegalPlayerSizeException;
 
     /**
-     * cards that are drawn by a player
+     * player who has to draw cards
      * @param player active player
-     * @param cards cards that are drawn
-     * @return list of cards
+     * @param card card that has to drawn
+     * @return player with his drawn cards
      */
-    Player drawCards(Player player, List<Card> cards);
+    Player drawCards(Player player, Card card);
 
     /**
      * card that is played by a player and will be discarded

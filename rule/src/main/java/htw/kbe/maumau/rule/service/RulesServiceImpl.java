@@ -22,8 +22,8 @@ public class RulesServiceImpl implements RulesService {
 
 
     @Override
-    public int drawTwoCards(int drawCardCounter, Card topCard) {
-        return topCard.getLabel().equals(Label.SEVEN) ? drawCardCounter + 2 : drawCardCounter;
+    public boolean drawTwoCards(Card topCard) {
+        return topCard.getLabel().equals(Label.SEVEN);
     }
 
     @Override

@@ -68,14 +68,14 @@ class RuleServiceTest {
     @DisplayName("checks drawCounter when SEVEN is played")
     void checkCounterWithSeven() {
 
-        assertEquals(2, rulesService.drawTwoCards(drawCardCounter, clubsSeven));
+        assertTrue(rulesService.drawTwoCards(clubsSeven));
     }
 
     @Test
     @DisplayName("checks drawCounter when no SEVEN is played")
     void checkCounterWithoutSeven() {
 
-        assertEquals(0, rulesService.drawTwoCards(drawCardCounter, heartsAss));
+        assertFalse(rulesService.drawTwoCards(heartsAss));
     }
 
     @Test

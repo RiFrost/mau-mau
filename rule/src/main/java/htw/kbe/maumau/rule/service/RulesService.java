@@ -16,11 +16,10 @@ public interface RulesService {
 
     /**
      * Checks if next player needs two draw two, also counts the number of cards that have to be drawn
-     * @param drawCardCounter number of cards that need to be drawn
      * @param topCard card on top of discardpile
-     * @return number of cards that need to be drawn
+     * @return true if
      */
-    int drawTwoCards(int drawCardCounter, Card topCard);
+    boolean drawTwoCards(Card topCard);
 
     /**
      * Checks if next player is suspended for one round

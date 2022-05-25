@@ -13,6 +13,10 @@ public class DeckServiceImpl implements DeckService {
 
     private CardService cardService;    // can be annotated with @Autowired if we use Spring
 
+    public DeckServiceImpl() {
+        this.cardService = new CardServiceImpl();
+    }
+
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {
         Deck deck = new Deck();

@@ -32,11 +32,9 @@ public class PlayerServiceTest {
         this.service = new PlayerServiceImpl();
         this.cardService = Mockito.mock(CardService.class);
         this.service.setPlayerService(this.cardService);
-
         cardService = new CardServiceImpl();
         }
 
-    }
 
     @Test
     public void testCreateNewPlayer() {
@@ -54,5 +52,11 @@ public class PlayerServiceTest {
         Assertions.assertFalse(player.hasSaidMau());
     }
 
-
+    @Test
+    public void testPlayCard(){
+//        Player player = new Player(1,"Tim");
+//        service.playCard(player, card);
+//        Card expectedCard = new Card(Suit.CLUBS, Label.ASS);
+//        Assertions.assertEquals(expectedCard, card);
+    }
 }

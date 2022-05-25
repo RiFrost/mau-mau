@@ -10,28 +10,22 @@ public class Game {
 
     private List<Player> players;
     private Deck cardDeck;
+    private Player activePlayer;
     private boolean isCanceled;
-    private long amountOfPlayers;
+    private boolean clockWise = true;
 
     public Game(List<Player> players, Deck cardDeck) {
         this.players = players;
         this.cardDeck = cardDeck;
+        this.activePlayer = players.get(0);
     }
 
     public List<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
     public Deck getCardDeck() {
         return cardDeck;
-    }
-
-    public void setCardDeck(Deck cardDeck) {
-        this.cardDeck = cardDeck;
     }
 
     public boolean isCanceled() {
@@ -42,11 +36,20 @@ public class Game {
         isCanceled = canceled;
     }
 
-    public long getAmountOfPlayers() {
-        return amountOfPlayers;
+    public Player getActivePlayer() {
+        return activePlayer;
     }
 
-    public void setAmountOfPlayers(long amountOfPlayers) {
-        this.amountOfPlayers = amountOfPlayers;
+    public void setActivePlayer(Player player) {
+        activePlayer = player;
     }
+
+    public void switchDirection() {
+        this.clockWise = !this.clockWise;
+    }
+
+    public boolean getClockWise() {
+        return clockWise;
+    }
+
 }

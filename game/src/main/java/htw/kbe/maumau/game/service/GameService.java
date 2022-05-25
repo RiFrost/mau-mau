@@ -1,6 +1,8 @@
 package htw.kbe.maumau.game.service;
 
+import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.deck.domain.Deck;
+import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.player.domain.Player;
 
@@ -8,13 +10,16 @@ import java.util.List;
 
 public interface GameService {
 
-    Game startGame(List<Player> players, Deck deck);
+    Game startNewGame(List<Player> players) throws IllegalDeckSizeException;
 
-    Player switchToNewPlayer(List<Player> players);
+    Player nextPlayer(Game game);
 
-    Player callWinner(List<Player> players);
+    public boolean hasPlayerHandCard(Card card, Game game);
 
-    boolean isGameCancelled(List<Player> players);
+    boolean checkPlayedCard(Card playedCard, Deck deck);
+
+    void cancelGame(Game game);
+
 //    /**
 //     * draws the given amount of cards at the beginning of a game
 //     * @param amount amount of cards that will get drawn

@@ -7,7 +7,6 @@ import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.fixtures.CardsFixture;
-import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -65,7 +64,7 @@ public class DeckServiceTest {
         String expectedMessage = "The number of cards does not match with 32";
         String actualMessage = exception.getMessage();
 
-        Assert.assertTrue(actualMessage.contains(expectedMessage));
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
@@ -82,7 +81,7 @@ public class DeckServiceTest {
         String expectedMessage = "Ratio of Suit and Label is not valid";
         String actualMessage = exception.getMessage();
 
-        Assert.assertTrue(actualMessage.contains(expectedMessage));
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @Test
@@ -99,9 +98,9 @@ public class DeckServiceTest {
 
         List<Card> actualInitialCardsForPlayer = service.initialCardDealing(deck);
 
-        Assert.assertEquals(deck.getNumberOfInitialCardsPerPlayer(), actualInitialCardsForPlayer.size());
-        Assert.assertEquals(26, deck.getDrawPile().size());
-        Assert.assertEquals(expectedInitialCardsForPlayer, actualInitialCardsForPlayer);
+        assertEquals(deck.getNumberOfInitialCardsPerPlayer(), actualInitialCardsForPlayer.size());
+        assertEquals(26, deck.getDrawPile().size());
+        assertEquals(expectedInitialCardsForPlayer, actualInitialCardsForPlayer);
     }
 
     @Test
@@ -113,9 +112,9 @@ public class DeckServiceTest {
 
         List<Card> actualDrawnCards = service.getCardsFromDrawPile(deck, 2);
 
-        Assert.assertEquals(2, actualDrawnCards.size());
-        Assert.assertEquals(1, deck.getDrawPile().size());
-        Assert.assertTrue(deck.getDiscardPile().isEmpty());
+        assertEquals(2, actualDrawnCards.size());
+        assertEquals(1, deck.getDrawPile().size());
+        assertTrue(deck.getDiscardPile().isEmpty());
     }
 
     @Test
@@ -127,9 +126,9 @@ public class DeckServiceTest {
 
         List<Card> actualDrawnCards = service.getCardsFromDrawPile(deck, 1);
 
-        Assert.assertEquals(new ArrayList<>(Arrays.asList(new Card(Suit.DIAMONDS, Label.ASS))), actualDrawnCards);
-        Assert.assertEquals(Arrays.asList(new Card(Suit.CLUBS, Label.ASS)), deck.getDrawPile());
-        Assert.assertEquals(Arrays.asList(new Card(Suit.HEARTS, Label.ASS)), deck.getDiscardPile());
+        assertEquals(new ArrayList<>(Arrays.asList(new Card(Suit.DIAMONDS, Label.ASS))), actualDrawnCards);
+        assertEquals(Arrays.asList(new Card(Suit.CLUBS, Label.ASS)), deck.getDrawPile());
+        assertEquals(Arrays.asList(new Card(Suit.HEARTS, Label.ASS)), deck.getDiscardPile());
     }
 
     @Test
@@ -142,8 +141,8 @@ public class DeckServiceTest {
 
         Card actualTopCard = service.setCardToTopCard(deck, discardedCard);
 
-        Assert.assertEquals(discardedCard, actualTopCard);
-        Assert.assertEquals(new ArrayList<>(Arrays.asList(new Card(Suit.DIAMONDS, Label.ASS), new Card(Suit.SPADES, Label.EIGHT))), deck.getDiscardPile());
+        assertEquals(discardedCard, actualTopCard);
+        assertEquals(new ArrayList<>(Arrays.asList(new Card(Suit.DIAMONDS, Label.ASS), new Card(Suit.SPADES, Label.EIGHT))), deck.getDiscardPile());
     }
 
 }

@@ -43,6 +43,6 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean isPlayersMauValid(Player player) {
-        return player.hasSaidMau();
+        return player.saidMau();
     }
 }

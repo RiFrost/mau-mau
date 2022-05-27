@@ -24,10 +24,9 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player sayMauMau(Player player) {
-        if(!player.hasSaidMau()) {
+        if (!player.hasSaidMau()) {
             player.setMustDraw(true);
-        }
-        else
+        } else
             player.setHasSaidMauMau(true);
         return player;
     }
@@ -52,9 +51,9 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void validatePlayerSize(List<Player> playerList){
+    public void validatePlayerSize(List<Player> playerList) {
         long limitOfPlayers = 5;
-        if(!(playerList.size() <= limitOfPlayers)){
+        if (!(playerList.size() <= limitOfPlayers)) {
             try {
                 throw new IllegalPlayerSizeException("The max number of players is " + limitOfPlayers);
             } catch (IllegalPlayerSizeException e) {
@@ -62,12 +61,17 @@ public class PlayerServiceImpl implements PlayerService {
             }
         }
         if (playerList.size() == 1) {
-            Player npcPlayer = new Player(100,"Kevin");
+            Player npcPlayer = new Player(100, "Kevin");
             npcPlayer.setNpc(true);
         }
     }
 
     @Override
+    public void setPlayerService(PlayerService playerService) {
+    }
+
+    @Override
     public void setPlayerService(CardService cardService) {
+
     }
 }

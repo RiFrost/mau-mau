@@ -6,6 +6,7 @@ import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.player.exceptions.IllegalPlayerSizeException;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,22 +32,22 @@ public class PlayerServiceTest {
 
     @Mock
     private CardService cardService;
+    private PlayerService playerService;
 
     @BeforeEach
     public void setUp() {
         this.service = new PlayerServiceImpl();
         this.cardService = Mockito.mock(CardService.class);
-        this.service.setPlayerService(this.cardService);
+        this.service.setPlayerService(this.playerService);
         cardService = new CardServiceImpl();
         }
 
 
     @Test
     @DisplayName("should return a player with its id and name")
-    public void testCreateNewPlayer() {
-        Player playerOne = new Player(1,"Tim");
-        Assertions.assertEquals(1, playerOne.getId());
-        Assertions.assertEquals("Tim", playerOne.getName());
+    public void testCreateNewPlayer() throws IllegalPlayerSizeException {
+        Assertions.assertEquals(1L, service.createNewPlayer(1L,"Tim").getId());
+        Assertions.assertEquals("Tim", service.createNewPlayer(1L,"Tim").getName());
     }
 
     @Test
@@ -59,12 +60,17 @@ public class PlayerServiceTest {
     }
 
     @Test
+    @DisplayName("test if player says mau and the draw consequence if this is false")
     public void testSayMauMau(){
         Player player = new Player(1,"Tim");
         player.setHasSaidMauMau(true);
+        service.sayMauMau(player);
         Assertions.assertTrue(player.hasSaidMau());
+
         player.setHasSaidMauMau(false);
+        service.sayMauMau(player);
         Assertions.assertFalse(player.hasSaidMau());
+        Assertions.assertTrue(player.isMustDraw());
     }
 
     @Test

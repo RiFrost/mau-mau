@@ -41,7 +41,7 @@ public interface PlayerService {
      */
     Player sayMauMau(Player player);
 
-    void validatePlayerSize(List<Player> player, long limotOfPlayers);
+    void validatePlayerSize(List<Player> player);
 
     void setPlayerService(CardService cardService);
 }

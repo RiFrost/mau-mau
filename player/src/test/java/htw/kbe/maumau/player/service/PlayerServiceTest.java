@@ -9,12 +9,17 @@ import htw.kbe.maumau.player.domain.Player;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
+import java.util.LinkedList;
 import java.util.List;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 public class PlayerServiceTest {
 
@@ -37,10 +42,20 @@ public class PlayerServiceTest {
 
 
     @Test
+    @DisplayName("should return a player with its id and name")
     public void testCreateNewPlayer() {
-        Player player = new Player(1,"Tim");
-        Assertions.assertEquals(1, player.getId());
-        Assertions.assertEquals("Tim", player.getName());
+        Player playerOne = new Player(1,"Tim");
+        Assertions.assertEquals(1, playerOne.getId());
+        Assertions.assertEquals("Tim", playerOne.getName());
+    }
+
+    @Test
+    public void testValidatePlayerSize() {
+//        List<Player> playerList = new LinkedList<>();
+//        playerList.add(new Player(1,"Tim"));          // IndexOutOfBoundsException
+//        playerList.add(new Player(2,"Tia"));
+//        service.validatePlayerSize(playerList);
+//        verify(playerList,times(1));
     }
 
     @Test

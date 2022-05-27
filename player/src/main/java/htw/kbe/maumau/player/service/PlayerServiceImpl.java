@@ -11,12 +11,14 @@ import java.util.List;
 
 public class PlayerServiceImpl implements PlayerService {
 
-    private List<Card> cardList = new LinkedList<Card>();
+    private List<Card> cardList = new LinkedList<>();
+    private List<Player> playerList = new LinkedList<>();
 
     @Override
     public Player createNewPlayer(Long id, String name) {
         Player player = new Player(id, name);
-     //   validatePlayerSize(player,);          // Müsste eher ins Game oder?
+        playerList.add(player);
+        validatePlayerSize(playerList);          // Müsste eher ins Game oder?
         return player;
     }
 
@@ -50,13 +52,18 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void validatePlayerSize(List<Player> player, long limitOfPlayers){
-        if(!(player.size() <= 5)){
+    public void validatePlayerSize(List<Player> playerList){
+        long limitOfPlayers = 5;
+        if(!(playerList.size() <= limitOfPlayers)){
             try {
                 throw new IllegalPlayerSizeException("The max number of players is " + limitOfPlayers);
             } catch (IllegalPlayerSizeException e) {
                 throw new RuntimeException(e);
             }
+        }
+        if (playerList.size() == 1) {
+            Player npcPlayer = new Player(100,"Kevin");
+            npcPlayer.setNpc(true);
         }
     }
 

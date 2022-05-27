@@ -9,6 +9,7 @@ public class Player {
 
     private long id;
     private String name;
+    private boolean npc;
     private List<Card> handCards;
     private boolean isActive;
     private boolean mustDraw;
@@ -37,6 +38,14 @@ public class Player {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isNpc() {
+        return npc;
+    }
+
+    public void setNpc(boolean npc) {
+        this.npc = npc;
     }
 
     public List<Card> getHandCards() {

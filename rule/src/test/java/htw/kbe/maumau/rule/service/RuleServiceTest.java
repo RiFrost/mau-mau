@@ -23,7 +23,7 @@ class RuleServiceTest {
     private final Card spadesJack = new Card(Suit.SPADES, Label.JACK);
     private final Card clubsNine = new Card(Suit.CLUBS, Label.NINE);
     private final Card heartsAss = new Card(Suit.HEARTS, Label.ASS);
-    private final Player player = new Player(2, "Uwe");
+    private final Player player = new Player("Uwe");
     private final Suit userWish = Suit.HEARTS;
     private final Suit userWish2 = null;
     int drawCardCounter = 0;
@@ -102,7 +102,7 @@ class RuleServiceTest {
     @Test
     @DisplayName("checks if player said Mau")
     void checkMau() {
-        player.setHasSaidMauMau(true);
+        player.setSaidMau(true);
         assertTrue(rulesService.isPlayersMauValid(player));
     }
 }

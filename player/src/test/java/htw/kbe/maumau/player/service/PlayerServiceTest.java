@@ -3,81 +3,102 @@ package htw.kbe.maumau.player.service;
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.card.service.CardService;
-import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.player.domain.Player;
-import htw.kbe.maumau.player.exceptions.IllegalPlayerSizeException;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
+import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.LinkedList;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 public class PlayerServiceTest {
 
-    @InjectMocks
     private PlayerService service;
-    private List<Card> cards;
-    private Suit suit;
-    private Card card;
-
-    @Mock
-    private CardService cardService;
-    private PlayerService playerService;
+    private Player player;
+    private List<Card> handCards;
 
     @BeforeEach
     public void setUp() {
         this.service = new PlayerServiceImpl();
-        this.cardService = Mockito.mock(CardService.class);
-        this.service.setPlayerService(this.playerService);
-        cardService = new CardServiceImpl();
-        }
-
-
-    @Test
-    @DisplayName("should return a player with its id and name")
-    public void testCreateNewPlayer() throws IllegalPlayerSizeException {
-        Assertions.assertEquals(1L, service.createNewPlayer(1L,"Tim").getId());
-        Assertions.assertEquals("Tim", service.createNewPlayer(1L,"Tim").getName());
+        this.player = new Player("Jasmin");
+        this.handCards = new ArrayList<>(Arrays.asList(new Card(Suit.HEARTS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS))); // ADD FIXTURES
     }
 
     @Test
-    public void testValidatePlayerSize() {
-//        List<Player> playerList = new LinkedList<>();
-//        playerList.add(new Player(1,"Tim"));          // IndexOutOfBoundsException
-//        playerList.add(new Player(2,"Tia"));
-//        service.validatePlayerSize(playerList);
-//        verify(playerList,times(1));
+    @DisplayName("should return a list of players")
+    public void testCreateValidPlayers() throws InvalidPlayerNameException {
+        List<String> validNames = new ArrayList<>(Arrays.asList("Jasmin", "Richard", "Philipp", "Maria"));
+
+        List<Player> expectedPlayers = service.createPlayers(validNames);
+
+        assertEquals(4, expectedPlayers.size());
+        assertEquals("Jasmin", expectedPlayers.get(0).getName());
+        assertEquals("Richard", expectedPlayers.get(1).getName());
+        assertEquals("Philipp", expectedPlayers.get(2).getName());
+        assertEquals("Maria", expectedPlayers.get(3).getName());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "This name is way to long", "    "})
+    public void testValidatePlayerName(String name) {
+        List<String> validNames = new ArrayList<>(Arrays.asList("Jasmin, Richard", "Philipp", "Maria"));
+
+        Exception e = assertThrows(InvalidPlayerNameException.class, () -> {
+            service.validateName(name, validNames);
+        });
     }
 
     @Test
-    @DisplayName("test if player says mau and the draw consequence if this is false")
-    public void testSayMauMau(){
-        Player player = new Player(1,"Tim");
-        player.setHasSaidMauMau(true);
-        service.sayMauMau(player);
-        Assertions.assertTrue(player.hasSaidMau());
+    @DisplayName("should throw InvalidPlayerName when name is duplicated")
+    public void testDuplicatePlayerName(){
+        String duplicatedName = "Maria";
+        List<String> validNames = new ArrayList<>(Arrays.asList("Jasmin, Richard", "Maria", "Maria"));
 
-        player.setHasSaidMauMau(false);
-        service.sayMauMau(player);
-        Assertions.assertFalse(player.hasSaidMau());
-        Assertions.assertTrue(player.isMustDraw());
+        Exception e = assertThrows(InvalidPlayerNameException.class, () -> {
+            service.validateName(duplicatedName, validNames);
+        });
     }
 
     @Test
-    public void testPlayCard(){
-//        Player player = new Player(1,"Tim");
-//        service.playCard(player, card);
-//        Card expectedCard = new Card(Suit.CLUBS, Label.ASS);
-//        Assertions.assertEquals(expectedCard, card);
+    @DisplayName("should set mau state to true")
+    public void testSayMau(){
+        assertFalse(player.saidMau());
+        service.sayMau(player);
+        assertTrue(player.saidMau());
+    }
+
+    @Test
+    @DisplayName("should set suspend state to true")
+    public void testMustSuspend(){
+        assertFalse(player.mustSuspend());
+        service.mustSuspend(player);
+        assertTrue(player.mustSuspend());
+    }
+
+    @Test
+    @DisplayName("should remove played card from hand cards")
+    public void testRemovePlayedCardFromHandCards(){
+        player.setHandCards(handCards);
+
+        service.playCard(player, new Card(Suit.HEARTS, Label.SEVEN));
+
+        assertEquals(1, player.getHandCards().size());
+        assertEquals(Arrays.asList(new Card(Suit.CLUBS, Label.ASS)), player.getHandCards());
+    }
+
+    @Test
+    @DisplayName("should add drawn cards to hand cards")
+    public void testAddDrawnCardsToHandCards(){
+        player.setHandCards(handCards);
+
+        service.drawCards(player, Arrays.asList(new Card(Suit.SPADES, Label.EIGHT)));
+
+        assertEquals(3, player.getHandCards().size());
     }
 }

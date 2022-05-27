@@ -1,10 +1,16 @@
 package htw.kbe.maumau.game.service;
 
 import htw.kbe.maumau.card.domain.Card;
+import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import htw.kbe.maumau.deck.service.DeckService;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.player.service.PlayerService;
+import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
+import htw.kbe.maumau.rule.service.RulesService;
 
 import java.util.List;
 
@@ -14,11 +20,29 @@ public interface GameService {
 
     Player nextPlayer(Game game);
 
-    public boolean hasPlayerHandCard(Card card, Game game);
+    void dealCards(Game game);
 
-    boolean checkPlayedCard(Card playedCard, Deck deck);
+    void drawCards(int amount, Game game);
 
-    void cancelGame(Game game);
+    boolean canPlayerPlayCards(Game game);
+
+    void applyCardRule(Game game);
+
+    void validateCard(Card card, Game game) throws PlayedCardIsInvalidException;
+
+    void setUserWish(Suit userWish, Game game);
+
+    void setCardService(CardService cardService);
+
+    void setPlayerService(PlayerService playerService);
+
+    void setDeckService(DeckService deckService);
+
+    void setRulesService(RulesService rulesService);
+
+
+
+
 
 //    /**
 //     * draws the given amount of cards at the beginning of a game

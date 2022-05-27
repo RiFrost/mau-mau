@@ -18,10 +18,10 @@ public class GameFixture {
 
 
     public static List<Player> players() {
-        players.add(new Player(1, "Phil"));
-        players.add(new Player(2, "Maria"));
-        players.add(new Player(3, "Jasmin"));
-        players.add(new Player(4, "Richard"));
+        players.add(new Player( "Phil"));
+        players.add(new Player("Maria"));
+        players.add(new Player("Jasmin"));
+        players.add(new Player("Richard"));
 
         return players;
     }

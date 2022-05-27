@@ -1,6 +1,6 @@
 package htw.kbe.maumau.game.domain;
 
-
+import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.player.domain.Player;
 
@@ -9,10 +9,12 @@ import java.util.List;
 public class Game {
 
     private List<Player> players;
-    private Deck cardDeck;
     private Player activePlayer;
-    private boolean isCanceled;
+    private Deck cardDeck;
     private boolean clockWise = true;
+    private int drawCardsCounter = 0;
+    private Suit userWish = null;
+    private boolean askForSuitWish = false;
 
     public Game(List<Player> players, Deck cardDeck) {
         this.players = players;
@@ -26,14 +28,6 @@ public class Game {
 
     public Deck getCardDeck() {
         return cardDeck;
-    }
-
-    public boolean isCanceled() {
-        return isCanceled;
-    }
-
-    public void setCanceled(boolean canceled) {
-        isCanceled = canceled;
     }
 
     public Player getActivePlayer() {
@@ -52,4 +46,31 @@ public class Game {
         return clockWise;
     }
 
+    public int getDrawCardsCounter() {
+        return drawCardsCounter;
+    }
+
+    public void setDrawCardsCounter(int amount) {
+        drawCardsCounter = amount;
+    }
+
+    public Suit getUserWish() {
+        return userWish;
+    }
+
+    public void setUserWish(Suit userWish) {
+        this.userWish = userWish;
+    }
+
+    public void addUpDrawCounter() {
+        drawCardsCounter += 2;
+    }
+
+    public boolean isAskForSuitWish() {
+        return askForSuitWish;
+    }
+
+    public void setAskForSuitWish(boolean askForSuitWish) {
+        this.askForSuitWish = askForSuitWish;
+    }
 }

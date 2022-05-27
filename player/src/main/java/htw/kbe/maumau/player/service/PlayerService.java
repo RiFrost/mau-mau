@@ -43,5 +43,8 @@ public interface PlayerService {
 
     void validatePlayerSize(List<Player> player);
 
+
+    void setPlayerService(PlayerService playerService);
+
     void setPlayerService(CardService cardService);
 }

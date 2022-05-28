@@ -16,6 +16,7 @@
 		<module>deck</module>
 		<module>rule</module>
 		<module>player</module>
+		<module>JaCoCo</module>
 	</modules>
 
 	<dependencyManagement>

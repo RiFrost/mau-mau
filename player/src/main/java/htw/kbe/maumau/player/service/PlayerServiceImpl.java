@@ -30,15 +30,6 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void sayMau(Player player) {
-        player.setSaidMau(true);
-    }
-
-    public void mustSuspend(Player player) {
-        player.setMustSuspend(true);
-    }
-
-    @Override
     public void playCard(Player player, Card card) {
         player.getHandCards().remove(card);
     }

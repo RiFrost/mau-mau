@@ -6,7 +6,6 @@ import htw.kbe.maumau.player.domain.Player;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 
 public interface RulesService {
-    int penaltyCards = 2;
 
     /**
      * Checks if card can be played, also if card was JACK and there is a suit wish
@@ -21,7 +20,13 @@ public interface RulesService {
      * @param topCard card on top of discard pile
      * @return true if
      */
-    boolean drawTwoCards(Card topCard);
+    boolean mustDrawTwoCards(Card topCard);
+
+    /**
+     *
+     * @return
+     */
+    int getNumberOfDrawnCards();
 
     /**
      * Checks if next player is suspended for one round
@@ -45,10 +50,9 @@ public interface RulesService {
     boolean changeGameDirection(Card topCard);
 
     /**
-     * Checks if player said Mau
+     * Checks if player said Mau and if it's valid
      * @param player player in turn
-     * @return true if player.isHasSaidMau() true, false if not
+     * @return false, when player's 'mau' is valid, true when it's invalid
      */
-    boolean isPlayersMauValid(Player player);
-
+    boolean isPlayersMauInvalid(Player player);
 }

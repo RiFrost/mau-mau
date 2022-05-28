@@ -66,7 +66,7 @@ public class Game {
         drawCardsCounter += 2;
     }
 
-    public boolean isAskForSuitWish() {
+    public boolean hasAskedForSuitWish() {
         return askForSuitWish;
     }
 

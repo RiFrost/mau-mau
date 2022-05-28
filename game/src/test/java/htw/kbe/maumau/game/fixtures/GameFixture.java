@@ -14,10 +14,8 @@ import java.util.List;
 
 public class GameFixture {
 
-    private static List<Player> players = new LinkedList<Player>();
-
-
     public static List<Player> players() {
+        List<Player> players = new LinkedList<>();
         players.add(new Player( "Phil"));
         players.add(new Player("Maria"));
         players.add(new Player("Jasmin"));
@@ -28,7 +26,11 @@ public class GameFixture {
 
     public static Deck deck() {
         Deck deck = new Deck();
-        deck.setDrawPile(cards());
+        List <Card> cards = cards();
+        Card topCard = cards.get(0);
+        cards.remove(topCard);
+        deck.setTopCard(topCard);
+        deck.setDrawPile(cards);
         return deck;
     }
 

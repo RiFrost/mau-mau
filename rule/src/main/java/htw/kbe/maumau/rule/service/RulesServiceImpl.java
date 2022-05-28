@@ -10,17 +10,21 @@ import java.util.Objects;
 
 public class RulesServiceImpl implements RulesService {
 
-
     @Override
-    public void validateCard(Card userCard, Card topCard, Suit userWish) throws PlayedCardIsInvalidException {
-        if(Objects.nonNull(userWish) && !(userCard.getSuit().equals(userWish))) throw new PlayedCardIsInvalidException("No card with the correct suit can be played, because of the wish of the user before.");
-        if(topCard.getLabel().equals(userCard.getLabel()) && topCard.getLabel().equals(Label.JACK)) throw new PlayedCardIsInvalidException("Jack on Jack is not allowed.");
-        if(!(topCard.getLabel().equals(userCard.getLabel()) || topCard.getSuit().equals(userCard.getSuit()))) throw new PlayedCardIsInvalidException("No card with the correct suit or colour can be played.");
+    public void validateCard(Card playedCard, Card topCard, Suit userWish) throws PlayedCardIsInvalidException {
+        if(topCard.getLabel().equals(playedCard.getLabel()) && topCard.getLabel().equals(Label.JACK)) throw new PlayedCardIsInvalidException("Jack on Jack is not allowed.");
+        if(!(topCard.getLabel().equals(playedCard.getLabel()) || topCard.getSuit().equals(playedCard.getSuit())) && Objects.isNull(userWish)) throw new PlayedCardIsInvalidException("The card must not be played. Label or suit does not match.");
+        if(Objects.nonNull(userWish) && !playedCard.getSuit().equals(userWish)) throw new PlayedCardIsInvalidException("The card must not be played. Suit does not match players wish.");
     }
 
     @Override
-    public boolean drawTwoCards(Card topCard) {
+    public boolean mustDrawTwoCards(Card topCard) {
         return topCard.getLabel().equals(Label.SEVEN);
+    }
+
+    @Override
+    public int getNumberOfDrawnCards() {
+        return 2;
     }
 
     @Override
@@ -39,7 +43,14 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public boolean isPlayersMauValid(Player player) {
-        return player.getHandCards().size() == 1 && player.saidMau();
+    public boolean isPlayersMauInvalid(Player player) {
+        if(player.getHandCards().size() == 1 && player.saidMau()) {
+            return false;
+        }
+        // Wichtig: Wenn Spieler min. 2 Karten hat, muss er nicht Mau gesagt haben, daher false!
+        if(player.getHandCards().size() > 1 && !player.saidMau()) {
+            return false;
+        }
+        return true;
     }
 }

@@ -207,10 +207,39 @@ public class GameServiceTest {
     }
 
     @Test
-    @DisplayName("should return the next player in counter clockwise direction")
-    public void nextPlayerCounterClockWise() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    @DisplayName("should return the first player of the list as next player in clockwise direction")
+    public void nextPlayerClockWiseLastPlayer() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+        Player activePlayer = players.get(3);
+        Player nextActivePlayer = players.get(0);
+        game.setActivePlayer(activePlayer);
+
+        assertEquals(activePlayer, game.getActivePlayer());
+
+        service.getNextPlayer(game);
+
+        assertEquals(nextActivePlayer, game.getActivePlayer());
+    }
+
+    @Test
+    @DisplayName("should return the first player as next in counter clockwise direction")
+    public void nextPlayerCounterClockWiseFirstPlayer() throws IllegalDeckSizeException, InvalidPlayerSizeException {
         Player activePlayer = players.get(0);
         Player nextActivePlayer = players.get(players.size() - 1);
+
+        assertEquals(activePlayer, game.getActivePlayer());
+
+        game.switchDirection();
+        service.getNextPlayer(game);
+
+        assertEquals(nextActivePlayer, game.getActivePlayer());
+    }
+
+    @Test
+    @DisplayName("should return the player which comes before in the list in counter clockwise direction")
+    public void nextPlayerCounterClockWise() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+        Player activePlayer = players.get(2);
+        Player nextActivePlayer = players.get(1);
+        game.setActivePlayer(activePlayer);
 
         assertEquals(activePlayer, game.getActivePlayer());
 

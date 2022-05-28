@@ -133,19 +133,3 @@ public class GameServiceImpl implements GameService {
         this.deckService = deckService;
     }
 }
-
-
-/*
-UI
-for (runde) {
-TopKarte = 7
-Spieler A ist dran
-
-if Spieler A hat Handkarte 7 -> er darf spielen -> validateCard
-else Spieler A muss ziehen -> drawCard
-
-
-}
-
-
- */

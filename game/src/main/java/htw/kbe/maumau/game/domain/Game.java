@@ -13,7 +13,7 @@ public class Game {
     private Deck cardDeck;
     private boolean clockWise = true;
     private int drawCardsCounter = 0;
-    private Suit userWish = null;
+    private Suit suitWish = null;
     private boolean askForSuitWish = false;
 
     public Game(List<Player> players, Deck cardDeck) {
@@ -54,12 +54,12 @@ public class Game {
         drawCardsCounter = amount;
     }
 
-    public Suit getUserWish() {
-        return userWish;
+    public Suit getSuitWish() {
+        return suitWish;
     }
 
-    public void setUserWish(Suit userWish) {
-        this.userWish = userWish;
+    public void setSuitWish(Suit suitWish) {
+        this.suitWish = suitWish;
     }
 
     public void addUpDrawCounter() {

@@ -66,7 +66,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should throw exception when player list size is smaller than two")
-    public void throwExceptionPlayerSizeIsTooLow() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    public void throwExceptionPlayerSizeIsTooLow() {
         Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {
             service.startNewGame(players.subList(0, 1));
         });
@@ -74,7 +74,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should throw exception when player list size is higher than four")
-    public void throwExceptionPlayerSizeIsTooHigh() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    public void throwExceptionPlayerSizeIsTooHigh() {
         players.add(players.get(0));
 
         Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {
@@ -88,10 +88,10 @@ public class GameServiceTest {
         Suit userWish = Suit.CLUBS;
         game.setAskForSuitWish(true);
 
-        service.setUserWish(userWish, game);
+        service.setPlayersSuitWish(userWish, game);
 
         assertFalse(game.hasAskedForSuitWish());
-        assertEquals(userWish, game.getUserWish());
+        assertEquals(userWish, game.getSuitWish());
     }
 
     @Test
@@ -99,15 +99,17 @@ public class GameServiceTest {
     public void validateCard() throws PlayedCardIsInvalidException {
         Card expectedTopCard = new Card(Suit.CLUBS, Label.KING);
         Card playedCard = new Card(Suit.CLUBS, Label.SEVEN);
-        game.setUserWish(null);
+        Suit userWish = Suit.CLUBS;
+        game.setSuitWish(userWish);
         game.getCardDeck().setTopCard(expectedTopCard);
 
         service.validateCard(playedCard, game);
 
+        assertEquals(null, game.getSuitWish());
         verify(rulesService, times(1)).validateCard(
                 argThat(card -> card.equals(playedCard)),
                 argThat(topCard -> topCard.equals(expectedTopCard)),
-                argThat(suit -> Objects.isNull(suit))
+                argThat(suit -> suit.equals(userWish))
         );
 
         verify(deckService, times(1)).setCardToTopCard(
@@ -117,8 +119,32 @@ public class GameServiceTest {
     }
 
     @Test
+    @DisplayName("should not allow that player can play a card")
+    public void playerCannotPlayCards() {
+        Player activePlayer = players.get(0);
+        activePlayer.setHandCards(List.of(new Card(Suit.DIAMONDS, Label.ASS)));
+        game.setActivePlayer(activePlayer);
+        game.getCardDeck().setTopCard(new Card(Suit.DIAMONDS, Label.SEVEN));
+        when(rulesService.mustDrawCards(any(), any())).thenReturn(true);
+
+        assertFalse(service.canPlayerPlayCards(game));
+    }
+
+    @Test
+    @DisplayName("should allow that player can play a card")
+    public void playerCanPlayCards() {
+        Player activePlayer = players.get(0);
+        activePlayer.setHandCards(List.of(new Card(Suit.CLUBS, Label.SEVEN)));
+        game.setActivePlayer(activePlayer);
+        game.getCardDeck().setTopCard(new Card(Suit.DIAMONDS, Label.SEVEN));
+        when(rulesService.mustDrawCards(any(), any())).thenReturn(false);
+
+        assertTrue(service.canPlayerPlayCards(game));
+    }
+
+    @Test
     @DisplayName("should apply rules")
-    public void applyIsCardJackRule() throws PlayedCardIsInvalidException {
+    public void applyIsCardJackRule() {
         Card topCard = new Card(Suit.CLUBS, Label.JACK);
         game.getCardDeck().setTopCard(topCard);
         when(rulesService.isCardJack(any())).thenReturn(true);
@@ -131,24 +157,24 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should apply rules")
-    public void applyPlayerMustSuspendRule() throws PlayedCardIsInvalidException {
+    public void applyPlayerMustSuspendRule() {
         Card topCard = new Card(Suit.CLUBS, Label.JACK);
         game.getCardDeck().setTopCard(topCard);
         Player activePlayer = players.get(0);
         Player expectedSuspendedPlayer = players.get(1);
         expectedSuspendedPlayer.setMustSuspend(true);
         game.setActivePlayer(activePlayer);
-        when(rulesService.isSuspended(any())).thenReturn(true);
+        when(rulesService.mustSuspend(any())).thenReturn(true);
 
         service.applyCardRule(game);
 
         assertEquals(expectedSuspendedPlayer.mustSuspend(), game.getPlayers().get(1).mustSuspend());
-        verify(rulesService).isSuspended(argThat(card -> card.equals(topCard)));
+        verify(rulesService).mustSuspend(argThat(card -> card.equals(topCard)));
     }
 
     @Test
     @DisplayName("should apply rules")
-    public void applyChangeGameDirectionRule() throws PlayedCardIsInvalidException {
+    public void applyChangeGameDirectionRule() {
         Card topCard = new Card(Suit.CLUBS, Label.JACK);
         game.getCardDeck().setTopCard(topCard);
         when(rulesService.changeGameDirection(any())).thenReturn(true);
@@ -161,20 +187,20 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should apply rules")
-    public void applyDrawTwoCardsRule() throws PlayedCardIsInvalidException {
+    public void applyDrawTwoCardsRule() {
         Card topCard = new Card(Suit.CLUBS, Label.JACK);
         game.getCardDeck().setTopCard(topCard);
-        when(rulesService.mustDrawTwoCards(any())).thenReturn(true);
+        when(rulesService.mustDrawCards(any())).thenReturn(true);
 
         service.applyCardRule(game);
 
         assertEquals(2, game.getDrawCardsCounter());
-        verify(rulesService).mustDrawTwoCards(argThat(card -> card.equals(topCard)));
+        verify(rulesService).mustDrawCards(argThat(card -> card.equals(topCard)));
     }
 
     @Test
     @DisplayName("should apply rules")
-    public void applyIsMauInvalidRule() throws PlayedCardIsInvalidException {
+    public void applyIsMauInvalidRule() {
         Player activePlayer = players.get(0);
         activePlayer.setHandCards(new ArrayList<>(List.of(new Card(Suit.CLUBS, Label.SEVEN))));
         game.setActivePlayer(activePlayer);
@@ -195,7 +221,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should return the next player in clockwise direction")
-    public void nextPlayerClockWise() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    public void nextPlayerClockWise() {
         Player activePlayer = players.get(0);
         Player nextActivePlayer = players.get(1);
 
@@ -208,7 +234,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should return the first player of the list as next player in clockwise direction")
-    public void nextPlayerClockWiseLastPlayer() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    public void nextPlayerClockWiseLastPlayer() {
         Player activePlayer = players.get(3);
         Player nextActivePlayer = players.get(0);
         game.setActivePlayer(activePlayer);
@@ -222,7 +248,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should return the first player as next in counter clockwise direction")
-    public void nextPlayerCounterClockWiseFirstPlayer() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    public void nextPlayerCounterClockWiseFirstPlayer() {
         Player activePlayer = players.get(0);
         Player nextActivePlayer = players.get(players.size() - 1);
 
@@ -236,7 +262,7 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should return the player which comes before in the list in counter clockwise direction")
-    public void nextPlayerCounterClockWise() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    public void nextPlayerCounterClockWise() {
         Player activePlayer = players.get(2);
         Player nextActivePlayer = players.get(1);
         game.setActivePlayer(activePlayer);
@@ -270,11 +296,10 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should set initial hand cards to player")
-    public void shouldDrawInitialHandCards() throws IllegalDeckSizeException, InvalidPlayerSizeException {
-        Game game = GameFixture.game();
+    public void shouldDrawInitialHandCards() {
         when(deckService.initialCardDealing(any())).thenReturn(GameFixture.cards().subList(0, 5));
 
-        service.dealCards(game);
+        service.initialCardDealing(game);
 
         for (Player player : game.getPlayers()) {
             assertEquals(5, player.getHandCards().size());

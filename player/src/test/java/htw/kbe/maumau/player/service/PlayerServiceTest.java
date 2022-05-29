@@ -66,22 +66,6 @@ public class PlayerServiceTest {
     }
 
     @Test
-    @DisplayName("should set mau state to true")
-    public void testSayMau(){
-        assertFalse(player.saidMau());
-        service.sayMau(player);
-        assertTrue(player.saidMau());
-    }
-
-    @Test
-    @DisplayName("should set suspend state to true")
-    public void testMustSuspend(){
-        assertFalse(player.mustSuspend());
-        service.mustSuspend(player);
-        assertTrue(player.mustSuspend());
-    }
-
-    @Test
     @DisplayName("should remove played card from hand cards")
     public void testRemovePlayedCardFromHandCards(){
         player.setHandCards(handCards);

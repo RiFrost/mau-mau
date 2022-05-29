@@ -9,7 +9,7 @@ import java.util.List;
 
 public class CardServiceImpl implements CardService {
 
-    private List<Card> cardList = new LinkedList<Card>();
+    private List<Card> cardList = new LinkedList<>();
 
     public CardServiceImpl() {
         createCardList();

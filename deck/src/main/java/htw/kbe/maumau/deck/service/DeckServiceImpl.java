@@ -11,7 +11,7 @@ import java.util.*;
 
 public class DeckServiceImpl implements DeckService {
 
-    private CardService cardService;    // can be annotated with @Autowired if we use Spring
+    private CardService cardService;    // can be annotated with @Autowired when we use Spring
 
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {

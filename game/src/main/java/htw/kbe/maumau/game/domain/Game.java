@@ -1,6 +1,6 @@
 package htw.kbe.maumau.game.domain;
 
-
+import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.player.domain.Player;
 
@@ -9,44 +9,68 @@ import java.util.List;
 public class Game {
 
     private List<Player> players;
+    private Player activePlayer;
     private Deck cardDeck;
-    private boolean isCanceled;
-    private long amountOfPlayers;
+    private boolean clockWise = true;
+    private int drawCardsCounter = 0;
+    private Suit userWish = null;
+    private boolean askForSuitWish = false;
 
     public Game(List<Player> players, Deck cardDeck) {
         this.players = players;
         this.cardDeck = cardDeck;
+        this.activePlayer = players.get(0);
     }
 
     public List<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
     public Deck getCardDeck() {
         return cardDeck;
     }
 
-    public void setCardDeck(Deck cardDeck) {
-        this.cardDeck = cardDeck;
+    public Player getActivePlayer() {
+        return activePlayer;
     }
 
-    public boolean isCanceled() {
-        return isCanceled;
+    public void setActivePlayer(Player player) {
+        activePlayer = player;
     }
 
-    public void setCanceled(boolean canceled) {
-        isCanceled = canceled;
+    public void switchDirection() {
+        this.clockWise = !this.clockWise;
     }
 
-    public long getAmountOfPlayers() {
-        return amountOfPlayers;
+    public boolean getClockWise() {
+        return clockWise;
     }
 
-    public void setAmountOfPlayers(long amountOfPlayers) {
-        this.amountOfPlayers = amountOfPlayers;
+    public int getDrawCardsCounter() {
+        return drawCardsCounter;
+    }
+
+    public void setDrawCardsCounter(int amount) {
+        drawCardsCounter = amount;
+    }
+
+    public Suit getUserWish() {
+        return userWish;
+    }
+
+    public void setUserWish(Suit userWish) {
+        this.userWish = userWish;
+    }
+
+    public void addUpDrawCounter() {
+        drawCardsCounter += 2;
+    }
+
+    public boolean hasAskedForSuitWish() {
+        return askForSuitWish;
+    }
+
+    public void setAskForSuitWish(boolean askForSuitWish) {
+        this.askForSuitWish = askForSuitWish;
     }
 }

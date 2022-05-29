@@ -33,23 +33,10 @@ public interface PlayerService {
     void playCard(Player player, Card card);
 
     /**
-     * a message by a player, who only has one card left in hand
-     * @param player active player
-     * @return message "Mau"
-     */
-    void sayMau(Player player);
-
-    /**
      * validate name
      * @param name that has to be validated
      * @throws InvalidPlayerNameException when String name is empty, has whitespaces or is too long
      */
     void validateName(String name, List<String> names) throws InvalidPlayerNameException;
-
-    /**
-     * set suspend state to true
-     * @param player who must suspend
-     */
-    void mustSuspend(Player player);
 
 }

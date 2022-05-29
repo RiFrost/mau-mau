@@ -106,24 +106,41 @@ class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("checks drawCounter when SEVEN is played")
+    @DisplayName("checks if SEVEN is played")
     public void checkMustDrawCards() {
 
-        assertTrue(rulesService.mustDrawTwoCards(clubsSeven));
+        assertTrue(rulesService.mustDrawCards(clubsSeven));
     }
 
     @Test
-    @DisplayName("checks drawCounter when no SEVEN is played")
-    public void checkMustNotDrawCards() {
+    @DisplayName("player must draw cards when hand card is not a SEVEN but top card is a SEVEN")
+    public void checkMustDrawCards1() {
+        player.setHandCards(List.of(clubsNine));
 
-        assertFalse(rulesService.mustDrawTwoCards(heartsAss));
+        assertTrue(rulesService.mustDrawCards(player, clubsSeven));
+    }
+
+    @Test
+    @DisplayName("player must not draw when hand card  and top card is a SEVEN")
+    public void checkMustDrawCards2() {
+        player.setHandCards(List.of(spadesSeven));
+
+        assertFalse(rulesService.mustDrawCards(player, clubsSeven));
+    }
+
+    @Test
+    @DisplayName("player must not draw when top card is not a SEVEN")
+    public void checkMustDrawCards3() {
+        player.setHandCards(List.of(spadesSeven));
+
+        assertFalse(rulesService.mustDrawCards(player, clubsEight));
     }
 
     @Test
     @DisplayName("checks if card is ASS")
     public void checkAss() {
 
-        assertTrue(rulesService.isSuspended(heartsAss));
+        assertTrue(rulesService.mustSuspend(heartsAss));
     }
 
     @Test

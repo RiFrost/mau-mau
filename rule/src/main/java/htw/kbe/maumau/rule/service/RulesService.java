@@ -12,19 +12,29 @@ public interface RulesService {
      * @param userCard card user wants to play
      * @param topCard card on top of discard pile
      * @param userWish suit wish after JACK was played
+     * @throws PlayedCardIsInvalidException when card cannot be played
      */
     void validateCard(Card userCard, Card topCard, Suit userWish) throws PlayedCardIsInvalidException;
 
     /**
-     * Checks if next player needs two draw two, also counts the number of cards that have to be drawn
+     * Checks if a player needs to draw cards
      * @param topCard card on top of discard pile
-     * @return true if
+     * @return true if card has label SEVEN, false when not
      */
-    boolean mustDrawTwoCards(Card topCard);
+    boolean mustDrawCards(Card topCard);
 
     /**
-     *
-     * @return
+     * checks if at least one hand card of the player is a SEVEN and top card is a SEVEN
+     * decides if a player has to draw cards
+     * @param player
+     * @param topCard card on top of discard pile
+     * @return true if player has to draw cards, false if player has not to draw
+     */
+    boolean mustDrawCards(Player player, Card topCard);
+
+    /**
+     * gets number of drawn cards
+     * @return number of cards to be drawn
      */
     int getNumberOfDrawnCards();
 
@@ -33,7 +43,7 @@ public interface RulesService {
      * @param topCard card on top of discard pile
      * @return true if card is ASS, false if not
      */
-    boolean isSuspended(Card topCard);
+    boolean mustSuspend(Card topCard);
 
     /**
      * Checks if last card played was a JACK and player can make a wish
@@ -50,9 +60,9 @@ public interface RulesService {
     boolean changeGameDirection(Card topCard);
 
     /**
-     * Checks if player said Mau and if it's valid
+     * Checks if player said 'mau' and if it's valid
      * @param player player in turn
-     * @return false, when player's 'mau' is valid, true when it's invalid
+     * @return false, if players 'mau' is valid, true if it's invalid
      */
     boolean isPlayersMauInvalid(Player player);
 }

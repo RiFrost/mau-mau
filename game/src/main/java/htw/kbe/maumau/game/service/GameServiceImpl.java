@@ -9,16 +9,19 @@ import htw.kbe.maumau.deck.service.DeckService;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.player.service.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.service.RulesService;
 
 import java.util.List;
+import java.util.Objects;
 
 public class GameServiceImpl implements GameService {
 
     private DeckService deckService;
     private CardService cardService;
     private RulesService rulesService;
+    private PlayerService playerService;
 
     @Override
     public Game startNewGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {
@@ -62,31 +65,35 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public void dealCards(Game game) {
+    public void initialCardDealing(Game game) {
         Deck deck = game.getCardDeck();
         List<Player> players = game.getPlayers();
         for(Player player : players) {
-            player.setHandCards(deckService.initialCardDealing(deck));
+            playerService.drawCards(player, deckService.initialCardDealing(deck));
         }
     }
 
     @Override
-    public void drawCards(int amount, Game game) {
+    public void drawCards(int amount, Game game) {  // Note: re-use this method for drawing penalty cards and cards because of a SEVEN
         Player activePlayer = game.getActivePlayer();
-        List<Card> handCards = activePlayer.getHandCards();
         List<Card> drawCards = deckService.getCardsFromDrawPile(game.getCardDeck(), amount);
-        handCards.addAll(drawCards);
-        activePlayer.setHandCards(handCards);
+
+        playerService.drawCards(activePlayer, drawCards);
+
+        if(game.getDrawCardsCounter() > 1) {  // Maye that logic is not completely right. But for now we leave like that
+            game.setDrawCardsCounter(0);
+        }
     }
 
     @Override
     public boolean canPlayerPlayCards(Game game) {
-        return true;
+        Player activePlayer = game.getActivePlayer();
+        return !rulesService.mustDrawCards(activePlayer, game.getCardDeck().getTopCard());
     }
 
     @Override
-    public void setUserWish(Suit userWish, Game game) { // UI kann direkt anpassen?
-        game.setUserWish(userWish);
+    public void setPlayersSuitWish(Suit userWish, Game game) {
+        game.setSuitWish(userWish);
         game.setAskForSuitWish(false);
     }
 
@@ -94,8 +101,12 @@ public class GameServiceImpl implements GameService {
     public void validateCard(Card card, Game game) throws PlayedCardIsInvalidException {
         Deck deck = game.getCardDeck();
         Card topCard = deck.getTopCard();
-        rulesService.validateCard(card, topCard, game.getUserWish());
+        rulesService.validateCard(card, topCard, game.getSuitWish());
         deckService.setCardToTopCard(deck, card);
+
+        if (Objects.nonNull(game.getSuitWish())) {
+            game.setSuitWish(null);
+        }
     }
 
     @Override
@@ -104,32 +115,39 @@ public class GameServiceImpl implements GameService {
         if(rulesService.isPlayersMauInvalid(game.getActivePlayer())) {
             drawCards(rulesService.getNumberOfDrawnCards(), game);
         }
-        else if(rulesService.isSuspended(topCard)) {
+        else if(rulesService.mustSuspend(topCard)) {
             Player nextPlayer = getNextActivePlayer(game);
             nextPlayer.setMustSuspend(true);
         }
         else if(rulesService.isCardJack(topCard)) {
             game.setAskForSuitWish(true);
+            // Note: After Jack was played and applyRule is done, then ask for players wish in UI and set wish into game
         }
         else if(rulesService.changeGameDirection(topCard)) {
             game.switchDirection();
         }
-        else if(rulesService.mustDrawTwoCards(topCard)) {
+        else if(rulesService.mustDrawCards(topCard)) {
             game.addUpDrawCounter();
         }
     }
 
-    // SERVICE SETTER METHODS
-
+    @Override
     public void setCardService(CardService cardService) {
         this.cardService = cardService;
     }
 
+    @Override
     public void setRulesService(RulesService rulesService) {
         this.rulesService = rulesService;
     }
 
+    @Override
     public void setDeckService(DeckService deckService) {
         this.deckService = deckService;
+    }
+
+    @Override
+    public void setPlayerService(PlayerService playerService) {
+        this.playerService = playerService;
     }
 }

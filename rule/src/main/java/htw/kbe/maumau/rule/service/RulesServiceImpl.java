@@ -18,7 +18,7 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public boolean mustDrawTwoCards(Card topCard) {
+    public boolean mustDrawCards(Card topCard) {
         return topCard.getLabel().equals(Label.SEVEN);
     }
 
@@ -28,8 +28,14 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public boolean isSuspended(Card topCard) {
+    public boolean mustSuspend(Card topCard) {
         return topCard.getLabel().equals(Label.ASS);
+    }
+
+    @Override
+    public boolean mustDrawCards(Player player, Card topCard) {
+        boolean hasSeven = player.getHandCards().stream().filter(c -> c.getLabel().equals(Label.SEVEN)).findFirst().isPresent();
+        return !hasSeven && mustDrawCards(topCard);
     }
 
     @Override

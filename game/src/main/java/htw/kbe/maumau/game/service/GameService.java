@@ -8,6 +8,7 @@ import htw.kbe.maumau.deck.service.DeckService;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.player.service.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.service.RulesService;
 
@@ -81,4 +82,6 @@ public interface GameService {
     void setDeckService(DeckService deckService);
 
     void setRulesService(RulesService rulesService);
+
+    void setPlayerService(PlayerService playerService);
 }

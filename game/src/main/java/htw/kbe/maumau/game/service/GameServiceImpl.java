@@ -9,6 +9,7 @@ import htw.kbe.maumau.deck.service.DeckService;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.player.service.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.service.RulesService;
 
@@ -20,6 +21,7 @@ public class GameServiceImpl implements GameService {
     private DeckService deckService;
     private CardService cardService;
     private RulesService rulesService;
+    private PlayerService playerService;
 
     @Override
     public Game startNewGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {
@@ -67,17 +69,16 @@ public class GameServiceImpl implements GameService {
         Deck deck = game.getCardDeck();
         List<Player> players = game.getPlayers();
         for(Player player : players) {
-            player.setHandCards(deckService.initialCardDealing(deck));
+            playerService.drawCards(player, deckService.initialCardDealing(deck));
         }
     }
 
     @Override
     public void drawCards(int amount, Game game) {  // Note: re-use this method for drawing penalty cards and cards because of a SEVEN
         Player activePlayer = game.getActivePlayer();
-        List<Card> handCards = activePlayer.getHandCards();
         List<Card> drawCards = deckService.getCardsFromDrawPile(game.getCardDeck(), amount);
-        handCards.addAll(drawCards);
-        activePlayer.setHandCards(handCards);
+
+        playerService.drawCards(activePlayer, drawCards);
 
         if(game.getDrawCardsCounter() > 1) {  // Maye that logic is not completely right. But for now we leave like that
             game.setDrawCardsCounter(0);
@@ -143,5 +144,10 @@ public class GameServiceImpl implements GameService {
     @Override
     public void setDeckService(DeckService deckService) {
         this.deckService = deckService;
+    }
+
+    @Override
+    public void setPlayerService(PlayerService playerService) {
+        this.playerService = playerService;
     }
 }

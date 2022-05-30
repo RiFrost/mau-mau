@@ -80,7 +80,7 @@ public class GameServiceImpl implements GameService {
 
         playerService.drawCards(activePlayer, drawCards);
 
-        if(game.getDrawCardsCounter() > 1) {  // Maye that logic is not completely right. But for now we leave like that
+        if(game.getDrawCardsCounter() > 1) {  // Maybe that logic is not completely right. But for now we leave like that
             game.setDrawCardsCounter(0);
         }
     }

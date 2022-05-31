@@ -4,7 +4,6 @@ import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.card.service.CardService;
-import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import java.util.*;

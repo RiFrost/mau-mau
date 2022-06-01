@@ -50,7 +50,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return String.format("Player: %s", this.name);
+        return String.format("Player %s", this.name);
     }
 
     @Override

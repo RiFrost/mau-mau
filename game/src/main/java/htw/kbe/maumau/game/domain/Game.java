@@ -20,6 +20,7 @@ public class Game {
         this.players = players;
         this.cardDeck = cardDeck;
         this.activePlayer = players.get(0);
+        System.out.println("Playerliste: "+ this.getPlayers());  //nur für Testzwecke
     }
 
     public List<Player> getPlayers() {

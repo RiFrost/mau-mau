@@ -18,10 +18,18 @@
 		<module>player</module>
 		<module>JaCoCo</module>
         <module>ui-controller</module>
-    </modules>
+		<module>app-controller</module>
+	</modules>
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>5.3.20</version>
+				<scope>runtime</scope>
+			</dependency>
+
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>

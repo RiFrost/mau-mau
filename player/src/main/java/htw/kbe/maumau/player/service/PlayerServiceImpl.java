@@ -3,11 +3,13 @@ package htw.kbe.maumau.player.service;
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.player.domain.Player;
 import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Service
 public class PlayerServiceImpl implements PlayerService {
 
     @Override

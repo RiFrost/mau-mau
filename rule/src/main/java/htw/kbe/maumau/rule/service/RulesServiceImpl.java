@@ -5,9 +5,11 @@ import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.player.domain.Player;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Service
 public class RulesServiceImpl implements RulesService {
 
     @Override

@@ -31,10 +31,9 @@ public class DeckServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.service = new DeckServiceImpl();
         this.cards = CardsFixture.cards();
         this.cardService = Mockito.mock(CardService.class);
-        this.service.setCardService(this.cardService);
+        this.service = new DeckServiceImpl(cardService);
         Mockito.when(cardService.getSuits()).thenReturn(CardsFixture.suits);
         Mockito.when(cardService.getLabels()).thenReturn(CardsFixture.labels);
     }

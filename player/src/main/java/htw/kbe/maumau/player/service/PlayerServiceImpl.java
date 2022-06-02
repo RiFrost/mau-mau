@@ -7,7 +7,9 @@ import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class PlayerServiceImpl implements PlayerService {
 
     @Override

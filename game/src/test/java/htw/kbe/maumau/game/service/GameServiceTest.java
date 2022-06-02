@@ -42,15 +42,11 @@ public class GameServiceTest {
 
     @BeforeEach
     public void setUp() {
-        service = new GameServiceImpl();
         deckService = mock(DeckService.class);
         rulesService = mock(RulesService.class);
         cardService = mock(CardService.class);
         playerService = mock(PlayerService.class);
-        service.setCardService(cardService);
-        service.setDeckService(deckService);
-        service.setRulesService(rulesService);
-        service.setPlayerService(playerService);
+        service = new GameServiceImpl(deckService, cardService, rulesService, playerService);
         players = GameFixture.players();
         game = GameFixture.game();
     }

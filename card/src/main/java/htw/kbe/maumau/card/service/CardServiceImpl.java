@@ -6,7 +6,9 @@ import htw.kbe.maumau.card.domain.Suit;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CardServiceImpl implements CardService {
 
     private List<Card> cardList = new LinkedList<>();

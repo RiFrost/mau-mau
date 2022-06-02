@@ -12,10 +12,13 @@ import htw.kbe.maumau.player.domain.Player;
 import htw.kbe.maumau.player.service.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.service.RulesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 
+@Service
 public class GameServiceImpl implements GameService {
 
     private DeckService deckService;
@@ -23,9 +26,18 @@ public class GameServiceImpl implements GameService {
     private RulesService rulesService;
     private PlayerService playerService;
 
+    @Autowired
+    public GameServiceImpl(DeckService deckService, CardService cardService, RulesService rulesService, PlayerService playerService) {
+        this.playerService = playerService;
+        this.rulesService = rulesService;
+        this.deckService = deckService;
+        this.cardService = cardService;
+    }
+
     @Override
     public Game startNewGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {
-        if(players.size() < 2 || players.size() > 4) throw new InvalidPlayerSizeException("Number of players is not valid");
+        if (players.size() < 2 || players.size() > 4)
+            throw new InvalidPlayerSizeException("Number of players is not valid");
         Deck deck = deckService.createDeck(cardService.getCards());
         return new Game(players, deck);
     }
@@ -34,7 +46,7 @@ public class GameServiceImpl implements GameService {
     public Player getNextPlayer(Game game) {
         game.setActivePlayer(getNextActivePlayer(game));
 
-        if(game.getActivePlayer().mustSuspend()) {
+        if (game.getActivePlayer().mustSuspend()) {
             game.getActivePlayer().setMustSuspend(false);
             getNextPlayer(game);
         }
@@ -47,14 +59,14 @@ public class GameServiceImpl implements GameService {
         List<Player> players = game.getPlayers();
         int idxActivePlayer = players.indexOf(activePlayer);
 
-        if(game.getClockWise()) {
-            if(idxActivePlayer == players.size() - 1) {
+        if (game.getClockWise()) {
+            if (idxActivePlayer == players.size() - 1) {
                 activePlayer = players.get(0);
             } else {
                 activePlayer = players.get(++idxActivePlayer);
             }
         } else {
-            if(idxActivePlayer == 0) {
+            if (idxActivePlayer == 0) {
                 activePlayer = players.get(players.size() - 1);
             } else {
                 activePlayer = players.get(--idxActivePlayer);
@@ -68,7 +80,7 @@ public class GameServiceImpl implements GameService {
     public void initialCardDealing(Game game) {
         Deck deck = game.getCardDeck();
         List<Player> players = game.getPlayers();
-        for(Player player : players) {
+        for (Player player : players) {
             playerService.drawCards(player, deckService.initialCardDealing(deck));
         }
     }
@@ -80,7 +92,7 @@ public class GameServiceImpl implements GameService {
 
         playerService.drawCards(activePlayer, drawCards);
 
-        if(game.getDrawCardsCounter() > 1) {  // Maybe that logic is not completely right. But for now we leave like that
+        if (game.getDrawCardsCounter() > 1) {  // Maybe that logic is not completely right. But for now we leave like that
             game.setDrawCardsCounter(0);
         }
     }
@@ -112,42 +124,18 @@ public class GameServiceImpl implements GameService {
     @Override
     public void applyCardRule(Game game) {
         Card topCard = game.getCardDeck().getTopCard();
-        if(rulesService.isPlayersMauInvalid(game.getActivePlayer())) {
+        if (rulesService.isPlayersMauInvalid(game.getActivePlayer())) {
             drawCards(rulesService.getNumberOfDrawnCards(), game);
-        }
-        else if(rulesService.mustSuspend(topCard)) {
+        } else if (rulesService.mustSuspend(topCard)) {
             Player nextPlayer = getNextActivePlayer(game);
             nextPlayer.setMustSuspend(true);
-        }
-        else if(rulesService.isCardJack(topCard)) {
+        } else if (rulesService.isCardJack(topCard)) {
             game.setAskForSuitWish(true);
             // Note: After Jack was played and applyRule is done, then ask for players wish in UI and set wish into game
-        }
-        else if(rulesService.changeGameDirection(topCard)) {
+        } else if (rulesService.changeGameDirection(topCard)) {
             game.switchDirection();
-        }
-        else if(rulesService.mustDrawCards(topCard)) {
+        } else if (rulesService.mustDrawCards(topCard)) {
             game.addUpDrawCounter();
         }
-    }
-
-    @Override
-    public void setCardService(CardService cardService) {
-        this.cardService = cardService;
-    }
-
-    @Override
-    public void setRulesService(RulesService rulesService) {
-        this.rulesService = rulesService;
-    }
-
-    @Override
-    public void setDeckService(DeckService deckService) {
-        this.deckService = deckService;
-    }
-
-    @Override
-    public void setPlayerService(PlayerService playerService) {
-        this.playerService = playerService;
     }
 }

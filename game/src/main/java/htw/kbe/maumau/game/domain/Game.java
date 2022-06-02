@@ -6,6 +6,8 @@ import htw.kbe.maumau.player.domain.Player;
 
 import java.util.List;
 
+// test commit
+
 public class Game {
 
     private List<Player> players;

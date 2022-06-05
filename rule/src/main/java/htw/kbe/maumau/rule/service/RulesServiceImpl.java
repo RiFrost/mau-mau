@@ -13,8 +13,9 @@ import java.util.Objects;
 public class RulesServiceImpl implements RulesService {
 
     @Override
-    public void validateCard(Card playedCard, Card topCard, Suit userWish) throws PlayedCardIsInvalidException {
-        if(topCard.getLabel().equals(playedCard.getLabel()) && topCard.getLabel().equals(Label.JACK)) throw new PlayedCardIsInvalidException("Jack on Jack is not allowed.");
+    public void validateCard(Player player, Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException {
+        if(!mustDrawCards(player, topCard, drawCounter) && !playedCard.getLabel().equals(Label.SEVEN) && topCard.getLabel().equals(Label.SEVEN)) throw new PlayedCardIsInvalidException("You have to play a SEVEN or draw cards!");
+        if(topCard.getLabel().equals(playedCard.getLabel()) && topCard.getLabel().equals(Label.JACK)) throw new PlayedCardIsInvalidException("JACK on JACK is not allowed.");
         if(!(topCard.getLabel().equals(playedCard.getLabel()) || topCard.getSuit().equals(playedCard.getSuit())) && Objects.isNull(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
         if(Objects.nonNull(userWish) && !playedCard.getSuit().equals(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
     }

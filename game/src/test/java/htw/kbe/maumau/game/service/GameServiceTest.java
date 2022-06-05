@@ -111,9 +111,11 @@ public class GameServiceTest {
 
         assertEquals(null, game.getSuitWish());
         verify(rulesService, times(1)).validateCard(
+                argThat(player -> player.equals(game.getActivePlayer())),
                 argThat(card -> card.equals(playedCard)),
                 argThat(topCard -> topCard.equals(expectedTopCard)),
-                argThat(suit -> suit.equals(userWish))
+                argThat(suit -> suit.equals(userWish)),
+                intThat(drawCounter -> drawCounter == game.getDrawCardsCounter())
         );
 
         verify(deckService, times(1)).setCardToTopCard(

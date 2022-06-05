@@ -29,6 +29,7 @@ class RuleServiceTest {
     private final Card heartsJack = new Card(Suit.HEARTS, Label.JACK);
     private final Player player = new Player("Uwe");
     private final Suit userWish = Suit.HEARTS;
+    private int drawCounter = 0;
 
     @BeforeEach
     public void setUp() {
@@ -38,29 +39,29 @@ class RuleServiceTest {
     @Test
     @DisplayName("checks if card can be played when suit is the same")
     public void checkIsSuitValid() throws PlayedCardIsInvalidException {
-        rulesService.validateCard(clubsSeven, clubsEight, null);
+        rulesService.validateCard(player, clubsSeven, clubsEight, null, drawCounter);
     }
 
     @Test
     @DisplayName("checks if card can be played when label is the same")
     public void checkIsLabelValid() throws PlayedCardIsInvalidException {
-        rulesService.validateCard(clubsSeven, spadesSeven, null);
+        rulesService.validateCard(player, clubsSeven, spadesSeven, null, drawCounter);
     }
 
     @Test
     @DisplayName("checks if card can be played when players card does match suit wish")
     public void checkSuitWishIsValid() throws PlayedCardIsInvalidException {
-        rulesService.validateCard(heartsAss, clubsJack, userWish);
+        rulesService.validateCard(player, heartsAss, clubsJack, userWish, drawCounter);
     }
 
     @Test
     @DisplayName("false when players card does match suit wish but jack on jack wants to be played")
     public void checkSuitWishIsValid1() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
-            rulesService.validateCard(heartsJack, clubsJack, userWish);
+            rulesService.validateCard(player, heartsJack, clubsJack, userWish, drawCounter);
         });
 
-        String expectedMessage = "Jack on Jack is not allowed.";
+        String expectedMessage = "JACK on JACK is not allowed.";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -70,7 +71,7 @@ class RuleServiceTest {
     @DisplayName("false when label and suit is not the same")
     public void checkIsLabelInvalid() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
-            rulesService.validateCard(clubsSeven, heartsAss, null);
+            rulesService.validateCard(player, clubsSeven, heartsAss, null, drawCounter);
         });
 
         String expectedMessage = "The card cannot be played. Label or suit does not match.";
@@ -83,10 +84,10 @@ class RuleServiceTest {
     @DisplayName("false when jack is played on jack")
     public void checkJackOnJack() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
-            rulesService.validateCard(clubsJack, spadesJack, null);
+            rulesService.validateCard(player, clubsJack, spadesJack, null, drawCounter);
         });
 
-        String expectedMessage = "Jack on Jack is not allowed.";
+        String expectedMessage = "JACK on JACK is not allowed.";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -96,10 +97,25 @@ class RuleServiceTest {
     @DisplayName("false when players card does not match suit wish")
     public void checkSuitWish() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
-            rulesService.validateCard(clubsEight, clubsJack, userWish);
+            rulesService.validateCard(player, clubsEight, clubsJack, userWish, drawCounter);
         });
 
         String expectedMessage = "The card cannot be played. Suit does not match players wish.";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("throw exception when player has SEVEN and top card is SEVEN but player doesn't want to play SEVEN")
+    public void checkLabelSevenOnSeven() {
+        player.setHandCards(List.of(spadesSeven));
+        drawCounter = 2;
+        Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
+            rulesService.validateCard(player, clubsEight, clubsSeven, null, drawCounter);
+        });
+
+        String expectedMessage = "You have to play a SEVEN or draw cards!";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

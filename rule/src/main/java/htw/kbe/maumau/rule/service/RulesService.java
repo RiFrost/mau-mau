@@ -8,13 +8,15 @@ import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 public interface RulesService {
 
     /**
-     * Checks if card can be played, also if card was JACK and there is a suit wish
-     * @param userCard - card user wants to play
+     * Checks if card can be played, also if card was JACK, SEVEN and if there is a suit wish
+     * @param player- player who is in turn
+     * @param playedCard - card user wants to play
      * @param topCard - card on top of discard pile
      * @param userWish - suit wish after JACK was played
-     * @throws PlayedCardIsInvalidException when card cannot be played
+     * @param drawCounter - number of drawn cards
+     * @throws PlayedCardIsInvalidException
      */
-    void validateCard(Card userCard, Card topCard, Suit userWish) throws PlayedCardIsInvalidException;
+    void validateCard(Player player, Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException;
 
     /**
      * Checks if a player needs to draw cards

@@ -9,17 +9,17 @@ public class UserInputValidation {
     public static String getPlayerName() {
         String name;
         Scanner scanner = new Scanner(System.in);
-        while(true){
+        while (true) {
             name = scanner.next();
             if (name.isBlank()) {
                 System.out.println("Your name cannot be blank! Please try again!");
-            } else if(name.matches(".*[0-9].*")) {
+            } else if (name.matches(".*[0-9].*")) {
                 System.out.println("Your name cannot contain numbers!");
-            } else if(name.length()<3) {
+            } else if (name.length() < 3) {
                 System.out.println("Your name is too short! Please choose a longer name for you!");
-            } else if(name.length()>15) {
+            } else if (name.length() > 15) {
                 System.out.println("Your name is too long! Please choose a shorter name for you!");
-            } else{
+            } else {
                 break;
             }
         }
@@ -29,7 +29,7 @@ public class UserInputValidation {
     public static int getChosenNumber(int min, int max) {
         Scanner scanner = new Scanner(System.in);
         int index;
-        while(true){
+        while (true) {
             try {
                 index = Integer.parseInt(scanner.next());
                 if (index < min || index > max) {

@@ -103,6 +103,11 @@ public class UIImpl implements UI {
     }
 
     @Override
+    public void showCardValidationFailedMessage(String exceptionMessage) {
+        System.out.printf("%s\nPlease try again!\n", exceptionMessage);
+    }
+
+    @Override
     public void showWinnerMessage(Player player) {
         System.out.printf("Congratulations %s, you won!", player.getName());
     }

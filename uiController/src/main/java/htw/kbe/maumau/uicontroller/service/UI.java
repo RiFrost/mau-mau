@@ -76,6 +76,12 @@ public interface UI {
     boolean playerWantToDrawCards();
 
     /**
+     * lets the player know why the card cannot be played
+     * @param exceptionMessage - message that was thrown by rule service
+     */
+    void showCardValidationFailedMessage(String exceptionMessage);
+
+    /**
      * lets players know who has won
      * @param player - player who won
      */

@@ -62,7 +62,7 @@ public class GameServiceTest {
         assertEquals(players.get(0), game.getActivePlayer());
         assertNotEquals(null, game.getCardDeck().getTopCard());
         assertEquals(31, game.getCardDeck().getDrawPile().size());
-        assertTrue(game.getClockWise());
+        assertTrue(game.isClockWise());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class GameServiceTest {
     }
 
     @Test
-    @DisplayName("should call rulesService and deckService when validate played card")
+    @DisplayName("should call rulesService, deckService and playerService when validate played card")
     public void validateCard() throws PlayedCardIsInvalidException {
         Card expectedTopCard = new Card(Suit.CLUBS, Label.KING);
         Card playedCard = new Card(Suit.CLUBS, Label.SEVEN);
@@ -120,30 +120,30 @@ public class GameServiceTest {
                 argThat(deck -> deck.equals(game.getCardDeck())),
                 argThat(card -> card.equals(playedCard))
         );
+        verify(playerService, times(1)).removePlayedCard(
+                argThat(player -> player.equals(game.getActivePlayer())),
+                argThat(card -> card.equals(playedCard))
+        );
     }
 
     @Test
     @DisplayName("should not allow that player can play a card")
     public void playerCannotPlayCards() {
-        Player activePlayer = players.get(0);
-        activePlayer.setHandCards(List.of(new Card(Suit.DIAMONDS, Label.ASS)));
-        game.setActivePlayer(activePlayer);
+        game.getActivePlayer().setHandCards(List.of(new Card(Suit.DIAMONDS, Label.ASS)));
         game.getCardDeck().setTopCard(new Card(Suit.DIAMONDS, Label.SEVEN));
-        when(rulesService.mustDrawCards(any(), any())).thenReturn(true);
+        when(rulesService.mustDrawCards(any(), any(), anyInt())).thenReturn(true);
 
-        assertFalse(service.canPlayerPlayCards(game));
+        assertTrue(service.mustPlayerDrawCards(game));
     }
 
     @Test
     @DisplayName("should allow that player can play a card")
     public void playerCanPlayCards() {
-        Player activePlayer = players.get(0);
-        activePlayer.setHandCards(List.of(new Card(Suit.CLUBS, Label.SEVEN)));
-        game.setActivePlayer(activePlayer);
+        game.getActivePlayer().setHandCards(List.of(new Card(Suit.CLUBS, Label.SEVEN)));
         game.getCardDeck().setTopCard(new Card(Suit.DIAMONDS, Label.SEVEN));
-        when(rulesService.mustDrawCards(any(), any())).thenReturn(false);
+        when(rulesService.mustDrawCards(any(), any(), anyInt())).thenReturn(false);
 
-        assertTrue(service.canPlayerPlayCards(game));
+        assertFalse(service.mustPlayerDrawCards(game));
     }
 
     @Test
@@ -160,19 +160,34 @@ public class GameServiceTest {
     }
 
     @Test
-    @DisplayName("should apply suspended rule")
+    @DisplayName("should apply suspended rule and set suspend state to next player in turn when lap counter is greater then 1")
     public void applyPlayerMustSuspendRule() {
-        Card topCard = new Card(Suit.CLUBS, Label.JACK);
+        Card topCard = new Card(Suit.CLUBS, Label.ASS);
         game.getCardDeck().setTopCard(topCard);
-        Player activePlayer = players.get(0);
+        game.addUpLapCounter();
         Player expectedSuspendedPlayer = players.get(1);
         expectedSuspendedPlayer.setMustSuspend(true);
-        game.setActivePlayer(activePlayer);
         when(rulesService.mustSuspend(any())).thenReturn(true);
 
         service.applyCardRule(game);
 
         assertEquals(expectedSuspendedPlayer.mustSuspend(), game.getPlayers().get(1).mustSuspend());
+        verify(rulesService).mustSuspend(argThat(card -> card.equals(topCard)));
+    }
+
+    @Test
+    @DisplayName("should apply suspended rule and set suspend state to active player when lap counter is 1")
+    public void applyPlayerMustSuspendRule2() {
+        Card topCard = new Card(Suit.CLUBS, Label.ASS);
+        game.getCardDeck().setTopCard(topCard);
+        Player activePlayer = game.getActivePlayer();
+        Player expectedPlayer = new Player(activePlayer.getName());
+        expectedPlayer.setMustSuspend(true);
+        when(rulesService.mustSuspend(any())).thenReturn(true);
+
+        service.applyCardRule(game);
+
+        assertEquals(expectedPlayer.mustSuspend(), game.getActivePlayer().mustSuspend());
         verify(rulesService).mustSuspend(argThat(card -> card.equals(topCard)));
     }
 
@@ -185,7 +200,7 @@ public class GameServiceTest {
 
         service.applyCardRule(game);
 
-        assertFalse(game.getClockWise());
+        assertFalse(game.isClockWise());
         verify(rulesService).changeGameDirection(argThat(card -> card.equals(topCard)));
     }
 
@@ -203,25 +218,26 @@ public class GameServiceTest {
     }
 
     @Test
-    @DisplayName("should apply 'mau' is invalid rule")
+    @DisplayName("should apply 'mau' is invalid rule and reset players 'mau")
     public void applyIsMauInvalidRule() {
-        Player activePlayer = players.get(0);
+        Player activePlayer = game.getActivePlayer();
         activePlayer.setHandCards(new ArrayList<>(List.of(new Card(Suit.CLUBS, Label.SEVEN))));
-        game.setActivePlayer(activePlayer);
+        activePlayer.setSaidMau(true);
         List<Card> drawnCards = List.of(new Card(Suit.DIAMONDS, Label.JACK), new Card(Suit.CLUBS, Label.EIGHT));
         when(rulesService.isPlayersMauInvalid(any())).thenReturn(true);
-        when(rulesService.getNumberOfDrawnCards()).thenReturn(2);
+        when(rulesService.getDefaultNumberOfDrawnCards()).thenReturn(2);
         when(deckService.getCardsFromDrawPile(any(), anyInt())).thenReturn(drawnCards);
-        doNothing().when(playerService).drawCards(any(), anyList());
+        doNothing().when(playerService).addDrawnCards(any(), anyList());
 
         service.applyCardRule(game);
 
+        assertFalse(game.getActivePlayer().saidMau());
         verify(rulesService).isPlayersMauInvalid(argThat(player -> player.equals(activePlayer)));
-        verify(rulesService, times(1)).getNumberOfDrawnCards();
+        verify(rulesService, times(1)).getDefaultNumberOfDrawnCards();
         verify(deckService).getCardsFromDrawPile(
                 argThat(deck -> deck.equals(game.getCardDeck())),
                 intThat(numberOfDrawnCards -> numberOfDrawnCards == 2));
-        verify(playerService, times(1)).drawCards(argThat(
+        verify(playerService, times(1)).addDrawnCards(argThat(
                         player -> player.equals(activePlayer)),
                 argThat(cards -> cards.equals(drawnCards))
         );
@@ -290,43 +306,35 @@ public class GameServiceTest {
         game.setActivePlayer(activePlayer);
         List<Card> drawnCards = List.of(new Card(Suit.SPADES, Label.SEVEN), new Card(Suit.CLUBS, Label.EIGHT));
         when(deckService.getCardsFromDrawPile(any(), anyInt())).thenReturn(drawnCards);
-        doNothing().when(playerService).drawCards(any(), anyList());
+        doNothing().when(playerService).addDrawnCards(any(), anyList());
 
-        service.drawCards(2, game);
+        service.giveDrawnCardsToPlayer(2, game);
 
         verify(deckService, times(1)).getCardsFromDrawPile(argThat(
                         deck -> deck.equals(game.getCardDeck())),
                 intThat(numberOfDrawnCards -> numberOfDrawnCards == 2)
         );
-        verify(playerService, times(1)).drawCards(argThat(
+        verify(playerService, times(1)).addDrawnCards(argThat(
                         player -> player.equals(activePlayer)),
                 argThat(cards -> cards.equals(drawnCards))
         );
     }
 
     @Test
-    @DisplayName("should return true if the player does have the card in hand")
-    public void hasPlayerHandCard() {
-        assertTrue(true);
-    }
-
-    @Test
     @DisplayName("should call 'initialCardDealing' and call 'drawCards' for each player in game")
     public void shouldDrawInitialHandCards() {
         when(deckService.initialCardDealing(any())).thenReturn(GameFixture.cards().subList(0, 5));
-        doNothing().when(playerService).drawCards(any(), anyList());
+        doNothing().when(playerService).addDrawnCards(any(), anyList());
 
         service.initialCardDealing(game);
 
         verify(deckService, times(4)).initialCardDealing(any());
-        verify(playerService, times(4)).drawCards(any(), anyList());
+        verify(playerService, times(4)).addDrawnCards(any(), anyList());
     }
 
     @Test
     @DisplayName("should return next player who is not suspended")
     public void getNextNotSuspendedPlayer() {
-        Player activePlayer = players.get(0);
-        game.setActivePlayer(activePlayer);
         Player suspendedPlayer = game.getPlayers().get(1);
         suspendedPlayer.setMustSuspend(true);
 
@@ -336,5 +344,31 @@ public class GameServiceTest {
         assertFalse(suspendedPlayer.mustSuspend());
     }
 
+
+    @Test
+    @DisplayName("should reset 'mau' state from active player to false")
+    public void resetPlayersMau() {
+        game.getActivePlayer().setSaidMau(true);
+
+        service.resetPlayersMau(game);
+
+        assertFalse(game.getActivePlayer().saidMau());
+    }
+
+    @Test
+    @DisplayName("should declare game over when active player has no hand cards")
+    public void gameIsOver() {
+        game.getActivePlayer().setHandCards(new ArrayList<>());
+
+        assertTrue(service.isGameOver(game));
+    }
+
+    @Test
+    @DisplayName("should not declare game over when active player has at least one hand card")
+    public void gameIsNotOver() {
+        game.getActivePlayer().setHandCards(List.of(new Card(Suit.CLUBS, Label.JACK)));
+
+        assertFalse(service.isGameOver(game));
+    }
 
 }

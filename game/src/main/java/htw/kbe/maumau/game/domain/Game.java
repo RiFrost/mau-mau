@@ -15,12 +15,12 @@ public class Game {
     private int drawCardsCounter = 0;
     private Suit suitWish = null;
     private boolean askForSuitWish = false;
+    private int lapCounter = 1;
 
     public Game(List<Player> players, Deck cardDeck) {
         this.players = players;
         this.cardDeck = cardDeck;
         this.activePlayer = players.get(0);
-        System.out.println("List of players: "+ this.getPlayers());  //nur für Testzwecke
     }
 
     public List<Player> getPlayers() {
@@ -41,10 +41,6 @@ public class Game {
 
     public void switchDirection() {
         this.clockWise = !this.clockWise;
-    }
-
-    public boolean getClockWise() {
-        return clockWise;
     }
 
     public int getDrawCardsCounter() {
@@ -73,5 +69,22 @@ public class Game {
 
     public void setAskForSuitWish(boolean askForSuitWish) {
         this.askForSuitWish = askForSuitWish;
+    }
+
+    public boolean isClockWise() {
+        return clockWise;
+    }
+
+    public int getLapCounter() {
+        return lapCounter;
+    }
+
+    public void addUpLapCounter() {
+        this.lapCounter += 1;
+    }
+
+    @Override
+    public String toString() {
+        return "Player " + players;
     }
 }

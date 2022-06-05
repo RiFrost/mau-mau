@@ -2,15 +2,11 @@ package htw.kbe.maumau.game.service;
 
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
-import htw.kbe.maumau.deck.service.DeckService;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.player.domain.Player;
-import htw.kbe.maumau.player.service.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import htw.kbe.maumau.rule.service.RulesService;
 
 import java.util.List;
 
@@ -18,7 +14,7 @@ public interface GameService {
 
     /**
      * initializes a game with the desired number of players and the needed card deck
-     * @param players list of players participating in the game
+     * @param players - list of players participating in the game
      * @return new game
      * @throws IllegalDeckSizeException when deck has not the right size of cards
      * @throws InvalidPlayerSizeException when player list size is above four or below two
@@ -40,10 +36,10 @@ public interface GameService {
 
     /**
      * as many cards are drawn from the draw pile as are indicated and then the cards are dealt to the player
-     * @param amount number of cards the player must draw
+     * @param numberOfDrawnCards - number of cards the player must draw
      * @param game
      */
-    void drawCards(int amount, Game game);
+    void giveDrawnCardsToPlayer(int numberOfDrawnCards, Game game);
 
     /**
      * Checks whether the player may play a card in this round. He may not if he has to draw cards
@@ -51,7 +47,7 @@ public interface GameService {
      * @param game
      * @return true when player can play a card, false when player has to draw cards instead
      */
-    boolean canPlayerPlayCards(Game game);
+    boolean mustPlayerDrawCards(Game game);
 
     /**
      * checks if the played card match a card rule
@@ -64,7 +60,7 @@ public interface GameService {
      * validates the card to be played
      * if the card is valid, it is added to the discard pile
      * if a suit wish was played and valid then removes suit wish from game
-     * @param card card that wants to be played
+     * @param card - card that wants to be played
      * @param game
      * @throws PlayedCardIsInvalidException when the played card is not valid for that round
      */
@@ -72,8 +68,21 @@ public interface GameService {
 
     /**
      * set a suit wish of a player into the game and set askForSuitWish state to false
-     * @param userWish suit wish of the player
+     * @param userWish - suit wish of the player
      * @param game
      */
     void setPlayersSuitWish(Suit userWish, Game game);
+
+    /**
+     * calls the game as won when the active player has no more hand cards
+     * @param game
+     * @return true, if active player has no hand cards, false if not
+     */
+    boolean isGameOver(Game game);
+
+    /**
+     * set 'mau' state to false of active player
+     * @param game
+     */
+    void resetPlayersMau(Game game);
 }

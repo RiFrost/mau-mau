@@ -59,7 +59,7 @@ public class GameServiceImpl implements GameService {
         List<Player> players = game.getPlayers();
         int idxActivePlayer = players.indexOf(activePlayer);
 
-        if (game.getClockWise()) {
+        if (game.isClockWise()) {
             if (idxActivePlayer == players.size() - 1) {
                 activePlayer = players.get(0);
             } else {
@@ -81,26 +81,25 @@ public class GameServiceImpl implements GameService {
         Deck deck = game.getCardDeck();
         List<Player> players = game.getPlayers();
         for (Player player : players) {
-            playerService.drawCards(player, deckService.initialCardDealing(deck));
+            playerService.addDrawnCards(player, deckService.initialCardDealing(deck));
         }
     }
 
     @Override
-    public void drawCards(int amount, Game game) {  // Note: re-use this method for drawing penalty cards and cards because of a SEVEN
+    public void giveDrawnCardsToPlayer(int numberOfDrawnCards, Game game) {
         Player activePlayer = game.getActivePlayer();
-        List<Card> drawCards = deckService.getCardsFromDrawPile(game.getCardDeck(), amount);
+        List<Card> drawCards = deckService.getCardsFromDrawPile(game.getCardDeck(), numberOfDrawnCards);
+        playerService.addDrawnCards(activePlayer, drawCards);
 
-        playerService.drawCards(activePlayer, drawCards);
-
-        if (game.getDrawCardsCounter() > 1) {  // Maybe that logic is not completely right. But for now we leave like that
+        if (game.getDrawCardsCounter() > 0) {
             game.setDrawCardsCounter(0);
         }
     }
 
     @Override
-    public boolean canPlayerPlayCards(Game game) {
+    public boolean mustPlayerDrawCards(Game game) {
         Player activePlayer = game.getActivePlayer();
-        return !rulesService.mustDrawCards(activePlayer, game.getCardDeck().getTopCard());
+        return rulesService.mustDrawCards(activePlayer, game.getCardDeck().getTopCard(), game.getDrawCardsCounter());
     }
 
     @Override
@@ -115,6 +114,7 @@ public class GameServiceImpl implements GameService {
         Card topCard = deck.getTopCard();
         rulesService.validateCard(card, topCard, game.getSuitWish());
         deckService.setCardToTopCard(deck, card);
+        playerService.removePlayedCard(game.getActivePlayer(), card);
 
         if (Objects.nonNull(game.getSuitWish())) {
             game.setSuitWish(null);
@@ -125,17 +125,39 @@ public class GameServiceImpl implements GameService {
     public void applyCardRule(Game game) {
         Card topCard = game.getCardDeck().getTopCard();
         if (rulesService.isPlayersMauInvalid(game.getActivePlayer())) {
-            drawCards(rulesService.getNumberOfDrawnCards(), game);
+            System.out.println("Mau invalid");
+            giveDrawnCardsToPlayer(rulesService.getDefaultNumberOfDrawnCards(), game);
+            resetPlayersMau(game);
         } else if (rulesService.mustSuspend(topCard)) {
-            Player nextPlayer = getNextActivePlayer(game);
-            nextPlayer.setMustSuspend(true);
+            if (game.getLapCounter() == 1) { // only used for the first round when LABEL ASS is top card
+                game.getActivePlayer().setMustSuspend(true);
+            } else {
+                Player nextPlayer = getNextActivePlayer(game);
+                nextPlayer.setMustSuspend(true);
+                System.out.println("next player suspend");
+            }
         } else if (rulesService.isCardJack(topCard)) {
             game.setAskForSuitWish(true);
-            // Note: After Jack was played and applyRule is done, then ask for players wish in UI and set wish into game
+            System.out.println("ask for suit wish true");
         } else if (rulesService.changeGameDirection(topCard)) {
             game.switchDirection();
+            System.out.println("Switch direction");
         } else if (rulesService.mustDrawCards(topCard)) {
             game.addUpDrawCounter();
+            System.out.println("seven counter");
+            System.out.println(game.getDrawCardsCounter());
         }
     }
+
+    @Override
+    public boolean isGameOver(Game game) {
+        return game.getActivePlayer().getHandCards().size() == 0;
+    }
+
+    @Override
+    public void resetPlayersMau(Game game) {
+        game.getActivePlayer().setSaidMau(false);
+    }
+
+
 }

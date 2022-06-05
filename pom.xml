@@ -17,8 +17,8 @@
 		<module>rule</module>
 		<module>player</module>
 		<module>JaCoCo</module>
-		<module>ui-controller</module>
 		<module>app-controller</module>
+		<module>uiController</module>
 	</modules>
 
 	<dependencyManagement>

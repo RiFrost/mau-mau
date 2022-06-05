@@ -15,8 +15,8 @@ public class RulesServiceImpl implements RulesService {
     @Override
     public void validateCard(Card playedCard, Card topCard, Suit userWish) throws PlayedCardIsInvalidException {
         if(topCard.getLabel().equals(playedCard.getLabel()) && topCard.getLabel().equals(Label.JACK)) throw new PlayedCardIsInvalidException("Jack on Jack is not allowed.");
-        if(!(topCard.getLabel().equals(playedCard.getLabel()) || topCard.getSuit().equals(playedCard.getSuit())) && Objects.isNull(userWish)) throw new PlayedCardIsInvalidException("The card must not be played. Label or suit does not match.");
-        if(Objects.nonNull(userWish) && !playedCard.getSuit().equals(userWish)) throw new PlayedCardIsInvalidException("The card must not be played. Suit does not match players wish.");
+        if(!(topCard.getLabel().equals(playedCard.getLabel()) || topCard.getSuit().equals(playedCard.getSuit())) && Objects.isNull(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
+        if(Objects.nonNull(userWish) && !playedCard.getSuit().equals(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
     }
 
     @Override

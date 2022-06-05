@@ -73,7 +73,7 @@ class RuleServiceTest {
             rulesService.validateCard(clubsSeven, heartsAss, null);
         });
 
-        String expectedMessage = "The card must not be played. Label or suit does not match.";
+        String expectedMessage = "The card cannot be played. Label or suit does not match.";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
@@ -99,7 +99,7 @@ class RuleServiceTest {
             rulesService.validateCard(clubsEight, clubsJack, userWish);
         });
 
-        String expectedMessage = "The card must not be played. Suit does not match players wish.";
+        String expectedMessage = "The card cannot be played. Suit does not match players wish.";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

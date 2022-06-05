@@ -1,12 +1,15 @@
 package htw.kbe.maumau.uicontroller.utilities;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Scanner;
 
+@Component
 public class UserInputValidation {
 
     // Note: initialize scanner object in every function for better testing opportunities
 
-    public static String getPlayerName() {
+    public String getPlayerName() {
         String name;
         Scanner scanner = new Scanner(System.in);
         while (true) {
@@ -26,7 +29,7 @@ public class UserInputValidation {
         return name;
     }
 
-    public static int getChosenNumber(int min, int max) {
+    public int getChosenNumber(int min, int max) {
         Scanner scanner = new Scanner(System.in);
         int index;
         while (true) {

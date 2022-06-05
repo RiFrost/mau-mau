@@ -5,6 +5,7 @@ import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.player.domain.Player;
 import htw.kbe.maumau.uicontroller.ascii.AsciiCards;
 import htw.kbe.maumau.uicontroller.utilities.UserInputValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,11 +13,18 @@ import java.util.*;
 @Service
 public class UIImpl implements UI {
 
+    private UserInputValidation userInputValidation;
+
+    @Autowired
+    public UIImpl(UserInputValidation userInputValidation) {
+        this.userInputValidation = userInputValidation;
+    }
+
     @Override
     public int getNumberOfPlayer() {
         System.out.println("Welcome to M(i)au M(i)au!");
         System.out.println("How many players will take part? Please choose a number from 2 to 4.");
-        int number = UserInputValidation.getChosenNumber(2, 4);
+        int number = userInputValidation.getChosenNumber(2, 4);
         System.out.printf("The Game will start with %d Players!\n", number);
         return number;
     }
@@ -27,7 +35,7 @@ public class UIImpl implements UI {
         int playerNo = 1;
         for (int i = 0; i < numberOfPlayer; i++) {
             System.out.printf("Player %d, please type in your Name:", playerNo++);
-            String playerName = UserInputValidation.getPlayerName();
+            String playerName = userInputValidation.getPlayerName();
             playerNames.add(playerName);
         }
         return playerNames;
@@ -63,7 +71,7 @@ public class UIImpl implements UI {
     public Map<Card, Boolean> getPlayedCard(Player player) {
         Map<Card, Boolean> cardAndMau = new HashMap<>();
         System.out.printf("Please choose a card:\n", player.getName());
-        int number = UserInputValidation.getChosenNumber(1, player.getHandCards().size());
+        int number = userInputValidation.getChosenNumber(1, player.getHandCards().size());
 
         boolean saidMau = saidMau(player);
         cardAndMau.put(player.getHandCards().get(number - 1), saidMau);
@@ -78,7 +86,7 @@ public class UIImpl implements UI {
         for (Suit suit: suits){
             System.out.printf("%d: %s\n", numberOfSuit++, suit);
         }
-        int number = UserInputValidation.getChosenNumber(1,suits.size());
+        int number = userInputValidation.getChosenNumber(1,suits.size());
         return suits.get(number - 1);
     }
 
@@ -86,7 +94,7 @@ public class UIImpl implements UI {
     public boolean saidMau(Player player) {
         System.out.printf("%s do you want to say 'mau'?\n", player.getName());
         System.out.println("Type 1 for 'True' or 2 for 'False'");
-        int saidMau = UserInputValidation.getChosenNumber(1, 2);
+        int saidMau = userInputValidation.getChosenNumber(1, 2);
         return saidMau == 1 ? true : false;
     }
 
@@ -98,7 +106,7 @@ public class UIImpl implements UI {
     @Override
     public boolean playerWantToDrawCards() {
         System.out.println("\nType 1 if you want to play a card or 2 for drawing a card:");
-        int number = UserInputValidation.getChosenNumber(1, 2);
+        int number = userInputValidation.getChosenNumber(1, 2);
         return number == 2 ? true : false;
     }
 

@@ -1,6 +1,7 @@
 package htw.kbe.maumau.uicontroller.utilities;
 
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -11,10 +12,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserInputValidationTest {
 
+    private UserInputValidation userInputValidation;
+
+    @BeforeEach
+    public void setUp() {
+       userInputValidation = new UserInputValidation();
+    }
+
     @Test
     @DisplayName("should only accept")
     public void testUserInputByStrings() {
-
         String[] userInput = new String[]{
                 " ",
                 "5",
@@ -30,7 +37,7 @@ public class UserInputValidationTest {
 
         try {
             System.setIn(new ByteArrayInputStream(String.join("\n", userInput).getBytes()));
-            String actual = UserInputValidation.getPlayerName();
+            String actual = userInputValidation.getPlayerName();
             assertEquals(actual, expected);
         } finally {
             System.setIn(stdin);
@@ -54,7 +61,7 @@ public class UserInputValidationTest {
 
         try {
             System.setIn(new ByteArrayInputStream(String.join("\n", userInput).getBytes()));
-            int actual = UserInputValidation.getChosenNumber(1, 2);
+            int actual = userInputValidation.getChosenNumber(1, 2);
             assertEquals(actual, expected);
         } finally {
             System.setIn(stdin);

@@ -113,27 +113,30 @@ class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("player must draw cards when hand card is not a SEVEN but top card is a SEVEN")
+    @DisplayName("player must draw cards when hand card is not a SEVEN but top card is a SEVEN and draw counter is greater or equal 2")
     public void checkMustDrawCards1() {
+        int drawCounter = 2;
         player.setHandCards(List.of(clubsNine));
 
-        assertTrue(rulesService.mustDrawCards(player, clubsSeven));
+        assertTrue(rulesService.mustDrawCards(player, clubsSeven, drawCounter));
     }
 
     @Test
-    @DisplayName("player must not draw when hand card  and top card is a SEVEN")
+    @DisplayName("player must not draw when hand card and top card is a SEVEN and draw counter is greater or equal 2")
     public void checkMustDrawCards2() {
+        int drawCounter = 2;
         player.setHandCards(List.of(spadesSeven));
 
-        assertFalse(rulesService.mustDrawCards(player, clubsSeven));
+        assertFalse(rulesService.mustDrawCards(player, clubsSeven, drawCounter));
     }
 
     @Test
-    @DisplayName("player must not draw when top card is not a SEVEN")
+    @DisplayName("player must not draw when top card is a SEVEN but draw counter is less than 2")
     public void checkMustDrawCards3() {
-        player.setHandCards(List.of(spadesSeven));
+        int drawCounter = 0;
+        player.setHandCards(List.of(clubsNine));
 
-        assertFalse(rulesService.mustDrawCards(player, clubsEight));
+        assertFalse(rulesService.mustDrawCards(player, clubsSeven, drawCounter));
     }
 
     @Test
@@ -162,6 +165,7 @@ class RuleServiceTest {
     public void checkMauIsInvalid() {
         player.setSaidMau(true);
         player.setHandCards(List.of(clubsNine));
+
         assertFalse(rulesService.isPlayersMauInvalid(player));
     }
 
@@ -178,6 +182,7 @@ class RuleServiceTest {
     public void checkMauIsInvalid2() {
         player.setSaidMau(false);
         player.setHandCards(List.of(clubsNine));
+
         assertTrue(rulesService.isPlayersMauInvalid(player));
     }
 
@@ -186,6 +191,7 @@ class RuleServiceTest {
     public void checkMauIsInvalid3() {
         player.setSaidMau(true);
         player.setHandCards(List.of(clubsNine, clubsEight));
+
         assertTrue(rulesService.isPlayersMauInvalid(player));
     }
 
@@ -193,6 +199,6 @@ class RuleServiceTest {
     @DisplayName("return default number of drawn cards")
     public void checkNumberOfDrawnCards() {
 
-        assertEquals(2, rulesService.getNumberOfDrawnCards());
+        assertEquals(2, rulesService.getDefaultNumberOfDrawnCards());
     }
 }

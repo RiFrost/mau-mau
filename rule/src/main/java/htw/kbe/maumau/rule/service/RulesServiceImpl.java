@@ -25,7 +25,7 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public int getNumberOfDrawnCards() {
+    public int getDefaultNumberOfDrawnCards() {
         return 2;
     }
 
@@ -35,9 +35,11 @@ public class RulesServiceImpl implements RulesService {
     }
 
     @Override
-    public boolean mustDrawCards(Player player, Card topCard) {
+    public boolean mustDrawCards(Player player, Card topCard, int drawCounter) {
         boolean hasSeven = player.getHandCards().stream().filter(c -> c.getLabel().equals(Label.SEVEN)).findFirst().isPresent();
-        return !hasSeven && mustDrawCards(topCard);
+        boolean isTopCardSeven = mustDrawCards(topCard);
+        boolean isCounterGreaterDefault = drawCounter >= getDefaultNumberOfDrawnCards();
+        return !hasSeven && isTopCardSeven && isCounterGreaterDefault;
     }
 
     @Override
@@ -52,10 +54,10 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean isPlayersMauInvalid(Player player) {
-        if(player.getHandCards().size() == 1 && player.saidMau()) {
+        if(player.getHandCards().size() <= 1 && player.saidMau()) {
             return false;
         }
-        // Wichtig: Wenn Spieler min. 2 Karten hat, muss er nicht Mau gesagt haben, daher false!
+        //  Note: If the player has at least 2 cards, he does not have to have said 'mau', therefore false!
         if(player.getHandCards().size() > 1 && !player.saidMau()) {
             return false;
         }

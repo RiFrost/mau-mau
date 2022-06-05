@@ -9,33 +9,32 @@ import java.util.List;
 public interface PlayerService {
 
     /**
-     * initialise player
-     * @param names - List of the playername
-     * @return player who is ready to play
+     * initializes new players
+     * @param names - list of player names
+     * @return list of players
      * @throws InvalidPlayerNameException when the name is empty, blanks only or longer then 15 symbols
      */
     List<Player> createPlayers(List<String> names) throws InvalidPlayerNameException;
 
     /**
-     * player who has to draw cards
-     * @param player active player
-     * @param card card that has to drawn
-     * @return player with his drawn cards
+     * adds drawn card(s) to hand cards to given player
+     * @param player - who gets drawn cards
+     * @param card - card that was drawn
      */
-    void drawCards(Player player, List<Card> card);
+    void addDrawnCards(Player player, List<Card> card);
 
     /**
-     * card that is played by a player and will be discarded
-     * @param player active player
-     * @param card card which will be discarded
-     * @return card that is played
+     * removes card that was played from hand card of player
+     * @param player - player who played the given card
+     * @param card - played card to be removed
      */
-    void playCard(Player player, Card card);
+    void removePlayedCard(Player player, Card card);
 
     /**
-     * validate name
-     * @param name that has to be validated
-     * @throws InvalidPlayerNameException when String name is empty, has whitespaces or is too long
+     * validates name
+     * @param name - that has to be validated
+     * @param names - list of names that is needed to check if names duplicate
+     * @throws InvalidPlayerNameException when String name is empty, has whitespaces, is too long or names duplicate
      */
     void validateName(String name, List<String> names) throws InvalidPlayerNameException;
 

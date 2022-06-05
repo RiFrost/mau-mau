@@ -32,12 +32,12 @@ public class PlayerServiceImpl implements PlayerService {
     }
 
     @Override
-    public void playCard(Player player, Card card) {
+    public void removePlayedCard(Player player, Card card) {
         player.getHandCards().remove(card);
     }
 
     @Override
-    public void drawCards(Player player, List<Card> cards) {
+    public void addDrawnCards(Player player, List<Card> cards) {
         player.getHandCards().addAll(cards);
     }
 

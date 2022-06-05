@@ -70,7 +70,7 @@ public class PlayerServiceTest {
     public void testRemovePlayedCardFromHandCards(){
         player.setHandCards(handCards);
 
-        service.playCard(player, new Card(Suit.HEARTS, Label.SEVEN));
+        service.removePlayedCard(player, new Card(Suit.HEARTS, Label.SEVEN));
 
         assertEquals(1, player.getHandCards().size());
         assertEquals(Arrays.asList(new Card(Suit.CLUBS, Label.ASS)), player.getHandCards());
@@ -81,7 +81,7 @@ public class PlayerServiceTest {
     public void testAddDrawnCardsToHandCards(){
         player.setHandCards(handCards);
 
-        service.drawCards(player, Arrays.asList(new Card(Suit.SPADES, Label.EIGHT)));
+        service.addDrawnCards(player, Arrays.asList(new Card(Suit.SPADES, Label.EIGHT)));
 
         assertEquals(3, player.getHandCards().size());
     }

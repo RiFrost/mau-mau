@@ -9,7 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>app-controller</artifactId>
+    <artifactId>appController</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>htw.kbe</groupId>
-            <artifactId>uicontroller</artifactId>
+            <artifactId>uiController</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

@@ -55,7 +55,7 @@ class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("false when players card does match suit wish but jack on jack wants to be played")
+    @DisplayName("throw exception when players card does match suit wish but jack on jack wants to be played")
     public void checkSuitWishIsValid1() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
             rulesService.validateCard(player, heartsJack, clubsJack, userWish, drawCounter);
@@ -68,7 +68,7 @@ class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("false when label and suit is not the same")
+    @DisplayName("throw exception when label and suit is not the same")
     public void checkIsLabelInvalid() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
             rulesService.validateCard(player, clubsSeven, heartsAss, null, drawCounter);
@@ -81,7 +81,7 @@ class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("false when jack is played on jack")
+    @DisplayName("throw exception when jack on jack is played")
     public void checkJackOnJack() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
             rulesService.validateCard(player, clubsJack, spadesJack, null, drawCounter);
@@ -94,7 +94,7 @@ class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("false when players card does not match suit wish")
+    @DisplayName("throw exception when players card does not match suit wish")
     public void checkSuitWish() {
         Exception exception = assertThrows(PlayedCardIsInvalidException.class, () -> {
             rulesService.validateCard(player, clubsEight, clubsJack, userWish, drawCounter);

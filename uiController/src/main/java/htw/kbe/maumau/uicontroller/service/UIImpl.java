@@ -13,12 +13,8 @@ import java.util.*;
 @Service
 public class UIImpl implements UI {
 
-    private UserInputValidation userInputValidation;
-
     @Autowired
-    public UIImpl(UserInputValidation userInputValidation) {
-        this.userInputValidation = userInputValidation;
-    }
+    private UserInputValidation userInputValidation;
 
     @Override
     public int getNumberOfPlayer() {

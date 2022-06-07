@@ -103,9 +103,4 @@ public class UITest {
         assertFalse(ui.playerWantToDrawCards());
         verify(mockedUserInputValidation, times(2)).getChosenNumber(anyInt(), anyInt());
     }
-
-
-
-
-
 }

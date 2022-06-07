@@ -5,31 +5,32 @@ import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.player.domain.Player;
 import htw.kbe.maumau.uicontroller.utilities.UserInputValidation;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+@ExtendWith(MockitoExtension.class)
 public class UITest {
 
     @InjectMocks
-    private UI ui;
+    private UIImpl ui;
 
     @Mock
     private UserInputValidation mockedUserInputValidation;
 
-    @BeforeEach
-    void setUp() {
-        mockedUserInputValidation = mock(UserInputValidation.class);
-        ui = new UIImpl(mockedUserInputValidation);
-    }
+//    @BeforeEach
+//    void setUp() {
+//        mockedUserInputValidation = mock(UserInputValidation.class);
+//        ui = new UIImpl(mockedUserInputValidation);
+//    }
 
     @Test
     @DisplayName("should return given number from user input")

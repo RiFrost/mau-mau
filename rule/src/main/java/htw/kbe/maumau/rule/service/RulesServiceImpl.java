@@ -13,12 +13,12 @@ import java.util.Objects;
 public class RulesServiceImpl implements RulesService {
 
     @Override
-    public void validateCard(Player player, Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException {
+    public void validateCard(Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException {
         Suit playedSuit = playedCard.getSuit();
         Suit topSuit = topCard.getSuit();
         Label playedLabel = playedCard.getLabel();
         Label topLabel = topCard.getLabel();
-        if(!mustDrawCards(player, topCard, drawCounter) && !playedLabel.equals(Label.SEVEN) && topLabel.equals(Label.SEVEN)) throw new PlayedCardIsInvalidException("You have to play a SEVEN.");
+        if(drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN))throw new PlayedCardIsInvalidException("You have to play a SEVEN.");
         if(playedLabel.equals(topLabel) && topLabel.equals(Label.JACK)) throw new PlayedCardIsInvalidException("JACK on JACK is not allowed.");
         if(!(playedLabel.equals(topLabel) || playedSuit.equals(topSuit)) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
         if(Objects.nonNull(userWish) && !playedSuit.equals(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");

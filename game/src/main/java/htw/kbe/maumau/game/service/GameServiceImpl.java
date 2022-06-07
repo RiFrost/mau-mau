@@ -107,7 +107,7 @@ public class GameServiceImpl implements GameService {
     public void validateCard(Card card, Game game) throws PlayedCardIsInvalidException {
         Deck deck = game.getCardDeck();
         Card topCard = deck.getTopCard();
-        rulesService.validateCard(game.getActivePlayer(), card, topCard, game.getSuitWish(), game.getDrawCardsCounter());
+        rulesService.validateCard(card, topCard, game.getSuitWish(), game.getDrawCardsCounter());
         deckService.setCardToTopCard(deck, card);
         playerService.removePlayedCard(game.getActivePlayer(), card);
 

@@ -25,7 +25,6 @@ public class UserInputValidation {
                 break;
             }
         }
-        scanner.close();
         return name;
     }
 
@@ -44,7 +43,6 @@ public class UserInputValidation {
                 System.out.println("This is not a number. Please try again!");
             }
         }
-        scanner.close();
         return index;
     }
 

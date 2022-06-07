@@ -30,7 +30,7 @@ public class UIImpl implements UI {
 
     @Override
     public List<String> getPlayerNames(int numberOfPlayer) {
-        List<String> playerNames = new ArrayList<>();   //ist eine LinkedList nötig?
+        List<String> playerNames = new ArrayList<>();
         int playerNo = 1;
         for (int i = 0; i < numberOfPlayer; i++) {
             System.out.printf("Player %d, please type in your Name:", playerNo++);

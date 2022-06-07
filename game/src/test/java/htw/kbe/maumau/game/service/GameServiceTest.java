@@ -3,22 +3,23 @@ package htw.kbe.maumau.game.service;
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.card.service.CardService;
+import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
-import htw.kbe.maumau.deck.service.DeckService;
+import htw.kbe.maumau.deck.service.DeckServiceImpl;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.fixtures.GameFixture;
 import htw.kbe.maumau.player.domain.Player;
-import htw.kbe.maumau.player.service.PlayerService;
+import htw.kbe.maumau.player.service.PlayerServiceImpl;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import htw.kbe.maumau.rule.service.RulesService;
+import htw.kbe.maumau.rule.service.RulesServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -26,27 +27,25 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 
+@ExtendWith(MockitoExtension.class)
 public class GameServiceTest {
 
     @InjectMocks
-    private GameService service;
-
+    private GameServiceImpl service;
     @Mock
-    private DeckService deckService;
-    private RulesService rulesService;
-    private CardService cardService;
-    private PlayerService playerService;
+    private DeckServiceImpl deckService;
+    @Mock
+    private RulesServiceImpl rulesService;
+    @Mock
+    private CardServiceImpl cardService;
+    @Mock
+    private PlayerServiceImpl playerService;
 
     private List<Player> players;
     private Game game;
 
     @BeforeEach
     public void setUp() {
-        deckService = mock(DeckService.class);
-        rulesService = mock(RulesService.class);
-        cardService = mock(CardService.class);
-        playerService = mock(PlayerService.class);
-        service = new GameServiceImpl(deckService, cardService, rulesService, playerService);
         players = GameFixture.players();
         game = GameFixture.game();
     }
@@ -68,7 +67,7 @@ public class GameServiceTest {
     @Test
     @DisplayName("should throw exception when player list size is smaller than two")
     public void throwExceptionPlayerSizeIsTooLow() throws IllegalDeckSizeException {
-        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
+//        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
 
         Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {
             service.startNewGame(players.subList(0, 1));
@@ -78,7 +77,7 @@ public class GameServiceTest {
     @Test
     @DisplayName("should throw exception when player list size is higher than four")
     public void throwExceptionPlayerSizeIsTooHigh() throws IllegalDeckSizeException {
-        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
+//        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
         players.add(players.get(0));
 
         Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {

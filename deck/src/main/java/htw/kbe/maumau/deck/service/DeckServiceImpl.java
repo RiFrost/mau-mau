@@ -7,10 +7,18 @@ import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import java.util.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DeckServiceImpl implements DeckService {
 
     private CardService cardService;    // can be annotated with @Autowired when we use Spring
+
+    @Autowired
+    public DeckServiceImpl(CardService cardService) {
+        this.cardService = cardService;
+    }
 
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {

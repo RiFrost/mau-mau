@@ -14,25 +14,20 @@ import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.service.RulesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Objects;
 
 @Service
 public class GameServiceImpl implements GameService {
 
-    private DeckService deckService;
-    private CardService cardService;
-    private RulesService rulesService;
-    private PlayerService playerService;
-
     @Autowired
-    public GameServiceImpl(DeckService deckService, CardService cardService, RulesService rulesService, PlayerService playerService) {
-        this.playerService = playerService;
-        this.rulesService = rulesService;
-        this.deckService = deckService;
-        this.cardService = cardService;
-    }
+    private DeckService deckService;
+    @Autowired
+    private CardService cardService;
+    @Autowired
+    private RulesService rulesService;
+    @Autowired
+    private PlayerService playerService;
 
     @Override
     public Game startNewGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {

@@ -1,7 +1,6 @@
 package htw.kbe.maumau.uicontroller.utilities;
 
 import org.springframework.stereotype.Component;
-
 import java.util.Scanner;
 
 @Component

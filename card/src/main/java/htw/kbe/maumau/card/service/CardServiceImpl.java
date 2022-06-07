@@ -4,7 +4,6 @@ import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
 import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

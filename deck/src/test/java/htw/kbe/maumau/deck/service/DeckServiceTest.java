@@ -4,38 +4,35 @@ import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.card.service.CardService;
+import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.fixtures.CardsFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+@ExtendWith(MockitoExtension.class)
 public class DeckServiceTest {
 
     @InjectMocks
-    private DeckService service;
-    private List<Card> cards;
-
+    private DeckServiceImpl service;
     @Mock
-    private CardService cardService;
-
+    private CardServiceImpl cardService;
+    private List<Card> cards;
 
     @BeforeEach
     public void setUp() {
-        this.cardService = Mockito.mock(CardService.class);
         this.cards = CardsFixture.cards();
-        this.service = new DeckServiceImpl();
-        Mockito.when(cardService.getSuits()).thenReturn(CardsFixture.suits);
-        Mockito.when(cardService.getLabels()).thenReturn(CardsFixture.labels);
     }
 
     @Test
@@ -72,6 +69,8 @@ public class DeckServiceTest {
         cards = CardsFixture.cards();
         cards.remove(0);
         cards.add(new Card(cards.get(0).getSuit(), cards.get(0).getLabel()));
+        Mockito.when(cardService.getSuits()).thenReturn(CardsFixture.suits);
+        Mockito.when(cardService.getLabels()).thenReturn(CardsFixture.labels);
 
         Exception exception = assertThrows(IllegalDeckSizeException.class, () -> {
             service.createDeck(cards);

@@ -114,7 +114,7 @@ class RuleServiceTest {
             rulesService.validateCard(player, clubsEight, clubsSeven, null, drawCounter);
         });
 
-        String expectedMessage = "You have to play a SEVEN or draw cards!";
+        String expectedMessage = "You have to play a SEVEN!";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

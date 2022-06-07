@@ -11,6 +11,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.io.IOException;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -34,7 +36,7 @@ public class UITest {
 
     @Test
     @DisplayName("should return given number from user input")
-    public void getNumberOfPlayer() {
+    public void getNumberOfPlayer() throws IOException {
         when(mockedUserInputValidation.getChosenNumber(anyInt(), anyInt())).thenReturn(2);
 
         assertEquals(2, ui.getNumberOfPlayer());

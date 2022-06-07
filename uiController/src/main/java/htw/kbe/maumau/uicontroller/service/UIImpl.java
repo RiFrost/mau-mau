@@ -4,10 +4,12 @@ import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.player.domain.Player;
 import htw.kbe.maumau.uicontroller.ascii.AsciiCards;
+import htw.kbe.maumau.uicontroller.instructions.GameInstructionsLoader;
 import htw.kbe.maumau.uicontroller.utilities.UserInputValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -18,8 +20,9 @@ public class UIImpl implements UI {
 
     @Override
     public int getNumberOfPlayer() {
-        System.out.println("Welcome to M(i)au M(i)au!");
-        System.out.println("How many players will take part? Please choose a number from 2 to 4.");
+        System.out.println("Welcome to M(i)au M(i)au!\n\n");
+        System.out.println(GameInstructionsLoader.loadFromFile());
+        System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
         int number = userInputValidation.getChosenNumber(2, 4);
         System.out.printf("The Game will start with %d Players!\n", number);
         return number;

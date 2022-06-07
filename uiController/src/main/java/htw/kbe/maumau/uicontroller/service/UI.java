@@ -10,6 +10,7 @@ import java.util.Map;
 public interface UI {
 
     /**
+     * shows gaming instructions
      * asks the player for the desired number of players
      * @return number of players
      */

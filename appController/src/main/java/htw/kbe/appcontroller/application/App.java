@@ -28,7 +28,7 @@ import java.util.Random;
 @Configuration
 public class App {
 
-    public static void main(String[] args) throws IllegalDeckSizeException, InvalidPlayerSizeException, InvalidPlayerNameException, PlayedCardIsInvalidException {
+    public static void main(String[] args) throws IllegalDeckSizeException, InvalidPlayerSizeException, InvalidPlayerNameException {
         final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(App.class);
 
         applicationContext.scan(GameServiceImpl.class.getPackage().getName());
@@ -48,7 +48,7 @@ public class App {
     }
 
 
-    private static void runGame(GameService gameService, UI uiImpl, CardService cardService, Game game) throws PlayedCardIsInvalidException {
+    private static void runGame(GameService gameService, UI uiImpl, CardService cardService, Game game) {
         while (true) {
             Player activePlayer = game.getActivePlayer();
 
@@ -84,7 +84,7 @@ public class App {
         }
     }
 
-    private static void handlePlayedCard(GameService gameService, UI uiImpl, Game game, Player activePlayer) throws PlayedCardIsInvalidException {
+    private static void handlePlayedCard(GameService gameService, UI uiImpl, Game game, Player activePlayer) {
         while(true) {
             try {
                 Map<Card, Boolean> playedCardAndMau = uiImpl.getPlayedCard(activePlayer);

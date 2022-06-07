@@ -1,0 +1,19 @@
+*** Rules ***
+
+Ass
+skips the next player's turn
+--------
+Eight
+When this card is discarded, it reverses the direction of the game. If the direction was clockwise, it becomes anti-clockwise and vice-versa.
+--------
+Jack
+The player that discarded this card can choose a suit, and the next player must discard a card with that suit.
+Jack on Jack is not allowed.
+The jack can be discarded even if the suit or number of the card on the table are not the same (this rule is not valid when the card on the table is a 7).
+--------
+Seven
+The next player draws 2 cards and doesn't discard. However, if he has another 7 to discard, he can choose not to draw 2 cards and discard his seven.
+In this case the seven was folded, and the next player must draw 4 cards unless he can refold the seven, making the next player draw six cards, and so on.
+--------
+Mau
+The Player must say "Mau" when they have only one card left. Otherwise, he has to draw immediately 2 penalty cards.

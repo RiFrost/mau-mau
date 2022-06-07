@@ -23,7 +23,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public void validateName(String name, List<String> names) throws InvalidPlayerNameException {
-        if(Collections.frequency(names, name) >= 2) throw new InvalidPlayerNameException("The Player s% occurs more than one time".format(name));
+        if(Collections.frequency(names, name) >= 2) throw new InvalidPlayerNameException(String.format("The Player %s occurs more than one time", name));
 
         if(name.length() <= 0 || name.length() > 15 || name.isBlank()) {
             throw new InvalidPlayerNameException("The Player name is invalid!");

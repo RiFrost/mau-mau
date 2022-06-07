@@ -61,7 +61,7 @@ class RuleServiceTest {
 
     @Test
     @DisplayName("should not throw exception when label seven is not played and draw counter is 0 but label of top card is seven")
-    public void testPlayedJackNotOnJack1() throws PlayedCardIsInvalidException {
+    public void testPlayedLabelMustNotEqualsTopLabel() throws PlayedCardIsInvalidException {
         rulesService.validateCard(clubsNine, clubsSeven, null, drawCounter);
     }
 

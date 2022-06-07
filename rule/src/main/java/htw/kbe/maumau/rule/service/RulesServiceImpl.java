@@ -18,10 +18,14 @@ public class RulesServiceImpl implements RulesService {
         Suit topSuit = topCard.getSuit();
         Label playedLabel = playedCard.getLabel();
         Label topLabel = topCard.getLabel();
-        if(drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN))throw new PlayedCardIsInvalidException("You have to play a SEVEN.");
-        if(playedLabel.equals(topLabel) && topLabel.equals(Label.JACK)) throw new PlayedCardIsInvalidException("JACK on JACK is not allowed.");
-        if(!(playedLabel.equals(topLabel) || playedSuit.equals(topSuit)) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
-        if(Objects.nonNull(userWish) && !playedSuit.equals(userWish)) throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
+        if (drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN))
+            throw new PlayedCardIsInvalidException("You have to play a SEVEN.");
+        if (playedLabel.equals(topLabel) && topLabel.equals(Label.JACK))
+            throw new PlayedCardIsInvalidException("JACK on JACK is not allowed.");
+        if (!(playedLabel.equals(topLabel) || playedSuit.equals(topSuit)) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish))
+            throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
+        if (Objects.nonNull(userWish) && !playedSuit.equals(userWish))
+            throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
     }
 
     @Override
@@ -59,11 +63,11 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean isPlayersMauInvalid(Player player) {
-        if(player.getHandCards().size() <= 1 && player.saidMau()) {
+        if (player.getHandCards().size() <= 1 && player.saidMau()) {
             return false;
         }
         //  Note: If the player has at least 2 cards, he does not have to have said 'mau', therefore false!
-        if(player.getHandCards().size() > 1 && !player.saidMau()) {
+        if (player.getHandCards().size() > 1 && !player.saidMau()) {
             return false;
         }
         return true;

@@ -110,7 +110,7 @@ public class UIImpl implements UI {
     }
 
     @Override
-    public void showCardValidationFailedMessage(String exceptionMessage) {
+    public void showValidationFailedMessage(String exceptionMessage) {
         System.out.printf("%s\nPlease try again!\n", exceptionMessage);
     }
 

@@ -28,7 +28,7 @@ import java.util.Random;
 @Configuration
 public class App {
 
-    public static void main(String[] args) throws IllegalDeckSizeException, InvalidPlayerSizeException, InvalidPlayerNameException {
+    public static void main(String[] args) {
         final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(App.class);
 
         applicationContext.scan(GameServiceImpl.class.getPackage().getName());
@@ -41,8 +41,12 @@ public class App {
         final UI uiImpl = applicationContext.getBean(UIImpl.class);
         final CardService cardService = applicationContext.getBean(CardServiceImpl.class);
 
-        Game game = initializeGameStart(playerService, gameService, uiImpl, cardService);
-        runGame(gameService, uiImpl, cardService, game);
+        try {
+            Game game = initializeGameStart(playerService, gameService, uiImpl, cardService);
+            runGame(gameService, uiImpl, cardService, game);
+        } catch (IllegalDeckSizeException illegalDeckSizeException) {
+            System.out.println(illegalDeckSizeException.getMessage());
+        }
 
         applicationContext.close();
     }
@@ -67,7 +71,7 @@ public class App {
             if (uiImpl.playerWantToDrawCards()) {
                 handleDrawingCards(gameService, uiImpl, game, activePlayer);
             } else {
-                    handlePlayedCard(gameService, uiImpl, game, activePlayer);
+                handlePlayedCard(gameService, uiImpl, game, activePlayer);
 
                 if (gameService.isGameOver(game)) {
                     uiImpl.showWinnerMessage(activePlayer);
@@ -85,7 +89,7 @@ public class App {
     }
 
     private static void handlePlayedCard(GameService gameService, UI uiImpl, Game game, Player activePlayer) {
-        while(true) {
+        while (true) {
             try {
                 Map<Card, Boolean> playedCardAndMau = uiImpl.getPlayedCard(activePlayer);
 
@@ -96,7 +100,7 @@ public class App {
                 gameService.validateCard(playedCardAndMau.keySet().stream().findFirst().get(), game);
                 break;
             } catch (PlayedCardIsInvalidException e) {
-               uiImpl.showCardValidationFailedMessage(e.getMessage());
+                uiImpl.showValidationFailedMessage(e.getMessage());
                 if (uiImpl.playerWantToDrawCards()) {
                     handleDrawingCards(gameService, uiImpl, game, activePlayer);
                     break;
@@ -114,9 +118,18 @@ public class App {
         gameService.giveDrawnCardsToPlayer(game.getDrawCardsCounter(), game);
     }
 
-    private static Game initializeGameStart(PlayerService playerService, GameService gameService, UI uiImpl, CardService cardService) throws IllegalDeckSizeException, InvalidPlayerSizeException, InvalidPlayerNameException {
-        List<String> playerNames = uiImpl.getPlayerNames(uiImpl.getNumberOfPlayer());
-        Game game = gameService.startNewGame(playerService.createPlayers(playerNames));
+    private static Game initializeGameStart(PlayerService playerService, GameService gameService, UI uiImpl, CardService cardService) throws IllegalDeckSizeException {
+        Game game;
+        while (true){
+            try{
+                List<String> playerNames = uiImpl.getPlayerNames(uiImpl.getNumberOfPlayer());
+                game = gameService.startNewGame(playerService.createPlayers(playerNames));
+                break;
+            } catch (InvalidPlayerNameException | InvalidPlayerSizeException playerServiceException) {
+                uiImpl.showValidationFailedMessage(playerServiceException.getMessage());
+            }
+        }
+
         gameService.initialCardDealing(game);
         uiImpl.showStartGameMessage();
         gameService.applyCardRule(game);   // Important when a SEVEN, JACK, ASS etc. is a top card at the beginning

@@ -36,21 +36,27 @@ class RuleServiceTest {
     }
 
     @Test
-    @DisplayName("checks if card can be played when suit is the same")
-    public void checkIsSuitValid() throws PlayedCardIsInvalidException {
+    @DisplayName("should not throw exception when suit of played card matches suit of top card")
+    public void testPlayedSuitMatchesTopSuit() throws PlayedCardIsInvalidException {
         rulesService.validateCard(player, clubsSeven, clubsEight, null, drawCounter);
     }
 
     @Test
-    @DisplayName("checks if card can be played when label is the same")
-    public void checkIsLabelValid() throws PlayedCardIsInvalidException {
+    @DisplayName("should not throw exception when label of played card matches label of top card")
+    public void testPlayedLabelMatchesTopLabel() throws PlayedCardIsInvalidException {
         rulesService.validateCard(player, clubsSeven, spadesSeven, null, drawCounter);
     }
 
     @Test
-    @DisplayName("checks if card can be played when players card does match suit wish")
-    public void checkSuitWishIsValid() throws PlayedCardIsInvalidException {
+    @DisplayName("should not throw exception when played card matches players suit wish")
+    public void testSuitWishMatchesPlayedCard() throws PlayedCardIsInvalidException {
         rulesService.validateCard(player, heartsAss, clubsJack, userWish, drawCounter);
+    }
+
+    @Test
+    @DisplayName("should not throw exception when jack is played and suit or label of the top card does not match")
+    public void testPlayedJackNotOnJack() throws PlayedCardIsInvalidException {
+        rulesService.validateCard(player, clubsJack, heartsAss, null, drawCounter);
     }
 
     @Test
@@ -114,7 +120,7 @@ class RuleServiceTest {
             rulesService.validateCard(player, clubsEight, clubsSeven, null, drawCounter);
         });
 
-        String expectedMessage = "You have to play a SEVEN!";
+        String expectedMessage = "You have to play a SEVEN.";
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));

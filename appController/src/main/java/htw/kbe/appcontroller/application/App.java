@@ -65,7 +65,10 @@ public class App {
                 continue;
             }
 
-            uiImpl.showTopCard(game.getCardDeck().getTopCard());
+            if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
+                uiImpl.showTopCard(game.getCardDeck().getTopCard());
+            }
+
             uiImpl.showHandCards(activePlayer, game.getSuitWish());
 
             if (uiImpl.playerWantToDrawCards()) {
@@ -98,6 +101,7 @@ public class App {
                 }
 
                 gameService.validateCard(playedCardAndMau.keySet().stream().findFirst().get(), game);
+                gameService.applyCardRule(game);
                 break;
             } catch (PlayedCardIsInvalidException e) {
                 uiImpl.showValidationFailedMessage(e.getMessage());
@@ -107,7 +111,6 @@ public class App {
                 }
             }
         }
-        gameService.applyCardRule(game);
     }
 
     private static void handleDrawingCards(GameService gameService, UI uiImpl, Game game, Player activePlayer) {
@@ -120,8 +123,8 @@ public class App {
 
     private static Game initializeGameStart(PlayerService playerService, GameService gameService, UI uiImpl, CardService cardService) throws IllegalDeckSizeException {
         Game game;
-        while (true){
-            try{
+        while (true) {
+            try {
                 List<String> playerNames = uiImpl.getPlayerNames(uiImpl.getNumberOfPlayer());
                 game = gameService.startNewGame(playerService.createPlayers(playerNames));
                 break;
@@ -132,6 +135,12 @@ public class App {
 
         gameService.initialCardDealing(game);
         uiImpl.showStartGameMessage();
+        uiImpl.showTopCard(game.getCardDeck().getTopCard());
+        handleFirstRound(gameService, cardService, game);
+        return game;
+    }
+
+    private static void handleFirstRound(GameService gameService, CardService cardService, Game game) {
         gameService.applyCardRule(game);   // Important when a SEVEN, JACK, ASS etc. is a top card at the beginning
 
         if (game.hasAskedForSuitWish()) {
@@ -143,7 +152,6 @@ public class App {
             game.getActivePlayer().setMustSuspend(false);
             gameService.getNextPlayer(game);
         }
-        return game;
     }
 }
 

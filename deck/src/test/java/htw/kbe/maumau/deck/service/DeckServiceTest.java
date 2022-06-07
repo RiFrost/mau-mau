@@ -33,7 +33,7 @@ public class DeckServiceTest {
     public void setUp() {
         this.cardService = Mockito.mock(CardService.class);
         this.cards = CardsFixture.cards();
-        this.service = new DeckServiceImpl(this.cardService);
+        this.service = new DeckServiceImpl();
         Mockito.when(cardService.getSuits()).thenReturn(CardsFixture.suits);
         Mockito.when(cardService.getLabels()).thenReturn(CardsFixture.labels);
     }

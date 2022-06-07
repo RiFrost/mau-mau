@@ -13,12 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class DeckServiceImpl implements DeckService {
 
-    private CardService cardService;    // can be annotated with @Autowired when we use Spring
-
     @Autowired
-    public DeckServiceImpl(CardService cardService) {
-        this.cardService = cardService;
-    }
+    private CardService cardService;    // can be annotated with @Autowired when we use Spring
 
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {

@@ -97,6 +97,10 @@ public class App {
                 break;
             } catch (PlayedCardIsInvalidException e) {
                uiImpl.showCardValidationFailedMessage(e.getMessage());
+                if (uiImpl.playerWantToDrawCards()) {
+                    handleDrawingCards(gameService, uiImpl, game, activePlayer);
+                    break;
+                }
             }
         }
         gameService.applyCardRule(game);
@@ -125,7 +129,6 @@ public class App {
         } else if (game.getActivePlayer().mustSuspend()) {
             game.getActivePlayer().setMustSuspend(false);
             gameService.getNextPlayer(game);
-
         }
         return game;
     }

@@ -44,6 +44,10 @@ public class App {
         try {
             Game game = initializeGameStart(playerService, gameService, uiImpl, cardService);
             runGame(gameService, uiImpl, cardService, game);
+            if(uiImpl.nextRound()){
+                Game nextGame = initializeGameStart(playerService, gameService, uiImpl, cardService);
+                runGame(gameService, uiImpl, cardService, nextGame);
+            }
         } catch (IllegalDeckSizeException illegalDeckSizeException) {
             System.out.println(illegalDeckSizeException.getMessage());
         }

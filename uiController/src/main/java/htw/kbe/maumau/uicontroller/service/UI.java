@@ -87,4 +87,10 @@ public interface UI {
      * @param player - player who won
      */
     void showWinnerMessage(Player player);
+
+    /**
+     * aks for next round to play
+     * @return true if player wants to play again, false if game should quit
+     */
+    boolean nextRound();
 }

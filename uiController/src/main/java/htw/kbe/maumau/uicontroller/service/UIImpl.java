@@ -24,7 +24,7 @@ public class UIImpl implements UI {
         System.out.println(GameInstructionsLoader.loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
         int number = userInputValidation.getChosenNumber(2, 4);
-        System.out.printf("The Game will start with %d Players!\n", number);
+        System.out.printf("The game will start with %d players!\n", number);
         return number;
     }
 
@@ -33,7 +33,7 @@ public class UIImpl implements UI {
         List<String> playerNames = new ArrayList<>();
         int playerNo = 1;
         for (int i = 0; i < numberOfPlayer; i++) {
-            System.out.printf("Player %d, please type in your Name:", playerNo++);
+            System.out.printf("Player %d, please type in your name:", playerNo++);
             String playerName = userInputValidation.getPlayerName();
             playerNames.add(playerName);
         }
@@ -56,7 +56,7 @@ public class UIImpl implements UI {
         int numberOfCard = 1;
 
         if(Objects.nonNull(suit)) {
-            System.out.printf("\nA Suit wish is given. Please choose a card of %s\n", suit);
+            System.out.printf("\nA suit wish is given. Please choose a card of %s\n", suit);
         }
 
         System.out.printf("\n%s, here are your hand cards:", player.getName());
@@ -69,7 +69,7 @@ public class UIImpl implements UI {
     @Override
     public Map<Card, Boolean> getPlayedCard(Player player) {
         Map<Card, Boolean> cardAndMau = new HashMap<>();
-        System.out.printf("Please choose a card:\n", player.getName());
+        System.out.printf("%s, please choose a card:\n", player.getName());
         int number = userInputValidation.getChosenNumber(1, player.getHandCards().size());
 
         boolean saidMau = saidMau(player);
@@ -80,7 +80,7 @@ public class UIImpl implements UI {
 
     @Override
     public Suit getChosenSuit(Player player, List<Suit> suits) {
-        System.out.printf("%s please choose a Suit:\n", player.getName());
+        System.out.printf("%s, please choose a suit:\n", player.getName());
         int numberOfSuit = 1;
         for (Suit suit: suits){
             System.out.printf("%d: %s\n", numberOfSuit++, suit);
@@ -116,7 +116,14 @@ public class UIImpl implements UI {
 
     @Override
     public void showWinnerMessage(Player player) {
-        System.out.printf("Congratulations %s, you won!", player.getName());
+        System.out.printf("CONGRATULATIONS %s, you won!\n", player.getName());
+    }
+
+    @Override
+    public boolean nextRound() {
+        System.out.print("\nType 1 if you want to play again or 2 for quit game.\n");
+        int number = userInputValidation.getChosenNumber(1, 2);
+        return number == 1 ? true : false;
     }
 
 }

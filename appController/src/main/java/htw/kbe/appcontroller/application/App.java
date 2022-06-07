@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Random;
 
 
-@ComponentScan(basePackages = {"htw.kbe.maumau.deck", "htw.kbe.maumau.rule", "htw.kbe.maumau.player", "htw.kbe.maumau.card", "htw.kbe.maumau.uicontroller"})
+@ComponentScan(basePackages = {"htw.kbe.maumau.deck", "htw.kbe.maumau.rule", "htw.kbe.maumau.player", "htw.kbe.maumau.card", "htw.kbe.maumau.uicontroller", "htw.kbe.maumau.game"})
 @Configuration
 public class App {
 

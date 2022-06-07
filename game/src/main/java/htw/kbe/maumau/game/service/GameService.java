@@ -76,4 +76,12 @@ public interface GameService {
      * @param game
      */
     void setPlayersSuitWish(Suit userWish, Game game);
+
+    void setCardService(CardService cardService);
+
+    void setDeckService(DeckService deckService);
+
+    void setRulesService(RulesService rulesService);
+
+    void setPlayerService(PlayerService playerService);
 }

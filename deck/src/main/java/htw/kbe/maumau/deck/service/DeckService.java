@@ -39,4 +39,6 @@ public interface DeckService {
      * @return new top card
      */
     Card setCardToTopCard(Deck deck, Card discardedCard);
+
+    void setCardService(CardService cardService);
 }

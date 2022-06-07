@@ -28,11 +28,13 @@ public class DeckServiceTest {
     @Mock
     private CardService cardService;
 
+
     @BeforeEach
     public void setUp() {
-        this.cardService = Mockito.mock(CardService.class);
+        this.service = new DeckServiceImpl();
         this.cards = CardsFixture.cards();
-        this.service = new DeckServiceImpl(this.cardService);
+        this.cardService = Mockito.mock(CardService.class);
+        this.service.setCardService(this.cardService);
         Mockito.when(cardService.getSuits()).thenReturn(CardsFixture.suits);
         Mockito.when(cardService.getLabels()).thenReturn(CardsFixture.labels);
     }

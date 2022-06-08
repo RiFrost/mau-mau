@@ -41,16 +41,18 @@ public class App {
         final UI uiImpl = applicationContext.getBean(UIImpl.class);
         final CardService cardService = applicationContext.getBean(CardServiceImpl.class);
 
-        try {
-            Game game = initializeGameStart(playerService, gameService, uiImpl, cardService);
-            runGame(gameService, uiImpl, cardService, game);
-            if(uiImpl.nextRound()){
-                Game nextGame = initializeGameStart(playerService, gameService, uiImpl, cardService);
-                runGame(gameService, uiImpl, cardService, nextGame);
+        while (true) {
+            try {
+                Game game = initializeGameStart(playerService, gameService, uiImpl, cardService);
+                runGame(gameService, uiImpl, cardService, game);
+            } catch (IllegalDeckSizeException illegalDeckSizeException) {
+                System.out.println(illegalDeckSizeException.getMessage());
             }
-        } catch (IllegalDeckSizeException illegalDeckSizeException) {
-            System.out.println(illegalDeckSizeException.getMessage());
+            if (!uiImpl.hasNextRound()) {
+                break;
+            }
         }
+
 
         applicationContext.close();
     }

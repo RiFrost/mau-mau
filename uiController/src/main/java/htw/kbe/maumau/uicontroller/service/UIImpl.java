@@ -120,7 +120,7 @@ public class UIImpl implements UI {
     }
 
     @Override
-    public boolean nextRound() {
+    public boolean hasNextRound() {
         System.out.print("\nType 1 if you want to play again or 2 for quit game.\n");
         int number = userInputValidation.getChosenNumber(1, 2);
         return number == 1 ? true : false;

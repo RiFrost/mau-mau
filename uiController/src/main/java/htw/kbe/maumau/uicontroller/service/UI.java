@@ -92,5 +92,5 @@ public interface UI {
      * aks for next round to play
      * @return true if player wants to play again, false if game should quit
      */
-    boolean nextRound();
+    boolean hasNextRound();
 }

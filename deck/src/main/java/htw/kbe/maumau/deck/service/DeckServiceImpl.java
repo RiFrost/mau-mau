@@ -6,11 +6,15 @@ import htw.kbe.maumau.card.domain.Suit;
 import htw.kbe.maumau.card.service.CardService;
 import htw.kbe.maumau.deck.domain.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import java.util.*;
 
+@Service
 public class DeckServiceImpl implements DeckService {
 
-    private CardService cardService;    // can be annotated with @Autowired when we use Spring
+    @Autowired
+    private CardService cardService;
 
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {
@@ -70,7 +74,7 @@ public class DeckServiceImpl implements DeckService {
             cardService.getLabels().stream().forEach(label -> numberPerLabel.put(label, 0));
         });
 
-         cards.stream().forEach(
+        cards.stream().forEach(
                 card -> {
                     numberPerSuit.computeIfPresent(card.getSuit(), (k, v) -> v + 1);
                     numberPerLabel.computeIfPresent(card.getLabel(), (k, v) -> v + 1);
@@ -83,10 +87,5 @@ public class DeckServiceImpl implements DeckService {
         if (!(isAmountOfSuitsValid && isAmountOfLabelsValid)) {
             throw new IllegalDeckSizeException("Ratio of Suit and Label is not valid");
         }
-    }
-
-    @Override
-    public void setCardService(CardService cardService) {
-        this.cardService = cardService;
     }
 }

@@ -10,12 +10,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerServiceTest {
 
@@ -70,7 +69,7 @@ public class PlayerServiceTest {
     public void testRemovePlayedCardFromHandCards(){
         player.setHandCards(handCards);
 
-        service.playCard(player, new Card(Suit.HEARTS, Label.SEVEN));
+        service.removePlayedCard(player, new Card(Suit.HEARTS, Label.SEVEN));
 
         assertEquals(1, player.getHandCards().size());
         assertEquals(Arrays.asList(new Card(Suit.CLUBS, Label.ASS)), player.getHandCards());
@@ -81,7 +80,7 @@ public class PlayerServiceTest {
     public void testAddDrawnCardsToHandCards(){
         player.setHandCards(handCards);
 
-        service.drawCards(player, Arrays.asList(new Card(Suit.SPADES, Label.EIGHT)));
+        service.addDrawnCards(player, Arrays.asList(new Card(Suit.SPADES, Label.EIGHT)));
 
         assertEquals(3, player.getHandCards().size());
     }

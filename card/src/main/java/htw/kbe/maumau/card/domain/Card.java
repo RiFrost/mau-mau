@@ -33,4 +33,8 @@ public class Card {
         return suit == card.suit && label == card.label;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(suit, label);
+    }
 }

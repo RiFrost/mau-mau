@@ -3,54 +3,47 @@ package htw.kbe.maumau.game.service;
 import htw.kbe.maumau.card.domain.Card;
 import htw.kbe.maumau.card.domain.Label;
 import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.card.service.CardService;
+import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
-import htw.kbe.maumau.deck.service.DeckService;
+import htw.kbe.maumau.deck.service.DeckServiceImpl;
 import htw.kbe.maumau.game.domain.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.fixtures.GameFixture;
 import htw.kbe.maumau.player.domain.Player;
-import htw.kbe.maumau.player.service.PlayerService;
+import htw.kbe.maumau.player.service.PlayerServiceImpl;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import htw.kbe.maumau.rule.service.RulesService;
+import htw.kbe.maumau.rule.service.RulesServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
+import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
+@ExtendWith(MockitoExtension.class)
 public class GameServiceTest {
 
     @InjectMocks
-    private GameService service;
-
+    private GameServiceImpl service;
     @Mock
-    private DeckService deckService;
-    private RulesService rulesService;
-    private CardService cardService;
-    private PlayerService playerService;
+    private DeckServiceImpl deckService;
+    @Mock
+    private RulesServiceImpl rulesService;
+    @Mock
+    private CardServiceImpl cardService;
+    @Mock
+    private PlayerServiceImpl playerService;
 
     private List<Player> players;
     private Game game;
 
     @BeforeEach
     public void setUp() {
-        service = new GameServiceImpl();
-        deckService = mock(DeckService.class);
-        rulesService = mock(RulesService.class);
-        cardService = mock(CardService.class);
-        playerService = mock(PlayerService.class);
-        service.setCardService(cardService);
-        service.setDeckService(deckService);
-        service.setRulesService(rulesService);
-        service.setPlayerService(playerService);
         players = GameFixture.players();
         game = GameFixture.game();
     }
@@ -66,28 +59,24 @@ public class GameServiceTest {
         assertEquals(players.get(0), game.getActivePlayer());
         assertNotEquals(null, game.getCardDeck().getTopCard());
         assertEquals(31, game.getCardDeck().getDrawPile().size());
-        assertTrue(game.getClockWise());
+        assertTrue(game.isClockWise());
     }
 
     @Test
     @DisplayName("should throw exception when player list size is smaller than two")
-    public void throwExceptionPlayerSizeIsTooLow() throws IllegalDeckSizeException {
-        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
+    public void throwExceptionPlayerSizeIsTooLow() {
+//        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
 
-        Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {
-            service.startNewGame(players.subList(0, 1));
-        });
+       assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players.subList(0, 1)));
     }
 
     @Test
     @DisplayName("should throw exception when player list size is higher than four")
-    public void throwExceptionPlayerSizeIsTooHigh() throws IllegalDeckSizeException {
-        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
+    public void throwExceptionPlayerSizeIsTooHigh() {
+//        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
         players.add(players.get(0));
 
-        Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {
-            service.startNewGame(players);
-        });
+        assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players));
     }
 
     @Test
@@ -103,7 +92,7 @@ public class GameServiceTest {
     }
 
     @Test
-    @DisplayName("should call rulesService and deckService when validate played card")
+    @DisplayName("should call rulesService, deckService and playerService when validate played card")
     public void validateCard() throws PlayedCardIsInvalidException {
         Card expectedTopCard = new Card(Suit.CLUBS, Label.KING);
         Card playedCard = new Card(Suit.CLUBS, Label.SEVEN);
@@ -113,15 +102,20 @@ public class GameServiceTest {
 
         service.validateCard(playedCard, game);
 
-        assertEquals(null, game.getSuitWish());
+        assertNull(game.getSuitWish());
         verify(rulesService, times(1)).validateCard(
                 argThat(card -> card.equals(playedCard)),
                 argThat(topCard -> topCard.equals(expectedTopCard)),
-                argThat(suit -> suit.equals(userWish))
+                argThat(suit -> suit.equals(userWish)),
+                intThat(drawCounter -> drawCounter == game.getDrawCardsCounter())
         );
 
         verify(deckService, times(1)).setCardToTopCard(
                 argThat(deck -> deck.equals(game.getCardDeck())),
+                argThat(card -> card.equals(playedCard))
+        );
+        verify(playerService, times(1)).removePlayedCard(
+                argThat(player -> player.equals(game.getActivePlayer())),
                 argThat(card -> card.equals(playedCard))
         );
     }
@@ -129,25 +123,21 @@ public class GameServiceTest {
     @Test
     @DisplayName("should not allow that player can play a card")
     public void playerCannotPlayCards() {
-        Player activePlayer = players.get(0);
-        activePlayer.setHandCards(List.of(new Card(Suit.DIAMONDS, Label.ASS)));
-        game.setActivePlayer(activePlayer);
+        game.getActivePlayer().setHandCards(List.of(new Card(Suit.DIAMONDS, Label.ASS)));
         game.getCardDeck().setTopCard(new Card(Suit.DIAMONDS, Label.SEVEN));
-        when(rulesService.mustDrawCards(any(), any())).thenReturn(true);
+        when(rulesService.mustDrawCards(any(), any(), anyInt())).thenReturn(true);
 
-        assertFalse(service.canPlayerPlayCards(game));
+        assertTrue(service.mustPlayerDrawCards(game));
     }
 
     @Test
     @DisplayName("should allow that player can play a card")
     public void playerCanPlayCards() {
-        Player activePlayer = players.get(0);
-        activePlayer.setHandCards(List.of(new Card(Suit.CLUBS, Label.SEVEN)));
-        game.setActivePlayer(activePlayer);
+        game.getActivePlayer().setHandCards(List.of(new Card(Suit.CLUBS, Label.SEVEN)));
         game.getCardDeck().setTopCard(new Card(Suit.DIAMONDS, Label.SEVEN));
-        when(rulesService.mustDrawCards(any(), any())).thenReturn(false);
+        when(rulesService.mustDrawCards(any(), any(), anyInt())).thenReturn(false);
 
-        assertTrue(service.canPlayerPlayCards(game));
+        assertFalse(service.mustPlayerDrawCards(game));
     }
 
     @Test
@@ -164,19 +154,34 @@ public class GameServiceTest {
     }
 
     @Test
-    @DisplayName("should apply suspended rule")
+    @DisplayName("should apply suspended rule and set suspend state to next player in turn when lap counter is greater then 1")
     public void applyPlayerMustSuspendRule() {
-        Card topCard = new Card(Suit.CLUBS, Label.JACK);
+        Card topCard = new Card(Suit.CLUBS, Label.ASS);
         game.getCardDeck().setTopCard(topCard);
-        Player activePlayer = players.get(0);
+        game.addUpLapCounter();
         Player expectedSuspendedPlayer = players.get(1);
         expectedSuspendedPlayer.setMustSuspend(true);
-        game.setActivePlayer(activePlayer);
         when(rulesService.mustSuspend(any())).thenReturn(true);
 
         service.applyCardRule(game);
 
         assertEquals(expectedSuspendedPlayer.mustSuspend(), game.getPlayers().get(1).mustSuspend());
+        verify(rulesService).mustSuspend(argThat(card -> card.equals(topCard)));
+    }
+
+    @Test
+    @DisplayName("should apply suspended rule and set suspend state to active player when lap counter is 1")
+    public void applyPlayerMustSuspendRule2() {
+        Card topCard = new Card(Suit.CLUBS, Label.ASS);
+        game.getCardDeck().setTopCard(topCard);
+        Player activePlayer = game.getActivePlayer();
+        Player expectedPlayer = new Player(activePlayer.getName());
+        expectedPlayer.setMustSuspend(true);
+        when(rulesService.mustSuspend(any())).thenReturn(true);
+
+        service.applyCardRule(game);
+
+        assertEquals(expectedPlayer.mustSuspend(), game.getActivePlayer().mustSuspend());
         verify(rulesService).mustSuspend(argThat(card -> card.equals(topCard)));
     }
 
@@ -189,7 +194,7 @@ public class GameServiceTest {
 
         service.applyCardRule(game);
 
-        assertFalse(game.getClockWise());
+        assertFalse(game.isClockWise());
         verify(rulesService).changeGameDirection(argThat(card -> card.equals(topCard)));
     }
 
@@ -207,25 +212,26 @@ public class GameServiceTest {
     }
 
     @Test
-    @DisplayName("should apply 'mau' is invalid rule")
+    @DisplayName("should apply 'mau' is invalid rule and reset players 'mau")
     public void applyIsMauInvalidRule() {
-        Player activePlayer = players.get(0);
+        Player activePlayer = game.getActivePlayer();
         activePlayer.setHandCards(new ArrayList<>(List.of(new Card(Suit.CLUBS, Label.SEVEN))));
-        game.setActivePlayer(activePlayer);
+        activePlayer.setSaidMau(true);
         List<Card> drawnCards = List.of(new Card(Suit.DIAMONDS, Label.JACK), new Card(Suit.CLUBS, Label.EIGHT));
         when(rulesService.isPlayersMauInvalid(any())).thenReturn(true);
-        when(rulesService.getNumberOfDrawnCards()).thenReturn(2);
+        when(rulesService.getDefaultNumberOfDrawnCards()).thenReturn(2);
         when(deckService.getCardsFromDrawPile(any(), anyInt())).thenReturn(drawnCards);
-        doNothing().when(playerService).drawCards(any(), anyList());
+        doNothing().when(playerService).addDrawnCards(any(), anyList());
 
         service.applyCardRule(game);
 
+        assertFalse(game.getActivePlayer().saidMau());
         verify(rulesService).isPlayersMauInvalid(argThat(player -> player.equals(activePlayer)));
-        verify(rulesService, times(1)).getNumberOfDrawnCards();
+        verify(rulesService, times(1)).getDefaultNumberOfDrawnCards();
         verify(deckService).getCardsFromDrawPile(
                 argThat(deck -> deck.equals(game.getCardDeck())),
                 intThat(numberOfDrawnCards -> numberOfDrawnCards == 2));
-        verify(playerService, times(1)).drawCards(argThat(
+        verify(playerService, times(1)).addDrawnCards(argThat(
                         player -> player.equals(activePlayer)),
                 argThat(cards -> cards.equals(drawnCards))
         );
@@ -294,43 +300,35 @@ public class GameServiceTest {
         game.setActivePlayer(activePlayer);
         List<Card> drawnCards = List.of(new Card(Suit.SPADES, Label.SEVEN), new Card(Suit.CLUBS, Label.EIGHT));
         when(deckService.getCardsFromDrawPile(any(), anyInt())).thenReturn(drawnCards);
-        doNothing().when(playerService).drawCards(any(), anyList());
+        doNothing().when(playerService).addDrawnCards(any(), anyList());
 
-        service.drawCards(2, game);
+        service.giveDrawnCardsToPlayer(2, game);
 
         verify(deckService, times(1)).getCardsFromDrawPile(argThat(
                         deck -> deck.equals(game.getCardDeck())),
                 intThat(numberOfDrawnCards -> numberOfDrawnCards == 2)
         );
-        verify(playerService, times(1)).drawCards(argThat(
+        verify(playerService, times(1)).addDrawnCards(argThat(
                         player -> player.equals(activePlayer)),
                 argThat(cards -> cards.equals(drawnCards))
         );
     }
 
     @Test
-    @DisplayName("should return true if the player does have the card in hand")
-    public void hasPlayerHandCard() {
-        assertTrue(true);
-    }
-
-    @Test
     @DisplayName("should call 'initialCardDealing' and call 'drawCards' for each player in game")
     public void shouldDrawInitialHandCards() {
         when(deckService.initialCardDealing(any())).thenReturn(GameFixture.cards().subList(0, 5));
-        doNothing().when(playerService).drawCards(any(), anyList());
+        doNothing().when(playerService).addDrawnCards(any(), anyList());
 
         service.initialCardDealing(game);
 
         verify(deckService, times(4)).initialCardDealing(any());
-        verify(playerService, times(4)).drawCards(any(), anyList());
+        verify(playerService, times(4)).addDrawnCards(any(), anyList());
     }
 
     @Test
     @DisplayName("should return next player who is not suspended")
     public void getNextNotSuspendedPlayer() {
-        Player activePlayer = players.get(0);
-        game.setActivePlayer(activePlayer);
         Player suspendedPlayer = game.getPlayers().get(1);
         suspendedPlayer.setMustSuspend(true);
 
@@ -340,5 +338,31 @@ public class GameServiceTest {
         assertFalse(suspendedPlayer.mustSuspend());
     }
 
+
+    @Test
+    @DisplayName("should reset 'mau' state from active player to false")
+    public void resetPlayersMau() {
+        game.getActivePlayer().setSaidMau(true);
+
+        service.resetPlayersMau(game);
+
+        assertFalse(game.getActivePlayer().saidMau());
+    }
+
+    @Test
+    @DisplayName("should declare game over when active player has no hand cards")
+    public void gameIsOver() {
+        game.getActivePlayer().setHandCards(new ArrayList<>());
+
+        assertTrue(service.isGameOver(game));
+    }
+
+    @Test
+    @DisplayName("should not declare game over when active player has at least one hand card")
+    public void gameIsNotOver() {
+        game.getActivePlayer().setHandCards(List.of(new Card(Suit.CLUBS, Label.JACK)));
+
+        assertFalse(service.isGameOver(game));
+    }
 
 }

@@ -50,8 +50,8 @@ public class DeckServiceTest {
 
     @Test
     @DisplayName("Should throw exception when delivered card stack is empty.")
-    public void testThrowExceptionWhenCardStackIsEmpty() throws IllegalDeckSizeException {
-            Exception exception = assertThrows(IllegalDeckSizeException.class, () -> {
+    public void testThrowExceptionWhenCardStackIsEmpty() {
+        Exception exception = assertThrows(IllegalDeckSizeException.class, () -> {
             service.createDeck(new ArrayList<>());
         });
 
@@ -63,7 +63,7 @@ public class DeckServiceTest {
 
     @Test
     @DisplayName("Should throw exception when delivered card stack has an invalid suit label ratio.")
-    public void testThrowExceptionWhenSuitLabelOfRatioIsInvalid() throws IllegalDeckSizeException {
+    public void testThrowExceptionWhenSuitLabelOfRatioIsInvalid() {
         cards = CardsFixture.cards();
         cards.remove(0);
         cards.add(new Card(cards.get(0).getSuit(), cards.get(0).getLabel()));

@@ -11,13 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UITest {
@@ -36,7 +33,7 @@ public class UITest {
 
     @Test
     @DisplayName("should return given number from user input")
-    public void getNumberOfPlayer() throws IOException {
+    public void getNumberOfPlayer() {
         when(mockedUserInputValidation.getChosenNumber(anyInt(), anyInt())).thenReturn(2);
 
         assertEquals(2, ui.getNumberOfPlayer());

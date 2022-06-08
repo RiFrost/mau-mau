@@ -8,8 +8,6 @@ import htw.kbe.maumau.uicontroller.instructions.GameInstructionsLoader;
 import htw.kbe.maumau.uicontroller.utilities.UserInputValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -94,7 +92,8 @@ public class UIImpl implements UI {
         System.out.printf("%s do you want to say 'mau'?\n", player.getName());
         System.out.println("Type 1 for 'True' or 2 for 'False'");
         int saidMau = userInputValidation.getChosenNumber(1, 2);
-        return saidMau == 1 ? true : false;
+//        return saidMau == 1 ? true : false;
+        return saidMau == 1;    // more simple expression
     }
 
     @Override
@@ -106,7 +105,8 @@ public class UIImpl implements UI {
     public boolean playerWantToDrawCards() {
         System.out.println("\nType 1 if you want to play a card or 2 for drawing a card:");
         int number = userInputValidation.getChosenNumber(1, 2);
-        return number == 2 ? true : false;
+//        return number == 2 ? true : false;
+        return number == 2;     // more simple expression
     }
 
     @Override
@@ -123,7 +123,8 @@ public class UIImpl implements UI {
     public boolean nextRound() {
         System.out.print("\nType 1 if you want to play again or 2 for quit game.\n");
         int number = userInputValidation.getChosenNumber(1, 2);
-        return number == 1 ? true : false;
+//        return number == 1 ? true : false;
+        return number == 1;  // more simple expression
     }
 
 }

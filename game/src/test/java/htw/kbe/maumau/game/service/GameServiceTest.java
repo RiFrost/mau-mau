@@ -22,10 +22,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 @ExtendWith(MockitoExtension.class)
 public class GameServiceTest {
@@ -66,23 +64,19 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should throw exception when player list size is smaller than two")
-    public void throwExceptionPlayerSizeIsTooLow() throws IllegalDeckSizeException {
+    public void throwExceptionPlayerSizeIsTooLow() {
 //        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
 
-        Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {
-            service.startNewGame(players.subList(0, 1));
-        });
+       assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players.subList(0, 1)));
     }
 
     @Test
     @DisplayName("should throw exception when player list size is higher than four")
-    public void throwExceptionPlayerSizeIsTooHigh() throws IllegalDeckSizeException {
+    public void throwExceptionPlayerSizeIsTooHigh() {
 //        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
         players.add(players.get(0));
 
-        Exception e = assertThrows(InvalidPlayerSizeException.class, () -> {
-            service.startNewGame(players);
-        });
+        assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players));
     }
 
     @Test
@@ -108,7 +102,7 @@ public class GameServiceTest {
 
         service.validateCard(playedCard, game);
 
-        assertEquals(null, game.getSuitWish());
+        assertNull(game.getSuitWish());
         verify(rulesService, times(1)).validateCard(
                 argThat(card -> card.equals(playedCard)),
                 argThat(topCard -> topCard.equals(expectedTopCard)),

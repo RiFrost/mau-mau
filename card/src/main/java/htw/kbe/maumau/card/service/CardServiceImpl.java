@@ -1,21 +1,18 @@
 package htw.kbe.maumau.card.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.CardService;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 @Service
 public class CardServiceImpl implements CardService {
-
-    private List<Card> cardList = new LinkedList<>();
-
-    public CardServiceImpl() {
-        createCardList();
-    }
 
     @Override
     public List<Suit> getSuits() {
@@ -29,14 +26,12 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public List<Card> getCards() {
-        return cardList;
-    }
-
-    private void createCardList() {
+        List<Card> cardList = new ArrayList<>();
         for(Suit suit : Suit.values()) {
             for(Label label : Label.values()) {
                 cardList.add(new Card(suit, label));
             }
         }
+        return cardList;
     }
 }

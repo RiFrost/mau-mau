@@ -6,6 +6,7 @@
 	<groupId>htw.kbe</groupId>
 	<artifactId>maumau</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
 	<packaging>pom</packaging>
 	<name>mau-mau</name>
 	<description>KBE Mau-Mau Project</description>
@@ -17,9 +18,9 @@
 		<module>rule</module>
 		<module>player</module>
 		<module>JaCoCo</module>
-		<module>appController</module>
-		<module>uiController</module>
-	</modules>
+		<module>controller</module>
+        <module>gamePlay</module>
+    </modules>
 
 	<dependencyManagement>
 		<dependencies>

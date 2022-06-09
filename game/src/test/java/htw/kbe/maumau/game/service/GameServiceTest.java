@@ -1,15 +1,15 @@
 package htw.kbe.maumau.game.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.service.DeckServiceImpl;
-import htw.kbe.maumau.game.domain.Game;
+import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.fixtures.GameFixture;
-import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.service.PlayerServiceImpl;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.service.RulesServiceImpl;
@@ -51,10 +51,12 @@ public class GameServiceTest {
     @Test
     @DisplayName("should return a new instance of game with Cards and the player list")
     public void testCreateValidGame() throws IllegalDeckSizeException, InvalidPlayerSizeException {
+        when(cardService.getCards()).thenReturn(GameFixture.cards());
         when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
-
         Game game = service.startNewGame(players);
 
+        verify(cardService, times(1)).getCards();
+        verify(deckService, times(1)).createDeck(anyList());
         assertEquals(players, game.getPlayers());
         assertEquals(players.get(0), game.getActivePlayer());
         assertNotEquals(null, game.getCardDeck().getTopCard());
@@ -65,7 +67,6 @@ public class GameServiceTest {
     @Test
     @DisplayName("should throw exception when player list size is smaller than two")
     public void throwExceptionPlayerSizeIsTooLow() {
-//        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
 
        assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players.subList(0, 1)));
     }
@@ -73,7 +74,6 @@ public class GameServiceTest {
     @Test
     @DisplayName("should throw exception when player list size is higher than four")
     public void throwExceptionPlayerSizeIsTooHigh() {
-//        when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
         players.add(players.get(0));
 
         assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players));

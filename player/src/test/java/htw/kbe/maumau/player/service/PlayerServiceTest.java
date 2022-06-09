@@ -1,10 +1,11 @@
 package htw.kbe.maumau.player.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
+import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
+import htw.kbe.maumau.player.export.PlayerService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

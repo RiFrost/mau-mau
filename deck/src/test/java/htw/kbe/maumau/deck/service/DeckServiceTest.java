@@ -1,10 +1,10 @@
 package htw.kbe.maumau.deck.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.card.service.CardServiceImpl;
-import htw.kbe.maumau.deck.domain.Deck;
+import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.fixtures.CardsFixture;
 import org.junit.jupiter.api.Test;

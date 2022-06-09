@@ -1,8 +1,9 @@
 package htw.kbe.maumau.card.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.CardService;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;

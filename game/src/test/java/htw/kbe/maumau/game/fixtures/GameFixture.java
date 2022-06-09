@@ -1,16 +1,14 @@
 package htw.kbe.maumau.game.fixtures;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.deck.domain.Deck;
-import htw.kbe.maumau.game.domain.Game;
-import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
+import htw.kbe.maumau.deck.export.Deck;
+import htw.kbe.maumau.game.export.Game;
+import htw.kbe.maumau.player.export.Player;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 public class GameFixture {

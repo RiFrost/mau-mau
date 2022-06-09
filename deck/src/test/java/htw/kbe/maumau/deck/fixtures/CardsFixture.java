@@ -1,7 +1,7 @@
 package htw.kbe.maumau.deck.fixtures;
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
 
 import java.util.ArrayList;
 import java.util.Arrays;

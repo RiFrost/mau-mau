@@ -1,10 +1,11 @@
 package htw.kbe.maumau.rule.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.player.domain.Player;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
+import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
+import htw.kbe.maumau.rule.export.RulesService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

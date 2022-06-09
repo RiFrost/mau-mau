@@ -1,11 +1,12 @@
 package htw.kbe.maumau.deck.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Label;
-import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.card.service.CardService;
-import htw.kbe.maumau.deck.domain.Deck;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
+import htw.kbe.maumau.card.export.CardService;
+import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import htw.kbe.maumau.deck.export.DeckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;

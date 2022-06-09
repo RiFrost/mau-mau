@@ -1,17 +1,18 @@
 package htw.kbe.maumau.game.service;
 
-import htw.kbe.maumau.card.domain.Card;
-import htw.kbe.maumau.card.domain.Suit;
-import htw.kbe.maumau.card.service.CardService;
-import htw.kbe.maumau.deck.domain.Deck;
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Suit;
+import htw.kbe.maumau.card.export.CardService;
+import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
-import htw.kbe.maumau.deck.service.DeckService;
-import htw.kbe.maumau.game.domain.Game;
+import htw.kbe.maumau.deck.export.DeckService;
+import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
-import htw.kbe.maumau.player.domain.Player;
-import htw.kbe.maumau.player.service.PlayerService;
+import htw.kbe.maumau.game.export.GameService;
+import htw.kbe.maumau.player.export.Player;
+import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import htw.kbe.maumau.rule.service.RulesService;
+import htw.kbe.maumau.rule.export.RulesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;

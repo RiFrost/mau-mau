@@ -1,5 +1,8 @@
 package htw.kbe.maumau.controller.utilities;
 
+import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
+import htw.kbe.maumau.card.export.Suit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 public class UtilitiesHelperTest {
 
@@ -15,6 +19,36 @@ public class UtilitiesHelperTest {
     @BeforeEach
     public void setUp() {
        utilitiesHelper = new UtilitiesHelper();
+    }
+
+    @Test
+    @DisplayName("should give a card image belonging to it's card")
+    public void testGetCardImage() {
+        String expectedASS = String.format("_____\n|%s  |\n| %s |\n|__%s|", "A", "\u2663", "A");
+        String expectedTEN = String.format("______\n|%s  |\n| %s  |\n|__%s|", "10", "\u2663", "10");
+
+        String actualASS = utilitiesHelper.getCardImage(new Card(Suit.CLUBS, Label.ASS));
+        String actualTEN = utilitiesHelper.getCardImage(new Card(Suit.CLUBS, Label.TEN));
+
+        assertEquals(expectedASS, actualASS);
+        assertEquals(expectedTEN, actualTEN);
+    }
+
+    @Test
+    @DisplayName("should load game instructions")
+    public void testFileLoading() {
+        String instruction = utilitiesHelper.loadFromFile();
+
+        assertNotNull(instruction);
+    }
+
+    @Test
+    @DisplayName("should catch exception when file not found")
+    public void testFileLoadingFail() {
+        InputStream mockedInputStream = mock(InputStream.class);
+        doThrow(new NullPointerException()).when(mockedInputStream).getClass().getResourceAsStream("");
+
+        assertDoesNotThrow(() -> {});
     }
 
     @Test

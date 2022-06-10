@@ -18,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DeckServiceTest {
@@ -77,6 +78,8 @@ public class DeckServiceTest {
         String expectedMessage = "Ratio of Suit and Label is not valid";
         String actualMessage = exception.getMessage();
 
+        verify(cardService, times(4)).getSuits();
+        verify(cardService, times(8)).getLabels();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 

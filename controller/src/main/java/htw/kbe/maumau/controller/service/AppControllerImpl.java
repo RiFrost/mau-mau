@@ -36,7 +36,7 @@ public class AppControllerImpl implements AppController {
     public ViewService viewService;
 
     @Override
-    public void runGame() {
+    public void playGame() {
         while (true) {
             try {
                 Game game = initializeGameStart(playerService, gameService, viewService, cardService);
@@ -50,7 +50,26 @@ public class AppControllerImpl implements AppController {
         }
     }
 
-    private void runGame(GameService gameService, ViewService viewServiceImpl, CardService cardService, Game game) {
+    private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewService, CardService cardService) throws IllegalDeckSizeException {
+        Game game;
+        while (true) {
+            try {
+                List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
+                game = gameService.createGame(playerService.createPlayers(playerNames));
+                break;
+            } catch (InvalidPlayerNameException | InvalidPlayerSizeException playerServiceException) {
+                viewService.showValidationFailedMessage(playerServiceException.getMessage());
+            }
+        }
+
+        gameService.initialCardDealing(game);
+        viewService.showStartGameMessage();
+        viewService.showTopCard(game.getCardDeck().getTopCard());
+        handleFirstRound(gameService, cardService, game);
+        return game;
+    }
+
+    private void runGame(GameService gameService, ViewService viewService, CardService cardService, Game game) {
         while (true) {
             Player activePlayer = game.getActivePlayer();
 
@@ -59,28 +78,28 @@ public class AppControllerImpl implements AppController {
             }
 
             if (gameService.mustPlayerDrawCards(game)) {
-                handleDrawingCards(gameService, viewServiceImpl, game, activePlayer);
+                handleDrawingCards(gameService, viewService, game, activePlayer);
                 continue;
             }
 
             if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
-                viewServiceImpl.showTopCard(game.getCardDeck().getTopCard());
+                viewService.showTopCard(game.getCardDeck().getTopCard());
             }
 
-            viewServiceImpl.showHandCards(activePlayer, game.getSuitWish());
+            viewService.showHandCards(activePlayer, game.getSuitWish());
 
-            if (viewServiceImpl.playerWantToDrawCards()) {
-                handleDrawingCards(gameService, viewServiceImpl, game, activePlayer);
+            if (viewService.playerWantToDrawCards()) {
+                handleDrawingCards(gameService, viewService, game, activePlayer);
             } else {
-                handlePlayedCard(gameService, viewServiceImpl, game, activePlayer);
+                handlePlayedCard(gameService, viewService, game, activePlayer);
 
                 if (gameService.isGameOver(game)) {
-                    viewServiceImpl.showWinnerMessage(activePlayer);
+                    viewService.showWinnerMessage(activePlayer);
                     break;
                 }
 
                 if (game.hasAskedForSuitWish()) {
-                    gameService.setPlayersSuitWish(viewServiceImpl.getChosenSuit(activePlayer, cardService.getSuits()), game);
+                    gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
                 }
             }
 
@@ -89,53 +108,34 @@ public class AppControllerImpl implements AppController {
         }
     }
 
-    private void handlePlayedCard(GameService gameService, ViewService viewServiceImpl, Game game, Player activePlayer) {
+    private void handlePlayedCard(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
         while (true) {
             try {
-                Map<Card, Boolean> playedCardAndMau = viewServiceImpl.getPlayedCard(activePlayer);
+                Map<Card, Boolean> playedCardAndMau = viewService.getPlayedCard(activePlayer);
 
                 if (playedCardAndMau.values().stream().findFirst().get()) {
                     game.getActivePlayer().setSaidMau(true);
                 }
-
                 gameService.validateCard(playedCardAndMau.keySet().stream().findFirst().get(), game);
                 gameService.applyCardRule(game);
                 break;
+
             } catch (PlayedCardIsInvalidException e) {
-                viewServiceImpl.showValidationFailedMessage(e.getMessage());
-                if (viewServiceImpl.playerWantToDrawCards()) {
-                    handleDrawingCards(gameService, viewServiceImpl, game, activePlayer);
+                viewService.showValidationFailedMessage(e.getMessage());
+                if (viewService.playerWantToDrawCards()) {
+                    handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
             }
         }
     }
 
-    private void handleDrawingCards(GameService gameService, ViewService viewServiceImpl, Game game, Player activePlayer) {
+    private void handleDrawingCards(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
         if (game.getDrawCardsCounter() < 2) {
             game.setDrawCardsCounter(1);
         }
-        viewServiceImpl.showDrawnCardMessage(activePlayer, game.getDrawCardsCounter());
+        viewService.showDrawnCardMessage(activePlayer, game.getDrawCardsCounter());
         gameService.giveDrawnCardsToPlayer(game.getDrawCardsCounter(), game);
-    }
-
-    private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewServiceImpl, CardService cardService) throws IllegalDeckSizeException {
-        Game game;
-        while (true) {
-            try {
-                List<String> playerNames = viewServiceImpl.getPlayerNames(viewServiceImpl.getNumberOfPlayer());
-                game = gameService.startNewGame(playerService.createPlayers(playerNames));
-                break;
-            } catch (InvalidPlayerNameException | InvalidPlayerSizeException playerServiceException) {
-                viewServiceImpl.showValidationFailedMessage(playerServiceException.getMessage());
-            }
-        }
-
-        gameService.initialCardDealing(game);
-        viewServiceImpl.showStartGameMessage();
-        viewServiceImpl.showTopCard(game.getCardDeck().getTopCard());
-        handleFirstRound(gameService, cardService, game);
-        return game;
     }
 
     private void handleFirstRound(GameService gameService, CardService cardService, Game game) {

@@ -3,7 +3,6 @@ package htw.kbe.maumau.game.export;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
-import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
@@ -19,7 +18,7 @@ public interface GameService {
      * @throws IllegalDeckSizeException when deck has not the right size of cards
      * @throws InvalidPlayerSizeException when player list size is above four or below two
      */
-    Game startNewGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException;
+    Game createGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException;
 
     /**
      * return the player for the next round, noting whether the round is played clockwise or counterclockwise.

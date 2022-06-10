@@ -17,7 +17,7 @@ public class App {
 
             final AppController appController = applicationContext.getBean(AppControllerImpl.class);
 
-            appController.runGame();
+            appController.playGame();
 
             applicationContext.close();
         }

@@ -27,6 +27,7 @@ public class DeckServiceTest {
     private DeckServiceImpl service;
     @Mock
     private CardServiceImpl cardService;
+
     private List<Card> cards;
 
     @BeforeEach
@@ -39,9 +40,13 @@ public class DeckServiceTest {
     public void testCreateDeckWhenValidCardStack() throws IllegalDeckSizeException {
         Deck deck = new Deck();
         deck.setDrawPile(cards);
+        Mockito.when(cardService.getSuits()).thenReturn(CardsFixture.suits);
+        Mockito.when(cardService.getLabels()).thenReturn(CardsFixture.labels);
 
         Deck actualDeck = service.createDeck(cards);
 
+        verify(cardService, atLeast(1)).getSuits();
+        verify(cardService, atLeast(1)).getLabels();
         assertAll(
                 () -> assertEquals(31, actualDeck.getDrawPile().size()),
                 () -> assertTrue(Objects.nonNull(actualDeck.getTopCard())),
@@ -78,8 +83,8 @@ public class DeckServiceTest {
         String expectedMessage = "Ratio of Suit and Label is not valid";
         String actualMessage = exception.getMessage();
 
-        verify(cardService, times(4)).getSuits();
-        verify(cardService, times(8)).getLabels();
+        verify(cardService, atLeast(1)).getSuits();
+        verify(cardService, atLeast(1)).getLabels();
         assertTrue(actualMessage.contains(expectedMessage));
     }
 

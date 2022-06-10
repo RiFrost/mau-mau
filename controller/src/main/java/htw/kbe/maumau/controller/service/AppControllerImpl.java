@@ -50,7 +50,7 @@ public class AppControllerImpl implements AppController {
         }
     }
 
-    private static void runGame(GameService gameService, ViewService viewServiceImpl, CardService cardService, Game game) {
+    private void runGame(GameService gameService, ViewService viewServiceImpl, CardService cardService, Game game) {
         while (true) {
             Player activePlayer = game.getActivePlayer();
 
@@ -89,7 +89,7 @@ public class AppControllerImpl implements AppController {
         }
     }
 
-    private static void handlePlayedCard(GameService gameService, ViewService viewServiceImpl, Game game, Player activePlayer) {
+    private void handlePlayedCard(GameService gameService, ViewService viewServiceImpl, Game game, Player activePlayer) {
         while (true) {
             try {
                 Map<Card, Boolean> playedCardAndMau = viewServiceImpl.getPlayedCard(activePlayer);
@@ -111,7 +111,7 @@ public class AppControllerImpl implements AppController {
         }
     }
 
-    private static void handleDrawingCards(GameService gameService, ViewService viewServiceImpl, Game game, Player activePlayer) {
+    private void handleDrawingCards(GameService gameService, ViewService viewServiceImpl, Game game, Player activePlayer) {
         if (game.getDrawCardsCounter() < 2) {
             game.setDrawCardsCounter(1);
         }
@@ -119,7 +119,7 @@ public class AppControllerImpl implements AppController {
         gameService.giveDrawnCardsToPlayer(game.getDrawCardsCounter(), game);
     }
 
-    private static Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewServiceImpl, CardService cardService) throws IllegalDeckSizeException {
+    private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewServiceImpl, CardService cardService) throws IllegalDeckSizeException {
         Game game;
         while (true) {
             try {
@@ -138,7 +138,7 @@ public class AppControllerImpl implements AppController {
         return game;
     }
 
-    private static void handleFirstRound(GameService gameService, CardService cardService, Game game) {
+    private void handleFirstRound(GameService gameService, CardService cardService, Game game) {
         gameService.applyCardRule(game);   // Important when a SEVEN, JACK, ASS etc. is a top card at the beginning
 
         if (game.hasAskedForSuitWish()) {

@@ -12,6 +12,10 @@ import java.util.stream.Collectors;
 @Component
 public class UtilitiesHelper {
 
+    /**
+     * loads the game instruction from a txt file
+     * @return game instruction
+     */
     public String loadFromFile() {
         String instructions = "";
         InputStream inputStream = this.getClass().getResourceAsStream("/game_instructions.txt");
@@ -24,6 +28,11 @@ public class UtilitiesHelper {
         return instructions;
     }
 
+    /**
+     * creates an ascii image from the required card
+     * @param card - card to be shown
+     * @return a card image in ascii style
+     */
     public String getCardImage(Card card) {
         String suit = "";
         String label = "";
@@ -47,6 +56,11 @@ public class UtilitiesHelper {
     }
 
     // Note: initialize scanner object in every function for better testing opportunities
+
+    /**
+     * asks the user how many want to participate in the game
+     * @return desired number of players
+     */
     public String getPlayerName() {
         String name;
         Scanner scanner = new Scanner(System.in);
@@ -67,6 +81,12 @@ public class UtilitiesHelper {
         return name;
     }
 
+    /**
+     * asks the player what he wants to do
+     * @param min - minimum input number
+     * @param max - maximum input number
+     * @return chosen number from player
+     */
     public int getChosenNumber(int min, int max) {
         Scanner scanner = new Scanner(System.in);
         int index;

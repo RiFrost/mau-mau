@@ -66,6 +66,9 @@ public class AppControllerImpl implements AppController {
         viewService.showStartGameMessage();
         viewService.showTopCard(game.getCardDeck().getTopCard());
         handleFirstRound(gameService, cardService, game);
+        for (Player p : game.getPlayers()) {
+           // System.out.println(p.getName());
+        }
         return game;
     }
 
@@ -79,6 +82,8 @@ public class AppControllerImpl implements AppController {
 
             if (gameService.mustPlayerDrawCards(game)) {
                 handleDrawingCards(gameService, viewService, game, activePlayer);
+                gameService.switchToNextPlayer(game);
+                game.addUpLapCounter();
                 continue;
             }
 
@@ -103,7 +108,7 @@ public class AppControllerImpl implements AppController {
                 }
             }
 
-            gameService.getNextPlayer(game);
+            gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
         }
     }
@@ -145,10 +150,10 @@ public class AppControllerImpl implements AppController {
             int rdmNumber = new Random().nextInt(cardService.getSuits().size());
             gameService.setPlayersSuitWish(cardService.getSuits().get(rdmNumber), game);
         } else if (!game.isClockWise()) {
-            gameService.getNextPlayer(game);
+            gameService.switchToNextPlayer(game);
         } else if (game.getActivePlayer().mustSuspend()) {
             game.getActivePlayer().setMustSuspend(false);
-            gameService.getNextPlayer(game);
+            gameService.switchToNextPlayer(game);
         }
     }
 

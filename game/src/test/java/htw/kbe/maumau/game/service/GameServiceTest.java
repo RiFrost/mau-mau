@@ -245,7 +245,7 @@ public class GameServiceTest {
 
         assertEquals(activePlayer, game.getActivePlayer());
 
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -259,7 +259,7 @@ public class GameServiceTest {
 
         assertEquals(activePlayer, game.getActivePlayer());
 
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -273,7 +273,7 @@ public class GameServiceTest {
         assertEquals(activePlayer, game.getActivePlayer());
 
         game.switchDirection();
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -288,7 +288,7 @@ public class GameServiceTest {
         assertEquals(activePlayer, game.getActivePlayer());
 
         game.switchDirection();
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -332,7 +332,7 @@ public class GameServiceTest {
         Player suspendedPlayer = game.getPlayers().get(1);
         suspendedPlayer.setMustSuspend(true);
 
-        Player nextPlayer = service.getNextPlayer(game);
+        Player nextPlayer = service.switchToNextPlayer(game);
 
         assertEquals(players.get(2), nextPlayer);
         assertFalse(suspendedPlayer.mustSuspend());

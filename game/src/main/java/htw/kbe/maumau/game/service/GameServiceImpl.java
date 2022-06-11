@@ -39,12 +39,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Player getNextPlayer(Game game) {
+    public Player switchToNextPlayer(Game game) {
         game.setActivePlayer(getNextActivePlayer(game));
 
         if (game.getActivePlayer().mustSuspend()) {
             game.getActivePlayer().setMustSuspend(false);
-            getNextPlayer(game);
+            switchToNextPlayer(game);
         }
 
         return game.getActivePlayer();

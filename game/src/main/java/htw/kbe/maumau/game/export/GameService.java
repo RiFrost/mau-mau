@@ -25,7 +25,7 @@ public interface GameService {
      * @param game
      * @return player whose turn it is in the next round
      */
-    Player getNextPlayer(Game game);
+    Player switchToNextPlayer(Game game);
 
     /**
      * at the start of the game, each player is dealt their hand cards

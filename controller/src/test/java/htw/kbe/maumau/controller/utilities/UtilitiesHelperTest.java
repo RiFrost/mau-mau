@@ -6,6 +6,8 @@ import htw.kbe.maumau.card.export.Suit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
@@ -45,8 +47,10 @@ public class UtilitiesHelperTest {
     @Test
     @DisplayName("should catch exception when file not found")
     public void testFileLoadingFail() {
-        InputStream mockedInputStream = mock(InputStream.class);
-        doThrow(new NullPointerException()).when(mockedInputStream).getClass().getResourceAsStream("");
+        BufferedReader mockedBufferedReader = mock(BufferedReader.class);
+        when(mockedBufferedReader.lines()).thenThrow(NullPointerException.class);
+
+        utilitiesHelper.loadFromFile();
 
         assertDoesNotThrow(() -> {});
     }

@@ -23,7 +23,7 @@ public class UtilitiesHelper {
              BufferedReader buffer = new BufferedReader(in)) {
             instructions = buffer.lines().collect(Collectors.joining("\n"));
         } catch (Exception e) {
-            System.out.println("Game instructions could not loaded");
+            System.out.println("Game instructions could not be loaded");
         }
         return instructions;
     }

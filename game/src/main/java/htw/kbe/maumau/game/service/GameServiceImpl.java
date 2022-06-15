@@ -13,6 +13,8 @@ import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.export.RulesService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -30,8 +32,11 @@ public class GameServiceImpl implements GameService {
     @Autowired
     private PlayerService playerService;
 
+    private static Logger logger = LogManager.getLogger(GameServiceImpl.class);
+
     @Override
     public Game createGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {
+        logger.info("SAMPLE ERROR MESSAGE FOR GAME-SERVICE");
         if (players.size() < 2 || players.size() > 4)
             throw new InvalidPlayerSizeException("Number of players is not valid");
         Deck deck = deckService.createDeck(cardService.getCards());

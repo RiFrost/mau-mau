@@ -10,7 +10,7 @@ or
     <Appenders>
         <File name="fout" fileName="logs/app.log" append="true">
             <PatternLayout>
-                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %m%nw</Pattern>
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} [%c{1}]: %-5p %m%n</Pattern>
             </PatternLayout>
         </File>
     </Appenders>

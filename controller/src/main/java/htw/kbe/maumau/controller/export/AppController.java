@@ -2,5 +2,8 @@ package htw.kbe.maumau.controller.export;
 
 public interface AppController {
 
-    void runGame();
+    /**
+     * runs the entire game
+     */
+    void playGame();
 }

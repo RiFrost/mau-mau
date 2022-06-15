@@ -53,7 +53,7 @@ public class GameServiceTest {
     public void testCreateValidGame() throws IllegalDeckSizeException, InvalidPlayerSizeException {
         when(cardService.getCards()).thenReturn(GameFixture.cards());
         when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
-        Game game = service.startNewGame(players);
+        Game game = service.createGame(players);
 
         verify(cardService, times(1)).getCards();
         verify(deckService, times(1)).createDeck(anyList());
@@ -68,7 +68,7 @@ public class GameServiceTest {
     @DisplayName("should throw exception when player list size is smaller than two")
     public void throwExceptionPlayerSizeIsTooLow() {
 
-       assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players.subList(0, 1)));
+       assertThrows(InvalidPlayerSizeException.class, () -> service.createGame(players.subList(0, 1)));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class GameServiceTest {
     public void throwExceptionPlayerSizeIsTooHigh() {
         players.add(players.get(0));
 
-        assertThrows(InvalidPlayerSizeException.class, () -> service.startNewGame(players));
+        assertThrows(InvalidPlayerSizeException.class, () -> service.createGame(players));
     }
 
     @Test
@@ -245,7 +245,7 @@ public class GameServiceTest {
 
         assertEquals(activePlayer, game.getActivePlayer());
 
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -259,7 +259,7 @@ public class GameServiceTest {
 
         assertEquals(activePlayer, game.getActivePlayer());
 
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -273,7 +273,7 @@ public class GameServiceTest {
         assertEquals(activePlayer, game.getActivePlayer());
 
         game.switchDirection();
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -288,7 +288,7 @@ public class GameServiceTest {
         assertEquals(activePlayer, game.getActivePlayer());
 
         game.switchDirection();
-        service.getNextPlayer(game);
+        service.switchToNextPlayer(game);
 
         assertEquals(nextActivePlayer, game.getActivePlayer());
     }
@@ -332,7 +332,7 @@ public class GameServiceTest {
         Player suspendedPlayer = game.getPlayers().get(1);
         suspendedPlayer.setMustSuspend(true);
 
-        Player nextPlayer = service.getNextPlayer(game);
+        Player nextPlayer = service.switchToNextPlayer(game);
 
         assertEquals(players.get(2), nextPlayer);
         assertFalse(suspendedPlayer.mustSuspend());

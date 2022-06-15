@@ -31,7 +31,7 @@ public class GameServiceImpl implements GameService {
     private PlayerService playerService;
 
     @Override
-    public Game startNewGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {
+    public Game createGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {
         if (players.size() < 2 || players.size() > 4)
             throw new InvalidPlayerSizeException("Number of players is not valid");
         Deck deck = deckService.createDeck(cardService.getCards());
@@ -39,12 +39,12 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Player getNextPlayer(Game game) {
+    public Player switchToNextPlayer(Game game) {
         game.setActivePlayer(getNextActivePlayer(game));
 
         if (game.getActivePlayer().mustSuspend()) {
             game.getActivePlayer().setMustSuspend(false);
-            getNextPlayer(game);
+            switchToNextPlayer(game);
         }
 
         return game.getActivePlayer();

@@ -88,7 +88,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public boolean saidMau(Player player) {
-        System.out.printf("%s do you want to say 'mau'?\n", player.getName());
+        System.out.printf("\n%s do you want to say 'mau'?\n", player.getName());
         System.out.println("1: YES\n2: NO");
         int saidMau = utilitiesHelper.getChosenNumber(1, 2);
         return saidMau == 1;

@@ -6,6 +6,8 @@ import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.export.RulesService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -13,8 +15,11 @@ import java.util.Objects;
 @Service
 public class RulesServiceImpl implements RulesService {
 
+    private static Logger logger = LogManager.getLogger(RulesServiceImpl.class);
+
     @Override
     public void validateCard(Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException {
+        logger.error("SAMPLE ERROR MESSAGE FOR RULE-SERVICE");
         Suit playedSuit = playedCard.getSuit();
         Suit topSuit = topCard.getSuit();
         Label playedLabel = playedCard.getLabel();

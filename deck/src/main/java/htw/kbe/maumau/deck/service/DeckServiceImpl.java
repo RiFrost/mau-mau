@@ -7,6 +7,8 @@ import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.export.DeckService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -17,8 +19,11 @@ public class DeckServiceImpl implements DeckService {
     @Autowired
     private CardService cardService;
 
+    private static Logger logger = LogManager.getLogger(DeckServiceImpl.class);
+
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {
+        logger.error("SAMPLE ERROR MESSAGE FOR DECK-SERVICE");
         Deck deck = new Deck();
         validateCardStack(cards, deck.getLimitOfCardStack());
         Collections.shuffle(cards);

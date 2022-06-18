@@ -15,8 +15,6 @@ import java.util.List;
 @Service
 public class CardServiceImpl implements CardService {
 
-    private static Logger logger = LogManager.getLogger(CardServiceImpl.class);
-
     @Override
     public List<Suit> getSuits() {
         return Arrays.asList(Suit.values());
@@ -29,7 +27,6 @@ public class CardServiceImpl implements CardService {
 
     @Override
     public List<Card> getCards() {
-        logger.error("SAMPLE ERROR MESSAGE FOR CARD-SERVICE");
         List<Card> cardList = new ArrayList<>();
         for(Suit suit : Suit.values()) {
             for(Label label : Label.values()) {

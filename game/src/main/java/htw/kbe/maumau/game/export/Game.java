@@ -85,6 +85,13 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Player " + players;
+        return  "players=" + players +
+                ", activePlayer=" + activePlayer +
+                ", cardDeck=" + cardDeck +
+                ", clockWise=" + clockWise +
+                ", drawCardsCounter=" + drawCardsCounter +
+                ", suitWish=" + suitWish +
+                ", askForSuitWish=" + askForSuitWish +
+                ", lapCounter=" + lapCounter;
     }
 }

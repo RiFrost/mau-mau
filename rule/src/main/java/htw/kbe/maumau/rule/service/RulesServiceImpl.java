@@ -19,19 +19,26 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public void validateCard(Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException {
-        logger.error("SAMPLE ERROR MESSAGE FOR RULE-SERVICE");
         Suit playedSuit = playedCard.getSuit();
         Suit topSuit = topCard.getSuit();
         Label playedLabel = playedCard.getLabel();
         Label topLabel = topCard.getLabel();
-        if (drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN))
+        if (drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN)) {
+            logger.error("Card {} is not valid, because a SEVEN must be played", playedCard);
             throw new PlayedCardIsInvalidException("You have to play a SEVEN.");
-        if (playedLabel.equals(topLabel) && topLabel.equals(Label.JACK))
+        }
+        if (playedLabel.equals(topLabel) && topLabel.equals(Label.JACK)) {
+            logger.error("Card {} is not valid, because JACK on Jack is not allowed", playedCard);
             throw new PlayedCardIsInvalidException("JACK on JACK is not allowed.");
-        if (!(playedLabel.equals(topLabel) || playedSuit.equals(topSuit)) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish))
+        }
+        if (!(playedLabel.equals(topLabel) || playedSuit.equals(topSuit)) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish)) {
+            logger.error("Card {} is not valid, because Label or suit does not match", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
-        if (Objects.nonNull(userWish) && !playedSuit.equals(userWish))
+        }
+        if (Objects.nonNull(userWish) && !playedSuit.equals(userWish)) {
+            logger.error("Card {} is not valid, because Suit does not match players wish", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
+        }
     }
 
     @Override
@@ -72,7 +79,7 @@ public class RulesServiceImpl implements RulesService {
         if (player.getHandCards().size() <= 1 && player.saidMau()) {
             return false;
         }
-        //  Note: If the player has at least 2 cards, he does not have to have said 'mau', therefore false!
+        //  Note: If the player has at least 2 cards, then he must not have said 'mau', therefore false!
         if (player.getHandCards().size() > 1 && !player.saidMau()) {
             return false;
         }

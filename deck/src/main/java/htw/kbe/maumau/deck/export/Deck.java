@@ -50,4 +50,12 @@ public class Deck {
         return numberOfInitialCardsPerPlayer;
     }
 
+    @Override
+    public String toString() {
+        return  "drawPile=" + drawPile +
+                ", discardPile=" + discardPile +
+                ", limitOfCardStack=" + limitOfCardStack +
+                ", numberOfInitialCardsPerPlayer=" + numberOfInitialCardsPerPlayer +
+                ", topCard=" + topCard;
+    }
 }

@@ -21,11 +21,10 @@ public interface GameService {
     Game createGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException;
 
     /**
-     * return the player for the next round, noting whether the round is played clockwise or counterclockwise.
+     * sets the player for the next round, noting whether the round is played clockwise or counterclockwise.
      * @param game
-     * @return player whose turn it is in the next round
      */
-    Player switchToNextPlayer(Game game);
+    void switchToNextPlayer(Game game);
 
     /**
      * at the start of the game, each player is dealt their hand cards

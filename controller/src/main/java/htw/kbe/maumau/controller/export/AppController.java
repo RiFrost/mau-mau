@@ -5,5 +5,5 @@ public interface AppController {
     /**
      * runs the entire game
      */
-    void playGame();
+    void play();
 }

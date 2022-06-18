@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -36,23 +37,34 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public Game createGame(List<Player> players) throws IllegalDeckSizeException, InvalidPlayerSizeException {
-        logger.info("SAMPLE ERROR MESSAGE FOR GAME-SERVICE");
-        if (players.size() < 2 || players.size() > 4)
+        if (players.size() < 2 || players.size() > 4) {
+            logger.error("Number of players is not equal or grater than 2 or equal or less than 4");
             throw new InvalidPlayerSizeException("Number of players is not valid");
+        }
         Deck deck = deckService.createDeck(cardService.getCards());
-        return new Game(players, deck);
+        Game game = new Game(players, deck);
+        logger.info("Game is created: {}", game);
+        return game;
     }
 
     @Override
-    public Player switchToNextPlayer(Game game) {
-        game.setActivePlayer(getNextActivePlayer(game));
+    public void initialCardDealing(Game game) {
+        Deck deck = game.getCardDeck();
+        List<Player> players = game.getPlayers();
+        for (Player player : players) {
+            playerService.addDrawnCards(player, deckService.initialCardDealing(deck));
+            logger.info("Player {} got 5 initial hand cards: {}", player.getName(), player.getHandCards());
+        }
+    }
 
+    @Override
+    public void switchToNextPlayer(Game game) {
+        game.setActivePlayer(getNextActivePlayer(game));
         if (game.getActivePlayer().mustSuspend()) {
             game.getActivePlayer().setMustSuspend(false);
             switchToNextPlayer(game);
         }
-
-        return game.getActivePlayer();
+        logger.info("Active player is: {}", game.getActivePlayer());
     }
 
     private Player getNextActivePlayer(Game game) {
@@ -73,27 +85,19 @@ public class GameServiceImpl implements GameService {
                 activePlayer = players.get(--idxActivePlayer);
             }
         }
-
         return activePlayer;
-    }
-
-    @Override
-    public void initialCardDealing(Game game) {
-        Deck deck = game.getCardDeck();
-        List<Player> players = game.getPlayers();
-        for (Player player : players) {
-            playerService.addDrawnCards(player, deckService.initialCardDealing(deck));
-        }
     }
 
     @Override
     public void giveDrawnCardsToPlayer(int numberOfDrawnCards, Game game) {
         Player activePlayer = game.getActivePlayer();
+        logger.info("Player {} has to draw {} cards", activePlayer.getName(), numberOfDrawnCards);
         List<Card> drawCards = deckService.getCardsFromDrawPile(game.getCardDeck(), numberOfDrawnCards);
         playerService.addDrawnCards(activePlayer, drawCards);
 
         if (game.getDrawCardsCounter() > 0) {
             game.setDrawCardsCounter(0);
+            logger.info("draw counter is set to 0");
         }
     }
 
@@ -106,6 +110,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void setPlayersSuitWish(Suit userWish, Game game) {
         game.setSuitWish(userWish);
+        logger.info("Player's wish {} is set", userWish);
         game.setAskForSuitWish(false);
     }
 
@@ -116,7 +121,7 @@ public class GameServiceImpl implements GameService {
         rulesService.validateCard(card, topCard, game.getSuitWish(), game.getDrawCardsCounter());
         deckService.setCardToTopCard(deck, card);
         playerService.removePlayedCard(game.getActivePlayer(), card);
-
+        logger.info("Card {} passed the validation", card);
         if (Objects.nonNull(game.getSuitWish())) {
             game.setSuitWish(null);
         }
@@ -125,28 +130,35 @@ public class GameServiceImpl implements GameService {
     @Override
     public void applyCardRule(Game game) {
         Card topCard = game.getCardDeck().getTopCard();
-        if (rulesService.isPlayersMauInvalid(game.getActivePlayer())) {
-            System.out.println("Mau invalid");
-            giveDrawnCardsToPlayer(rulesService.getDefaultNumberOfDrawnCards(), game);
-            resetPlayersMau(game);
-        } else if (rulesService.mustSuspend(topCard)) {
-            if (game.getLapCounter() == 1) { // only used for the first round when LABEL ASS is top card
-                game.getActivePlayer().setMustSuspend(true);
-            } else {
-                Player nextPlayer = getNextActivePlayer(game);
-                nextPlayer.setMustSuspend(true);
-                System.out.println("next player suspend");
-            }
-        } else if (rulesService.isCardJack(topCard)) {
-            game.setAskForSuitWish(true);
-            System.out.println("ask for suit wish true");
-        } else if (rulesService.changeGameDirection(topCard)) {
-            game.switchDirection();
-            System.out.println("Switch direction");
-        } else if (rulesService.mustDrawCards(topCard)) {
+        if (rulesService.mustDrawCards(topCard)) {
             game.addUpDrawCounter();
-            System.out.println("seven counter");
-            System.out.println(game.getDrawCardsCounter());
+            logger.info("Draw counter is increased by {}", game.getDrawCardsCounter());
+        }
+        if (rulesService.isPlayersMauInvalid(game.getActivePlayer())) {
+            giveDrawnCardsToPlayer(rulesService.getDefaultNumberOfDrawnCards(), game);
+            logger.info("'Mau' of Player {} is invalid", game.getActivePlayer().getName());
+        }
+        if (rulesService.mustSuspend(topCard)) {
+            setSuspendStatusToPlayer(game);
+        }
+        if (rulesService.isCardJack(topCard)) {
+            game.setAskForSuitWish(true);
+            logger.info("Player {} gets to make a suit wish", game.getActivePlayer().getName());
+        }
+        if (rulesService.changeGameDirection(topCard)) {
+            game.switchDirection();
+            logger.info("Direction is switched");
+        }
+    }
+
+    private void setSuspendStatusToPlayer(Game game) {
+        if (game.getLapCounter() == 1) {  // only used for the first round when LABEL ASS is top card
+            game.getActivePlayer().setMustSuspend(true);
+            logger.info("Player {} must suspend in current round", game.getActivePlayer().getName());
+        } else {
+            Player nextPlayer = getNextActivePlayer(game);
+            nextPlayer.setMustSuspend(true);
+            logger.info("Player {} must suspend in the next round", nextPlayer.getName());
         }
     }
 
@@ -158,6 +170,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void resetPlayersMau(Game game) {
         game.getActivePlayer().setSaidMau(false);
+        logger.info("'Mau' state of active Player {} is reset", game.getActivePlayer().getName());
     }
 
 

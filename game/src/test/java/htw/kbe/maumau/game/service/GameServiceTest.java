@@ -225,7 +225,6 @@ public class GameServiceTest {
 
         service.applyCardRule(game);
 
-        assertFalse(game.getActivePlayer().saidMau());
         verify(rulesService).isPlayersMauInvalid(argThat(player -> player.equals(activePlayer)));
         verify(rulesService, times(1)).getDefaultNumberOfDrawnCards();
         verify(deckService).getCardsFromDrawPile(
@@ -332,9 +331,9 @@ public class GameServiceTest {
         Player suspendedPlayer = game.getPlayers().get(1);
         suspendedPlayer.setMustSuspend(true);
 
-        Player nextPlayer = service.switchToNextPlayer(game);
+        service.switchToNextPlayer(game);
 
-        assertEquals(players.get(2), nextPlayer);
+        assertEquals(players.get(2), game.getActivePlayer());
         assertFalse(suspendedPlayer.mustSuspend());
     }
 

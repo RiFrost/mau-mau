@@ -13,7 +13,6 @@ import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,9 +52,9 @@ public class AppControllerImplTest {
         game.setDrawCardsCounter(2);
     }
 
-    public Player getActivePlayer(int number) {
+    public Player setActivePlayer(int number) {
         game.setActivePlayer(game.getPlayers().get(number));
-        return game.getActivePlayer();
+        return null;
     }
 
     @Test
@@ -75,14 +74,13 @@ public class AppControllerImplTest {
         when(gameService.mustPlayerDrawCards(any())).thenReturn(true, false, false);
 
         // Player 1 has to draw cards because of a SEVEN
-        when(gameService.switchToNextPlayer(any())).thenAnswer(p -> getActivePlayer(1));
+        doAnswer(a -> setActivePlayer(1)).doAnswer(a -> setActivePlayer(2)).when(gameService).switchToNextPlayer(any());
 
         // Player 2 wants to draw a card
         doNothing().when(viewService).showHandCards(any(), any());
         when(viewService.playerWantToDrawCards()).thenReturn(true, false);
         doNothing().when(viewService).showDrawnCardMessage(any(), anyInt());
         doNothing().when(gameService).giveDrawnCardsToPlayer(anyInt(), any());
-        when(gameService.switchToNextPlayer(any())).thenAnswer(p -> (getActivePlayer(2)));
 
         // Player 3 plays his last card and wins the game
         when(viewService.getPlayedCard(any())).thenReturn(Map.of(
@@ -94,7 +92,7 @@ public class AppControllerImplTest {
         // a new round of play is not desired
         when(viewService.hasNextRound()).thenReturn(false);
 
-        appController.playGame();
+        appController.play();
 
         verify(viewService, times(1)).getNumberOfPlayer();
         verify(viewService, times(1)).getPlayerNames(

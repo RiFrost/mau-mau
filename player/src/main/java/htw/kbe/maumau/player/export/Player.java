@@ -55,4 +55,12 @@ public class Player {
         Player player = (Player) o;
         return player.getName() == this.getName();
     }
+
+    @Override
+    public String toString() {
+        return  "name='" + name + '\'' +
+                ", handCards=" + handCards +
+                ", mustSuspend=" + mustSuspend +
+                ", saidMau=" + saidMau;
+    }
 }

@@ -23,18 +23,19 @@ public class DeckServiceImpl implements DeckService {
 
     @Override
     public Deck createDeck(List<Card> cards) throws IllegalDeckSizeException {
-        logger.error("SAMPLE ERROR MESSAGE FOR DECK-SERVICE");
         Deck deck = new Deck();
         validateCardStack(cards, deck.getLimitOfCardStack());
         Collections.shuffle(cards);
         setTopCard(cards, deck);
         deck.setDrawPile(cards);
+        logger.info("Deck is initialized: {}", deck);
         return deck;
     }
 
     private void setTopCard(List<Card> cards, Deck deck) {
         Card lastCard = cards.get((cards.size()-1));
         deck.setTopCard(lastCard);
+        logger.info("Top card is {}", lastCard);
         cards.remove(lastCard);
     }
 
@@ -69,6 +70,7 @@ public class DeckServiceImpl implements DeckService {
 
     private void validateCardStack(List<Card> cards, long limitOfCardStack) throws IllegalDeckSizeException {
         if (cards.isEmpty() || cards.size() != limitOfCardStack) {
+            logger.error("Number of cards does not match with limit of card stack");
             throw new IllegalDeckSizeException("The number of cards does not match with " + limitOfCardStack);
         }
 
@@ -90,8 +92,10 @@ public class DeckServiceImpl implements DeckService {
         boolean isAmountOfSuitsValid = numberPerSuit.values().stream().allMatch(x -> x == cardService.getLabels().size());
         boolean isAmountOfLabelsValid = numberPerLabel.values().stream().allMatch(x -> x == cardService.getSuits().size());
 
-        if (!(isAmountOfSuitsValid && isAmountOfLabelsValid)) {
+        if (!isAmountOfSuitsValid || !isAmountOfLabelsValid) {
+            logger.error("Ratio of Suit and Label is not valid");
             throw new IllegalDeckSizeException("Ratio of Suit and Label is not valid");
         }
     }
+
 }

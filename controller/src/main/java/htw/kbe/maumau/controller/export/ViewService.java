@@ -12,14 +12,12 @@ public interface ViewService {
         /**
          * shows gaming instructions
          * asks the player for the desired number of players
-         *
          * @return number of players
          */
         int getNumberOfPlayer();
 
         /**
          * asks for player names depending on the number of players
-         *
          * @param numberOfPlayer - number of players in the game
          * @return list of player names
          */
@@ -32,14 +30,12 @@ public interface ViewService {
 
         /**
          * lets the player know which card is on top of the pile
-         *
          * @param topCard - card that is in top of the discard pile
          */
         void showTopCard(Card topCard);
 
         /**
          * shows the player his hand cards and if there is a suit wish, it is also shown
-         *
          * @param player - player who is in turn
          * @param suit   - suit that was requested (optional)
          */
@@ -47,7 +43,6 @@ public interface ViewService {
 
         /**
          * asks the player which card he wants to discard
-         *
          * @param player - player who is in turn
          * @return map whose key is the played card and value is the 'mau' state
          */
@@ -55,7 +50,6 @@ public interface ViewService {
 
         /**
          * asks the player for the suit wish
-         *
          * @param player - player who is in turn
          * @param suits  - list of suits to choose from
          * @return desired suit wish
@@ -64,7 +58,6 @@ public interface ViewService {
 
         /**
          * asks the player if he wants say 'mau'
-         *
          * @param player - player who is in turn
          * @return true if player said 'mau', false if not
          */
@@ -72,7 +65,6 @@ public interface ViewService {
 
         /**
          * lets the player know how many cards he has drawn
-         *
          * @param player             - player who is in turn
          * @param numberOfDrawnCards - number of cards to be drawn
          */
@@ -80,28 +72,24 @@ public interface ViewService {
 
         /**
          * asks the player if he wants to draw card(s)
-         *
          * @return true if player wants to draw cards, false if not
          */
         boolean playerWantToDrawCards();
 
         /**
-         * lets the player know why the card cannot be played
-         *
-         * @param exceptionMessage - message that was thrown by rule service
+         * lets the player know want went wrong in the game
+         * @param exceptionMessage - message that was thrown by exception
          */
-        void showValidationFailedMessage(String exceptionMessage);
+        void showErrorMessage(String exceptionMessage);
 
         /**
          * lets players know who has won
-         *
          * @param player - player who won
          */
         void showWinnerMessage(Player player);
 
         /**
          * aks for next round to play
-         *
          * @return true if player wants to play again, false if game should quit
          */
         boolean hasNextRound();

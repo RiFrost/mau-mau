@@ -18,20 +18,24 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public List<Player> createPlayers(List<String> names) throws InvalidPlayerNameException {
-        logger.error("SAMPLE ERROR MESSAGE FOR PLAYER-SERVICE");
         List<Player> players = new ArrayList();
         for (String name : names) {
-           validateName(name, names);
-           players.add(new Player(name));
+            validateName(name, names);
+            players.add(new Player(name));
         }
+        logger.info("The following players were created: {}", players);
         return players;
     }
 
     @Override
     public void validateName(String name, List<String> names) throws InvalidPlayerNameException {
-        if(Collections.frequency(names, name) >= 2) throw new InvalidPlayerNameException(String.format("The Player %s occurs more than one time", name));
+        if(Collections.frequency(names, name) >= 2) {
+            logger.error("Player's name {} occurs more than one time", name);
+            throw new InvalidPlayerNameException(String.format("The Player %s occurs more than one time", name));
+        }
 
         if(name.length() <= 0 || name.length() > 15 || name.isBlank()) {
+            logger.error("Player's name is either too long, too short or blank");
             throw new InvalidPlayerNameException("The Player name is invalid!");
         }
     }
@@ -39,11 +43,13 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void removePlayedCard(Player player, Card card) {
         player.getHandCards().remove(card);
+        logger.info("{} is removed from deck of player {}", card, player.getName());
     }
 
     @Override
     public void addDrawnCards(Player player, List<Card> cards) {
         player.getHandCards().addAll(cards);
+        logger.info("{} is added to deck of player {}", cards, player.getName());
     }
 
 }

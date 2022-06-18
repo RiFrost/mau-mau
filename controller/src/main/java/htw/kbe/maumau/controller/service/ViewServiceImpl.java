@@ -3,11 +3,8 @@ package htw.kbe.maumau.controller.service;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.controller.utilities.UtilitiesHelper;
-import htw.kbe.maumau.game.service.GameServiceImpl;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.controller.export.ViewService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -18,11 +15,8 @@ public class ViewServiceImpl implements ViewService {
     @Autowired
     private UtilitiesHelper utilitiesHelper;
 
-    private static Logger logger = LogManager.getLogger(ViewServiceImpl.class);
-
     @Override
     public int getNumberOfPlayer() {
-        logger.error("SAMPLE ERROR MESSAGE FOR VIEW-SERVICE");
         System.out.println("Welcome to M(i)au M(i)au!\n\n");
         System.out.println(utilitiesHelper.loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
@@ -113,7 +107,7 @@ public class ViewServiceImpl implements ViewService {
     }
 
     @Override
-    public void showValidationFailedMessage(String exceptionMessage) {
+    public void showErrorMessage(String exceptionMessage) {
         System.out.printf("%s\nPlease try again!\n", exceptionMessage);
     }
 

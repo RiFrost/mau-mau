@@ -13,6 +13,9 @@ import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
+import htw.kbe.maumau.rule.service.RulesServiceImpl;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,45 +38,40 @@ public class AppControllerImpl implements AppController {
     @Autowired
     public ViewService viewService;
 
+    private static Logger logger = LogManager.getLogger(AppControllerImpl.class);
+
     @Override
-    public void playGame() {
+    public void play() {
         while (true) {
             try {
                 Game game = initializeGameStart(playerService, gameService, viewService, cardService);
                 runGame(gameService, viewService, cardService, game);
-            } catch (IllegalDeckSizeException illegalDeckSizeException) {
-                System.out.println(illegalDeckSizeException.getMessage());
+            } catch (Exception e) {
+                viewService.showErrorMessage(e.getMessage());
+                logger.error("Exception was thrown with the following message: {}", e.getMessage());
+                break;
             }
             if (!viewService.hasNextRound()) {
                 break;
             }
+            logger.info("A new game round has started");
         }
+        logger.info("Game ended");
     }
 
-    private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewService, CardService cardService) throws IllegalDeckSizeException {
-        Game game;
-        while (true) {
-            try {
-                List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
-                game = gameService.createGame(playerService.createPlayers(playerNames));
-                break;
-            } catch (InvalidPlayerNameException | InvalidPlayerSizeException playerServiceException) {
-                viewService.showValidationFailedMessage(playerServiceException.getMessage());
-            }
-        }
-
+    private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewService, CardService cardService) throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
+        List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
+        Game game = gameService.createGame(playerService.createPlayers(playerNames));
         gameService.initialCardDealing(game);
         viewService.showStartGameMessage();
         viewService.showTopCard(game.getCardDeck().getTopCard());
         handleFirstRound(gameService, cardService, game);
-        for (Player p : game.getPlayers()) {
-           // System.out.println(p.getName());
-        }
         return game;
     }
 
     private void runGame(GameService gameService, ViewService viewService, CardService cardService, Game game) {
         while (true) {
+            logger.info("Current round: {}", game.getLapCounter());
             Player activePlayer = game.getActivePlayer();
 
             if (activePlayer.getHandCards().size() > 1) {
@@ -81,6 +79,7 @@ public class AppControllerImpl implements AppController {
             }
 
             if (gameService.mustPlayerDrawCards(game)) {
+                logger.info("Active player {} must draw cards", activePlayer.getName());
                 handleDrawingCards(gameService, viewService, game, activePlayer);
                 gameService.switchToNextPlayer(game);
                 game.addUpLapCounter();
@@ -94,12 +93,14 @@ public class AppControllerImpl implements AppController {
             viewService.showHandCards(activePlayer, game.getSuitWish());
 
             if (viewService.playerWantToDrawCards()) {
+                logger.info("Active player {} wants to draw a card", activePlayer.getName());
                 handleDrawingCards(gameService, viewService, game, activePlayer);
             } else {
                 handlePlayedCard(gameService, viewService, game, activePlayer);
 
                 if (gameService.isGameOver(game)) {
                     viewService.showWinnerMessage(activePlayer);
+                    logger.info("Game is over. Player {} won", activePlayer.getName());
                     break;
                 }
 
@@ -119,15 +120,17 @@ public class AppControllerImpl implements AppController {
                 Map<Card, Boolean> playedCardAndMau = viewService.getPlayedCard(activePlayer);
 
                 if (playedCardAndMau.values().stream().findFirst().get()) {
-                    game.getActivePlayer().setSaidMau(true);
+                    activePlayer.setSaidMau(true);
                 }
                 gameService.validateCard(playedCardAndMau.keySet().stream().findFirst().get(), game);
                 gameService.applyCardRule(game);
                 break;
 
             } catch (PlayedCardIsInvalidException e) {
-                viewService.showValidationFailedMessage(e.getMessage());
+                viewService.showErrorMessage(e.getMessage());
+                logger.error("Played card is not valid to play. Player has to choose another card or draw a card");
                 if (viewService.playerWantToDrawCards()) {
+                    logger.info("Active player {} wants to draw a card",activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
@@ -151,7 +154,7 @@ public class AppControllerImpl implements AppController {
             gameService.setPlayersSuitWish(cardService.getSuits().get(rdmNumber), game);
         } else if (!game.isClockWise()) {
             gameService.switchToNextPlayer(game);
-        } else if (game.getActivePlayer().mustSuspend()) {
+        } else if (game.getActivePlayer().mustSuspend()) {  // Here the active player must suspend not the next player!
             game.getActivePlayer().setMustSuspend(false);
             gameService.switchToNextPlayer(game);
         }

@@ -1,15 +1,18 @@
 package htw.kbe.app;
 
 import htw.kbe.config.AppConfig;
+import htw.kbe.maumau.controller.export.AppController;
+import htw.kbe.maumau.controller.service.AppControllerImpl;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class App {
 
     public static void main(String[] args) {
-            final AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
-            var app = applicationContext.getBean(AppConfig.class);
+            ConfigurableApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+            final AppController controller  = applicationContext.getBean(AppControllerImpl.class);
 
-            app.appController().play();
+            controller.play();
 
             applicationContext.close();
         }

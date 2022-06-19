@@ -1,4 +1,4 @@
-package htw.kbe.maumau.controller.service;
+package htw.kbe.maumau.controller.fixtures;
 
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Label;

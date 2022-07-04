@@ -14,7 +14,6 @@ public class Game {
     @Id
     @GeneratedValue
     private Long id;
-
     @Column(nullable = false)
     @OneToMany(mappedBy="player")
     private List<Player> players;

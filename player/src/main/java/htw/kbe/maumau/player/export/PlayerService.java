@@ -38,4 +38,6 @@ public interface PlayerService {
      */
     void validateName(String name, List<String> names) throws InvalidPlayerNameException;
 
+    void sortHandCards(Player player);
+
 }

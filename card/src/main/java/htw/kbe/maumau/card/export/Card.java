@@ -1,9 +1,7 @@
 package htw.kbe.maumau.card.export;
 
 import java.util.Objects;
-
-public class Card {
-
+public class Card implements Comparable<Card> {
     private Suit suit;
     private Label label;
 
@@ -36,5 +34,16 @@ public class Card {
     @Override
     public int hashCode() {
         return Objects.hash(suit, label);
+    }
+
+    @Override
+    public int compareTo(Card o) {
+        if(this.equals(o)) return 0;
+        if(this.suit.value > o.suit.value) return -1;
+        else if(this.suit.value == o.suit.value) {
+            return this.label.value > o.label.value ? -1 : 1;
+        }
+
+        return 1;
     }
 }

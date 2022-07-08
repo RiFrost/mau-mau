@@ -1,3 +1,4 @@
+/*
 package htw.kbe.maumau.controller.utilities;
 
 import htw.kbe.maumau.card.export.Card;
@@ -103,4 +104,4 @@ public class UtilitiesHelperTest {
             System.setIn(stdin);
         }
     }
-}
+}*/

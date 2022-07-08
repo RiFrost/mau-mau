@@ -9,7 +9,7 @@ public class Card implements Comparable<Card> {
 
     @Id
     @Column(name = "card_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     @Column(nullable = false)
     private Suit suit;

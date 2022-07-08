@@ -14,9 +14,9 @@ public class Deck {
     @Column(name = "deck_id")
     @GeneratedValue
     private Long id;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Card> drawPile;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Card> discardPile;
     @Column(nullable = false)
     private long limitOfCardStack = 32;

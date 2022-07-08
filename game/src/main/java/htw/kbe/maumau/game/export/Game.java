@@ -16,22 +16,20 @@ public class Game {
     @Column(name = "game_id")
     @GeneratedValue
     private Long id;
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "player_id")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @OneToOne
-    @JoinColumn(name = "player_id")
+    @OneToOne(cascade = CascadeType.ALL)
     private Player activePlayer;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "deck_id")
     private Deck cardDeck;
     @Column(nullable = false)
     private boolean clockWise = true;
     @Column(nullable = false)
     private int drawCardsCounter = 0;
-    @Column(nullable = false)
-    private Suit suitWish = null;
+    @Column(nullable = true)
+    private Suit suitWish = Suit.CLUBS;
     @Column(nullable = false)
     private boolean askForSuitWish = false;
     @Column(nullable = false)
@@ -45,7 +43,6 @@ public class Game {
         this.cardDeck = cardDeck;
         this.activePlayer = players.get(0);
     }
-
 
     public List<Player> getPlayers() {
         return players;

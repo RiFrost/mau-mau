@@ -5,8 +5,8 @@ import htw.kbe.maumau.card.export.Card;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-//@Entity
-//@Table(name = "player")
+@Entity
+@Table(name = "player")
 public class Player {
 
     @Id
@@ -17,8 +17,8 @@ public class Player {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = true)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "card_id")
     private List<Card> handCards;
     @Column(nullable = false)
     private boolean mustSuspend;

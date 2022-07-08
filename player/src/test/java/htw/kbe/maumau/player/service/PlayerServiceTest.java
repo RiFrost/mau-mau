@@ -85,4 +85,62 @@ public class PlayerServiceTest {
 
         assertEquals(3, player.getHandCards().size());
     }
+
+    @Test
+    @DisplayName("should sort player hand cards")
+    public void testSortHandCards() {
+        this.handCards = new ArrayList<>(Arrays.asList(
+                new Card(Suit.HEARTS, Label.SEVEN),
+                new Card(Suit.CLUBS, Label.ASS),
+                new Card(Suit.SPADES, Label.EIGHT),
+                new Card(Suit.DIAMONDS, Label.SEVEN),
+                new Card(Suit.CLUBS, Label.KING)
+        ));
+        List<Card> expectedHandCards =  new ArrayList<>(Arrays.asList(
+                new Card(Suit.CLUBS, Label.ASS),
+                new Card(Suit.CLUBS, Label.KING),
+                new Card(Suit.SPADES, Label.EIGHT),
+                new Card(Suit.HEARTS, Label.SEVEN),
+                new Card(Suit.DIAMONDS, Label.SEVEN)
+        ));
+        player.setHandCards(handCards);
+
+        service.sortHandCards(player);
+
+        assertEquals(expectedHandCards, player.getHandCards());
+    }
+
+    @Test
+    @DisplayName("should sort more complex player hand cards")
+    public void testSortHandCards02() {
+        this.handCards = new ArrayList<>(Arrays.asList(
+                new Card(Suit.HEARTS, Label.SEVEN),
+                new Card(Suit.CLUBS, Label.ASS),
+                new Card(Suit.SPADES, Label.EIGHT),
+                new Card(Suit.DIAMONDS, Label.SEVEN),
+                new Card(Suit.CLUBS, Label.KING),
+                new Card(Suit.DIAMONDS, Label.JACK),
+                new Card(Suit.DIAMONDS, Label.ASS),
+                new Card(Suit.HEARTS, Label.EIGHT),
+                new Card(Suit.SPADES, Label.QUEEN),
+                new Card(Suit.SPADES, Label.NINE)
+        ));
+        List<Card> expectedHandCards =  new ArrayList<>(Arrays.asList(
+                new Card(Suit.CLUBS, Label.ASS),
+                new Card(Suit.CLUBS, Label.KING),
+                new Card(Suit.SPADES, Label.QUEEN),
+                new Card(Suit.SPADES, Label.NINE),
+                new Card(Suit.SPADES, Label.EIGHT),
+                new Card(Suit.HEARTS, Label.EIGHT),
+                new Card(Suit.HEARTS, Label.SEVEN),
+                new Card(Suit.DIAMONDS, Label.ASS),
+                new Card(Suit.DIAMONDS, Label.JACK),
+                new Card(Suit.DIAMONDS, Label.SEVEN)
+        ));
+        player.setHandCards(handCards);
+
+        service.sortHandCards(player);
+
+        assertEquals(expectedHandCards, player.getHandCards());
+    }
 }

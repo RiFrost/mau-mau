@@ -52,4 +52,10 @@ public class PlayerServiceImpl implements PlayerService {
         logger.info("{} is added to deck of player {}", cards, player.getName());
     }
 
+    @Override
+    public void sortHandCards(Player player) {
+        List<Card> handCards = player.getHandCards();
+        Collections.sort(handCards);
+    }
+
 }

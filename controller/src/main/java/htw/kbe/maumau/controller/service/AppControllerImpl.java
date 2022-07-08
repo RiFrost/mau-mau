@@ -13,17 +13,16 @@ import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import htw.kbe.maumau.rule.service.RulesServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-@Service
+@Controller
 public class AppControllerImpl implements AppController {
 
     @Autowired

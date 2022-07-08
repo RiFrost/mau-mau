@@ -2,25 +2,25 @@ package htw.kbe.maumau.controller.service;
 
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.controller.utilities.UtilitiesHelper;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.controller.export.ViewService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
+import java.util.stream.Collectors;
 
-@Service
+@Component
 public class ViewServiceImpl implements ViewService {
-
-    @Autowired
-    private UtilitiesHelper utilitiesHelper;
 
     @Override
     public int getNumberOfPlayer() {
         System.out.println("Welcome to M(i)au M(i)au!\n\n");
-        System.out.println(utilitiesHelper.loadFromFile());
+        System.out.println(loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
-        int number = utilitiesHelper.getChosenNumber(2, 4);
+        int number = getChosenNumber(2, 4);
         System.out.printf("The game will start with %d players!\n", number);
         return number;
     }
@@ -31,7 +31,7 @@ public class ViewServiceImpl implements ViewService {
         int playerNo = 1;
         for (int i = 0; i < numberOfPlayer; i++) {
             System.out.printf("Player %d, please type in your name:", playerNo++);
-            String playerName = utilitiesHelper.getPlayerName();
+            String playerName = getPlayerName();
             playerNames.add(playerName);
         }
         return playerNames;
@@ -45,21 +45,21 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public void showTopCard(Card topCard) {
         System.out.printf("The top card is %s\n", topCard);
-        System.out.println(utilitiesHelper.getCardImage(topCard));
+        System.out.println(getCardImage(topCard));
     }
 
     @Override
     public void showHandCards(Player player, Suit suit) {
         int numberOfCard = 1;
 
-        if(Objects.nonNull(suit)) {
+        if (Objects.nonNull(suit)) {
             System.out.printf("\nA suit wish is given. Please choose a card of %s\n", suit);
         }
 
         System.out.printf("\n%s, here are your hand cards:", player.getName());
-        for (Card card: player.getHandCards()) {
+        for (Card card : player.getHandCards()) {
             System.out.printf("\n%d: %s\n", numberOfCard++, card);
-            System.out.println(utilitiesHelper.getCardImage(card));
+            System.out.println(getCardImage(card));
         }
     }
 
@@ -67,7 +67,7 @@ public class ViewServiceImpl implements ViewService {
     public Map<Card, Boolean> getPlayedCard(Player player) {
         Map<Card, Boolean> cardAndMau = new HashMap<>();
         System.out.printf("%s, please choose a card:\n", player.getName());
-        int number = utilitiesHelper.getChosenNumber(1, player.getHandCards().size());
+        int number = getChosenNumber(1, player.getHandCards().size());
 
         boolean saidMau = saidMau(player);
         cardAndMau.put(player.getHandCards().get(number - 1), saidMau);
@@ -79,10 +79,10 @@ public class ViewServiceImpl implements ViewService {
     public Suit getChosenSuit(Player player, List<Suit> suits) {
         System.out.printf("%s, please choose a suit:\n", player.getName());
         int numberOfSuit = 1;
-        for (Suit suit: suits){
+        for (Suit suit : suits) {
             System.out.printf("%d: %s\n", numberOfSuit++, suit);
         }
-        int number = utilitiesHelper.getChosenNumber(1,suits.size());
+        int number = getChosenNumber(1, suits.size());
         return suits.get(number - 1);
     }
 
@@ -90,7 +90,7 @@ public class ViewServiceImpl implements ViewService {
     public boolean saidMau(Player player) {
         System.out.printf("\n%s do you want to say 'mau'?\n", player.getName());
         System.out.println("1: YES\n2: NO");
-        int saidMau = utilitiesHelper.getChosenNumber(1, 2);
+        int saidMau = getChosenNumber(1, 2);
         return saidMau == 1;
     }
 
@@ -102,7 +102,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public boolean playerWantToDrawCards() {
         System.out.println("What do you want to do?\n1: PLAY\n2: DRAW");
-        int number = utilitiesHelper.getChosenNumber(1, 2);
+        int number = getChosenNumber(1, 2);
         return number == 2;
     }
 
@@ -120,7 +120,79 @@ public class ViewServiceImpl implements ViewService {
     public boolean hasNextRound() {
         System.out.print("\nWould you like to start a new round?\n");
         System.out.println("1: YES\n2: NO");
-        int number = utilitiesHelper.getChosenNumber(1, 2);
+        int number = getChosenNumber(1, 2);
         return number == 1;
+    }
+
+    private String loadFromFile() {
+        String instructions = "";
+        InputStream inputStream = this.getClass().getResourceAsStream("/game_instructions.txt");
+        try (InputStreamReader in = new InputStreamReader(inputStream);
+             BufferedReader buffer = new BufferedReader(in)) {
+            instructions = buffer.lines().collect(Collectors.joining("\n"));
+        } catch (Exception e) {
+            System.out.println("Game instructions could not be loaded");
+        }
+        return instructions;
+    }
+
+    private String getCardImage(Card card) {
+        String suit = "";
+        String label = "";
+        switch (card.getSuit()) {
+            case CLUBS -> suit = "\u2663";
+            case HEARTS -> suit = "\u2665";
+            case DIAMONDS -> suit = "\u2666";
+            case SPADES -> suit = "\u2660";
+        }
+        switch (card.getLabel()) {
+            case SEVEN -> label = "7";
+            case EIGHT -> label = "8";
+            case NINE -> label = "9";
+            case TEN -> label = "10";
+            case JACK -> label = "J";
+            case QUEEN -> label = "Q";
+            case KING -> label = "K";
+            case ASS -> label = "A";
+        }
+        return label.equals("10") ? String.format("______\n|%s  |\n| %s  |\n|__%s|", label, suit, label) : String.format("_____\n|%s  |\n| %s |\n|__%s|", label, suit, label);
+    }
+
+    private String getPlayerName() {
+        String name;
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            name = scanner.next();
+            if (name.isBlank()) {
+                System.out.println("Your name cannot be blank! Please try again!");
+            } else if (name.matches(".*[0-9].*")) {
+                System.out.println("Your name cannot contain numbers!");
+            } else if (name.length() < 3) {
+                System.out.println("Your name is too short! Please choose a longer name for you!");
+            } else if (name.length() > 15) {
+                System.out.println("Your name is too long! Please choose a shorter name for you!");
+            } else {
+                break;
+            }
+        }
+        return name;
+    }
+
+    private int getChosenNumber(int min, int max) {
+        Scanner scanner = new Scanner(System.in);
+        int index;
+        while (true) {
+            try {
+                index = Integer.parseInt(scanner.next());
+                if (index < min || index > max) {
+                    System.out.printf("Please choose a number between %d and %d:", min, max);
+                    continue;
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("This is not a number. Please try again!");
+            }
+        }
+        return index;
     }
 }

@@ -7,16 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "deck")
 public class Deck {
 
     @Id
+    @Column(name = "deck_id")
     @GeneratedValue
     private Long id;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
     private List<Card> drawPile;
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id")
     private List<Card> discardPile;
     @Column(nullable = false)
     private long limitOfCardStack = 32;

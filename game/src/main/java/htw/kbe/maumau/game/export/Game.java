@@ -9,18 +9,22 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "game")
 public class Game {
 
     @Id
+    @Column(name = "game_id")
     @GeneratedValue
     private Long id;
-    @Column(nullable = false)
-    @OneToMany(mappedBy="player")
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "player_id")
     private List<Player> players;
 
     @OneToOne
+    @JoinColumn(name = "player_id")
     private Player activePlayer;
     @OneToOne
+    @JoinColumn(name = "deck_id")
     private Deck cardDeck;
     @Column(nullable = false)
     private boolean clockWise = true;

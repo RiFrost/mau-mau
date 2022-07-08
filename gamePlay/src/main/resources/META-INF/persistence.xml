@@ -6,6 +6,9 @@
     <persistence-unit name="gameDemo" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>htw.kbe.maumau.game.export.Game</class>
+        <class>htw.kbe.maumau.player.export.Player</class>
+        <class>htw.kbe.maumau.card.export.Card</class>
+        <class>htw.kbe.maumau.deck.export.Deck</class>
         <properties>
             <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@oradbs03.f4.htw-berlin.de:1521:oradb1" />

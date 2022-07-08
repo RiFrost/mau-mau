@@ -5,19 +5,20 @@ import htw.kbe.maumau.card.export.Card;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-@Entity
+//@Entity
+//@Table(name = "player")
 public class Player {
 
     @Id
-    @GeneratedValue
     @Column(name = "player_id")
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = false)
+    @JoinColumn(name = "card_id", nullable = true)
     private List<Card> handCards;
     @Column(nullable = false)
     private boolean mustSuspend;

@@ -89,17 +89,16 @@ public class AppControllerImplTest {
         // Player 1 has to draw cards because of a SEVEN
         doAnswer(a -> setActivePlayer(1)).doAnswer(a -> setActivePlayer(2)).when(gameService).switchToNextPlayer(any());
 
-        // Player 2 wants to draw a card
+        // Player 2 wants to draw a card voluntary
         doNothing().when(viewService).showHandCards(any(), any());
-        when(viewService.playerWantToDrawCards()).thenReturn(true, false);
         doNothing().when(viewService).showDrawnCardMessage(any(), anyInt());
         doNothing().when(gameService).giveDrawnCardsToPlayer(anyInt(), any());
 
         // Player 3 plays his last card and wins the game
-        when(viewService.getPlayedCard(any())).thenReturn(Map.of(
+        when(viewService.getPlayedCard(any())).thenReturn(null, Map.of(
                 new Card(Suit.CLUBS, Label.KING), false));
         doNothing().when(gameService).validateCard(any(), any());
-        when(gameService.isGameOver(any())).thenReturn(true);
+        when(gameService.isGameOver(any())).thenReturn(false, true);
         doNothing().when(viewService).showWinnerMessage(any());
 
         // a new round of play is not desired
@@ -117,16 +116,11 @@ public class AppControllerImplTest {
         verify(gameService, times(2)).applyCardRule(any());
         verify(gameService, times(3)).mustPlayerDrawCards(argThat(g -> g.equals(game)));
         verify(viewService, times(2)).showHandCards(any(), any());
-        verify(viewService, times(2)).playerWantToDrawCards();
         verify(viewService, times(2)).showDrawnCardMessage(any(), anyInt());
         verify(gameService, times(2)).giveDrawnCardsToPlayer(anyInt(), any());
         verify(gameService, times(2)).switchToNextPlayer(argThat(g -> g.equals(game)));
-        verify(viewService, times(1)).getPlayedCard(argThat(player -> player.equals(game.getPlayers().get(2))));
-        verify(gameService, times(1)).validateCard(
-                argThat(card -> card.equals(game.getPlayers().get(2).getHandCards().get(0))),
-                argThat(g -> g.equals(game))
-        );
-        verify(gameService, times(1)).isGameOver(argThat(g -> g.equals(game)));
+        verify(viewService, times(2)).getPlayedCard(any());
+        verify(gameService, times(2)).isGameOver(any());
         verify(viewService, times(1)).showWinnerMessage(argThat(winner -> winner.getName().equals("Richard")));
         verify(viewService, times(1)).hasNextRound();
     }
@@ -170,7 +164,6 @@ public class AppControllerImplTest {
         doNothing().when(gameService).resetPlayersMau(any());
         when(gameService.mustPlayerDrawCards(any())).thenReturn(false, false);
         doNothing().when(viewService).showHandCards(any(), any());
-        when(viewService.playerWantToDrawCards()).thenReturn(false, false, false);
 
         // handlePlayedCard()
         // Player 1 play at first an invalid card then a valid card with label JACK and chose a suit
@@ -202,7 +195,6 @@ public class AppControllerImplTest {
         verify(gameService, times(1)).resetPlayersMau(argThat(g -> g.equals(game)));
         verify(gameService, times(2)).mustPlayerDrawCards(any());
         verify(viewService, times(2)).showHandCards(any(), any());
-        verify(viewService, times(3)).playerWantToDrawCards();
         verify(viewService, times(3)).getPlayedCard(any());
         verify(gameService, times(3)).validateCard(any(), any());
         verify(viewService, times(1)).showErrorMessage(argThat(msg -> msg.equals(exceptionMessage)));

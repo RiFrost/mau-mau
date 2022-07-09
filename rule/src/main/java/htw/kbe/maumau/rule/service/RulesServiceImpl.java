@@ -24,19 +24,19 @@ public class RulesServiceImpl implements RulesService {
         Label playedLabel = playedCard.getLabel();
         Label topLabel = topCard.getLabel();
         if (drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN)) {
-            logger.error("Card {} is not valid, because a SEVEN must be played", playedCard);
+            logger.info("Card {} is not valid, because a SEVEN must be played", playedCard);
             throw new PlayedCardIsInvalidException("You have to play a SEVEN.");
         }
         if (playedLabel.equals(topLabel) && topLabel.equals(Label.JACK)) {
-            logger.error("Card {} is not valid, because JACK on Jack is not allowed", playedCard);
+            logger.info("Card {} is not valid, because JACK on Jack is not allowed", playedCard);
             throw new PlayedCardIsInvalidException("JACK on JACK is not allowed.");
         }
         if (!(playedLabel.equals(topLabel) || playedSuit.equals(topSuit)) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish)) {
-            logger.error("Card {} is not valid, because Label or suit does not match", playedCard);
+            logger.info("Card {} is not valid, because Label or suit does not match", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
         }
         if (Objects.nonNull(userWish) && !playedSuit.equals(userWish)) {
-            logger.error("Card {} is not valid, because Suit does not match players wish", playedCard);
+            logger.info("Card {} is not valid, because Suit does not match players wish", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
         }
     }

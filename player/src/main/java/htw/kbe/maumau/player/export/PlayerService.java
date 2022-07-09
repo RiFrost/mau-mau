@@ -17,7 +17,8 @@ public interface PlayerService {
     List<Player> createPlayers(List<String> names) throws InvalidPlayerNameException;
 
     /**
-     * adds drawn card(s) to hand cards to given player
+     * adds drawn card(s) to hand cards to given player and hand cards are sorted by suit (from black to red)
+     * and label (from ASS to SEVEN).
      * @param player - who gets drawn cards
      * @param card - card that was drawn
      */
@@ -37,7 +38,4 @@ public interface PlayerService {
      * @throws InvalidPlayerNameException when String name is empty, has whitespaces, is too long or names duplicate
      */
     void validateName(String name, List<String> names) throws InvalidPlayerNameException;
-
-    void sortHandCards(Player player);
-
 }

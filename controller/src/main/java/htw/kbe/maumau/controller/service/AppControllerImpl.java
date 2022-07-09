@@ -112,18 +112,18 @@ public class AppControllerImpl implements AppController {
     private void handlePlayersTurn(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
         while (true) {
             try {
-                Map<Card, Boolean> playedCardAndMau = viewService.getPlayedCard(activePlayer);
+                Card playedCard = viewService.getPlayedCard(activePlayer);
 
-                if (Objects.isNull(playedCardAndMau)) {
+                if (Objects.isNull(playedCard)) {
                     logger.info("Active player {} wants to draw a card", activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
 
-                if (playedCardAndMau.values().stream().findFirst().get()) {
+                if (viewService.saidMau(activePlayer)) {
                     activePlayer.setSaidMau(true);
                 }
-                gameService.validateCard(playedCardAndMau.keySet().stream().findFirst().get(), game);
+                gameService.validateCard(playedCard, game);
                 gameService.applyCardRule(game);
                 break;
 

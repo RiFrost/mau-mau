@@ -65,21 +65,16 @@ public class ViewServiceImplTest {
     }
 
     @Test
-    @DisplayName("should create a Map with chosen Card to play and chosen 'mau' state")
-    public void getChosenCardAndMauState() {
-/*        Player player = new Player("Jasmin");
+    @DisplayName("should return the card that the player has selected")
+    public void getChosenCard() {
+        Player player = new Player("Jasmin");
         player.setHandCards(List.of(new Card(Suit.CLUBS, Label.JACK), new Card(Suit.SPADES, Label.ASS)));
-        String[] input = new String[]{
-                "2",
-                "1"
-        };
-        InputStream in = new ByteArrayInputStream(String.join("\n", input).getBytes());
+
+        String input = "2";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        Map<Card, Boolean> actualMap = service.getPlayedCard(player);
-
-        assertTrue(actualMap.containsKey(new Card(Suit.SPADES, Label.ASS)));
-        assertEquals(true, actualMap.get(new Card(Suit.SPADES, Label.ASS)));*/
+        assertEquals(new Card(Suit.SPADES, Label.ASS), service.getPlayedCard(player));
     }
 
     @Test
@@ -91,9 +86,7 @@ public class ViewServiceImplTest {
         InputStream in = new ByteArrayInputStream(input.getBytes());
         System.setIn(in);
 
-        Map<Card, Boolean> actualMap = service.getPlayedCard(player);
-
-        assertNull(actualMap);
+        assertNull(service.getPlayedCard(player));
     }
 
     @Test

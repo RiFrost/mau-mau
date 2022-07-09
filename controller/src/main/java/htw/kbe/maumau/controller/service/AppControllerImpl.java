@@ -88,7 +88,7 @@ public class AppControllerImpl implements AppController {
             if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
                 viewService.showTopCard(game.getCardDeck().getTopCard());
             }
-            playerService.sortHandCards(activePlayer);
+
             viewService.showHandCards(activePlayer, game.getSuitWish());
 
             if (viewService.playerWantToDrawCards()) {

@@ -5,7 +5,6 @@ import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.player.export.Player;
-import htw.kbe.maumau.rule.service.RulesServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -84,6 +83,20 @@ public class ViewServiceImplTest {
     }
 
     @Test
+    @DisplayName("should return null when player wants to draw a card and therefore choose 0")
+    public void playerWantsToDraw() {
+        Player player = new Player("Jasmin");
+        player.setHandCards(List.of(new Card(Suit.CLUBS, Label.JACK)));
+        String input = "0";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        Map<Card, Boolean> actualMap = service.getPlayedCard(player);
+
+        assertNull(actualMap);
+    }
+
+    @Test
     @DisplayName("should return the chosen suit wish from player")
     public void getChosenSuitWish() {
         List<Suit> suits = List.of(Suit.SPADES, Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS);
@@ -111,22 +124,6 @@ public class ViewServiceImplTest {
         System.setIn(in);
 
         assertFalse(service.saidMau(player));
-    }
-
-    @Test
-    @DisplayName("should return if player wants to draw a card or not")
-    public void checkIfAPlayerWantsToDrawCards() {
-        String input = "1";
-        InputStream in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        assertFalse(service.playerWantToDrawCards());
-
-        input = "2";
-        in = new ByteArrayInputStream(input.getBytes());
-        System.setIn(in);
-
-        assertTrue(service.playerWantToDrawCards());
     }
 
     @Test

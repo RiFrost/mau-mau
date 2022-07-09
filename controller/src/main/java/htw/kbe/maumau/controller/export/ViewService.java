@@ -44,9 +44,9 @@ public interface ViewService {
         /**
          * asks the player which card he wants to discard or if he wants to draw card(s)
          * @param player - player who is in turn
-         * @return map whose key is the played card and value is the 'mau' state
+         * @return card  - chosen card that the player wants to play
          */
-        Map<Card, Boolean> getPlayedCard(Player player);
+        Card getPlayedCard(Player player);
 
         /**
          * asks the player for the suit wish

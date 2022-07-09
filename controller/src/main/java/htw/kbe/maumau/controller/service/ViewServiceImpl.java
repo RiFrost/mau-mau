@@ -65,17 +65,11 @@ public class ViewServiceImpl implements ViewService {
     }
 
     @Override
-    public Map<Card, Boolean> getPlayedCard(Player player) {
-        Map<Card, Boolean> cardAndMau = new HashMap<>();
+    public Card getPlayedCard(Player player) {
         System.out.printf("%s, please choose a card tp play or draw a card:\n", player.getName());
         int number = getChosenNumber(0, player.getHandCards().size());
 
-        if (number == 0) { return null; }
-
-        boolean saidMau = saidMau(player);
-        cardAndMau.put(player.getHandCards().get(number - 1), saidMau);
-
-        return cardAndMau;
+        return number == 0 ? null : player.getHandCards().get(number - 1);
     }
 
     @Override

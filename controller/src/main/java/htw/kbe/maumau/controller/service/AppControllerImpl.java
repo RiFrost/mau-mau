@@ -127,7 +127,7 @@ public class AppControllerImpl implements AppController {
 
             } catch (PlayedCardIsInvalidException e) {
                 viewService.showErrorMessage(e.getMessage());
-                logger.error("Played card is not valid to play. Player has to choose another card or draw a card");
+                logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
                 if (viewService.playerWantToDrawCards()) {
                     logger.info("Active player {} wants to draw a card",activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);

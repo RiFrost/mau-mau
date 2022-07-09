@@ -5,7 +5,6 @@ import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ViewService {
 
@@ -69,12 +68,6 @@ public interface ViewService {
          * @param numberOfDrawnCards - number of cards to be drawn
          */
         void showDrawnCardMessage(Player player, int numberOfDrawnCards);
-
-/*        *//**
-         * asks the player if he wants to draw card(s)
-         * @return true if player wants to draw cards, false if not
-         *//*
-        boolean playerWantToDrawCards();*/
 
         /**
          * lets the player know want went wrong in the game

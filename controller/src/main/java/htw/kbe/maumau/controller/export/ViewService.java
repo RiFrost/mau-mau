@@ -42,11 +42,11 @@ public interface ViewService {
         void showHandCards(Player player, Suit suit);
 
         /**
-         * asks the player which card he wants to discard
+         * asks the player which card he wants to discard or if he wants to draw card(s)
          * @param player - player who is in turn
-         * @return map whose key is the played card and value is the 'mau' state
+         * @return card  - chosen card that the player wants to play
          */
-        Map<Card, Boolean> getPlayedCard(Player player);
+        Card getPlayedCard(Player player);
 
         /**
          * asks the player for the suit wish
@@ -70,11 +70,11 @@ public interface ViewService {
          */
         void showDrawnCardMessage(Player player, int numberOfDrawnCards);
 
-        /**
+/*        *//**
          * asks the player if he wants to draw card(s)
          * @return true if player wants to draw cards, false if not
-         */
-        boolean playerWantToDrawCards();
+         *//*
+        boolean playerWantToDrawCards();*/
 
         /**
          * lets the player know want went wrong in the game

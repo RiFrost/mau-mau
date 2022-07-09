@@ -3,103 +3,90 @@ package htw.kbe.maumau.controller.service;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.controller.utilities.UtilitiesHelper;
+import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.player.export.Player;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.*;
 
-import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
 public class ViewServiceImplTest {
 
-    @InjectMocks
-    private ViewServiceImpl service;
 
-    @Mock
-    private UtilitiesHelper mockedUtilitiesHelper;
+    private ViewService service;
 
-    @Captor
-    private ArgumentCaptor<Card> cardArgumentCaptor;
+    @BeforeEach
+    public void setUp() {
+        service = new ViewServiceImpl();
+    }
 
     @Test
-    @DisplayName("should return given number from user input")
+    @DisplayName("should return given number from user input and only accept numbers greater than or equal to minimum " +
+            "or less than or equal to maximum")
     public void getNumberOfPlayer() {
-        when(mockedUtilitiesHelper.loadFromFile()).thenReturn("game instructions");
-        when(mockedUtilitiesHelper.getChosenNumber(anyInt(), anyInt())).thenReturn(2);
+        String[] userInput = new String[]{
+                "invalid_string",
+                "-",
+                "0",
+                "5",
+                "1",
+                "4"
+        };
+        int expected = 4;
+        System.setIn(new ByteArrayInputStream(String.join("\n", userInput).getBytes()));
 
-        assertEquals(2, service.getNumberOfPlayer());
-        verify(mockedUtilitiesHelper, times(1)).getChosenNumber(anyInt(), anyInt());
-        verify(mockedUtilitiesHelper, times(1)).loadFromFile();
+        assertEquals(expected, service.getNumberOfPlayer());
     }
 
     @Test
-    @DisplayName("should call getCardImage for showing top card")
-    public void showTopCard() {
-        Card topCard = new Card(Suit.SPADES, Label.SEVEN);
-        when(mockedUtilitiesHelper.getCardImage(any())).thenReturn("image");
-
-        service.showTopCard(topCard);
-
-        verify(mockedUtilitiesHelper, times(1)).getCardImage(argThat(
-                card -> card.equals(topCard))
-        );
-    }
-
-    @Test
-    @DisplayName("should call getCardImage for showing all hand cards from player")
-    public void showHandCards() {
-        Player player = new Player("Phil");
-        List<Card> handCards = List.of(new Card(Suit.SPADES, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS));
-        player.setHandCards(handCards);
-        when(mockedUtilitiesHelper.getCardImage(any())).thenReturn("image");
-
-        service.showHandCards(player, null);
-
-        verify(mockedUtilitiesHelper, times(2)).getCardImage(cardArgumentCaptor.capture());
-        List<Card> allValues = cardArgumentCaptor.getAllValues();
-        assertEquals(handCards.get(0), allValues.get(0));
-        assertEquals(handCards.get(1), allValues.get(1));
-    }
-
-    @Test
-    @DisplayName("should create a new list of given player names")
+    @DisplayName("should create a new list of given player names and only accepts names greater than 4 and" +
+            "or less than 15 characters")
     public void getPlayerNames() {
-        List<String> expectedPlayerNames = List.of("Philipp", "Jasmin", "Richard", "Maria");
+        List<String> expectedPlayerNames = List.of("Philipp");
+        String[] input = new String[]{
+                " ",
+                "5",
+                "No",
+                "-",
+                "RichardJasminAndPhillip",
+                "Philipp",
+                "anything_after_Richard_will_be_ignored"
+        };
+        System.setIn(new ByteArrayInputStream(String.join("\n", input).getBytes()));
 
-        when(mockedUtilitiesHelper.getPlayerName()).thenReturn(expectedPlayerNames.get(0),
-                expectedPlayerNames.get(1),
-                expectedPlayerNames.get(2),
-                expectedPlayerNames.get(3));
+        List<String> actualPlayerNames = service.getPlayerNames(1);
 
-        List<String> actualPlayerNames = service.getPlayerNames(4);
-
-        verify(mockedUtilitiesHelper, times(4)).getPlayerName();
-        assertEquals(4, actualPlayerNames.size());
         assertEquals(expectedPlayerNames, actualPlayerNames);
     }
 
     @Test
-    @DisplayName("should create a Map with chosen Card to play and chosen 'mau' state")
-    public void getChosenCardAndMauState() {
+    @DisplayName("should return the card that the player has selected")
+    public void getChosenCard() {
         Player player = new Player("Jasmin");
         player.setHandCards(List.of(new Card(Suit.CLUBS, Label.JACK), new Card(Suit.SPADES, Label.ASS)));
-        when(mockedUtilitiesHelper.getChosenNumber(anyInt(), anyInt())).thenReturn(2, 1);
 
-        Map<Card, Boolean> actualMap = service.getPlayedCard(player);
+        String input = "2";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
-        assertTrue(actualMap.containsKey(new Card(Suit.SPADES, Label.ASS)));
-        assertEquals(true, actualMap.get(new Card(Suit.SPADES, Label.ASS)));
-        verify(mockedUtilitiesHelper, times(2)).getChosenNumber(anyInt(), anyInt());
+        assertEquals(new Card(Suit.SPADES, Label.ASS), service.getPlayedCard(player));
+    }
+
+    @Test
+    @DisplayName("should return null when player wants to draw a card and therefore choose 0")
+    public void playerWantsToDraw() {
+        Player player = new Player("Jasmin");
+        player.setHandCards(List.of(new Card(Suit.CLUBS, Label.JACK)));
+        String input = "0";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        assertNull(service.getPlayedCard(player));
     }
 
     @Test
@@ -107,40 +94,44 @@ public class ViewServiceImplTest {
     public void getChosenSuitWish() {
         List<Suit> suits = List.of(Suit.SPADES, Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS);
         Player player = new Player("Jasmin");
-        when(mockedUtilitiesHelper.getChosenNumber(anyInt(), anyInt())).thenReturn(3);
+        String input = "3";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         assertEquals(Suit.DIAMONDS, service.getChosenSuit(player, suits));
-        verify(mockedUtilitiesHelper, times(1)).getChosenNumber(anyInt(), anyInt());
     }
 
     @Test
     @DisplayName("should return chosen 'mau' state from the player")
     public void getSaidMau() {
         Player player = new Player("Jasmin");
-        when(mockedUtilitiesHelper.getChosenNumber(anyInt(), anyInt())).thenReturn(1, 2);
+
+        String input = "1";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         assertTrue(service.saidMau(player));
+
+        input = "2";
+        in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
         assertFalse(service.saidMau(player));
-        verify(mockedUtilitiesHelper, times(2)).getChosenNumber(anyInt(), anyInt());
-    }
-
-    @Test
-    @DisplayName("should return if player wants to draw a card or not")
-    public void checkIfAPlayerWantsToDrawCards() {
-        when(mockedUtilitiesHelper.getChosenNumber(anyInt(), anyInt())).thenReturn(2, 1);
-
-        assertTrue(service.playerWantToDrawCards());
-        assertFalse(service.playerWantToDrawCards());
-        verify(mockedUtilitiesHelper, times(2)).getChosenNumber(anyInt(), anyInt());
     }
 
     @Test
     @DisplayName("should return if player wants to start a new round")
     public void checkIfPlayerWantNewRound() {
-        when(mockedUtilitiesHelper.getChosenNumber(anyInt(), anyInt())).thenReturn(1, 2);
+        String input = "1";
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
         assertTrue(service.hasNextRound());
+
+        input = "2";
+        in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
         assertFalse(service.hasNextRound());
-        verify(mockedUtilitiesHelper, times(2)).getChosenNumber(anyInt(), anyInt());
     }
 }

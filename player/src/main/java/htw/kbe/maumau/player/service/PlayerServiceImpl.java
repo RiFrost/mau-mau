@@ -49,13 +49,7 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void addDrawnCards(Player player, List<Card> cards) {
         player.getHandCards().addAll(cards);
+        Collections.sort(player.getHandCards());
         logger.info("{} is added to deck of player {}", cards, player.getName());
     }
-
-    @Override
-    public void sortHandCards(Player player) {
-        List<Card> handCards = player.getHandCards();
-        Collections.sort(handCards);
-    }
-
 }

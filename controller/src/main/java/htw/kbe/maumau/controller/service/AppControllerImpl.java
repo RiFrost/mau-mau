@@ -13,17 +13,17 @@ import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import htw.kbe.maumau.rule.service.RulesServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
-@Service
+@Controller
 public class AppControllerImpl implements AppController {
 
     @Autowired
@@ -89,51 +89,47 @@ public class AppControllerImpl implements AppController {
             if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
                 viewService.showTopCard(game.getCardDeck().getTopCard());
             }
-            playerService.sortHandCards(activePlayer);
+
             viewService.showHandCards(activePlayer, game.getSuitWish());
+            handlePlayersTurn(gameService, viewService, game, activePlayer);
 
-            if (viewService.playerWantToDrawCards()) {
-                logger.info("Active player {} wants to draw a card", activePlayer.getName());
-                handleDrawingCards(gameService, viewService, game, activePlayer);
-            } else {
-                handlePlayedCard(gameService, viewService, game, activePlayer);
-
-                if (gameService.isGameOver(game)) {
-                    viewService.showWinnerMessage(activePlayer);
-                    logger.info("Game is over. Player {} won", activePlayer.getName());
-                    break;
-                }
-
-                if (game.hasAskedForSuitWish()) {
-                    gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
-                }
+            if (gameService.isGameOver(game)) {
+                viewService.showWinnerMessage(activePlayer);
+                logger.info("Game is over. Player {} won", activePlayer.getName());
+                break;
             }
+
+            if (game.hasAskedForSuitWish()) {
+                gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
+            }
+
 
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
         }
     }
 
-    private void handlePlayedCard(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
+    private void handlePlayersTurn(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
         while (true) {
             try {
-                Map<Card, Boolean> playedCardAndMau = viewService.getPlayedCard(activePlayer);
+                Card playedCard = viewService.getPlayedCard(activePlayer);
 
-                if (playedCardAndMau.values().stream().findFirst().get()) {
+                if (Objects.isNull(playedCard)) {
+                    logger.info("Active player {} wants to draw a card", activePlayer.getName());
+                    handleDrawingCards(gameService, viewService, game, activePlayer);
+                    break;
+                }
+
+                if (viewService.saidMau(activePlayer)) {
                     activePlayer.setSaidMau(true);
                 }
-                gameService.validateCard(playedCardAndMau.keySet().stream().findFirst().get(), game);
+                gameService.validateCard(playedCard, game);
                 gameService.applyCardRule(game);
                 break;
 
             } catch (PlayedCardIsInvalidException e) {
                 viewService.showErrorMessage(e.getMessage());
-                logger.error("Played card is not valid to play. Player has to choose another card or draw a card");
-                if (viewService.playerWantToDrawCards()) {
-                    logger.info("Active player {} wants to draw a card",activePlayer.getName());
-                    handleDrawingCards(gameService, viewService, game, activePlayer);
-                    break;
-                }
+                logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
             }
         }
     }

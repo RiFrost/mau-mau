@@ -103,9 +103,8 @@ public class PlayerServiceTest {
                 new Card(Suit.HEARTS, Label.SEVEN),
                 new Card(Suit.DIAMONDS, Label.SEVEN)
         ));
-        player.setHandCards(handCards);
 
-        service.sortHandCards(player);
+        service.addDrawnCards(player, handCards);
 
         assertEquals(expectedHandCards, player.getHandCards());
     }
@@ -137,9 +136,8 @@ public class PlayerServiceTest {
                 new Card(Suit.DIAMONDS, Label.JACK),
                 new Card(Suit.DIAMONDS, Label.SEVEN)
         ));
-        player.setHandCards(handCards);
 
-        service.sortHandCards(player);
+        service.addDrawnCards(player, handCards);
 
         assertEquals(expectedHandCards, player.getHandCards());
     }

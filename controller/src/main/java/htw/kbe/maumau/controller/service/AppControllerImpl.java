@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 @Controller
@@ -90,33 +91,34 @@ public class AppControllerImpl implements AppController {
             }
 
             viewService.showHandCards(activePlayer, game.getSuitWish());
+            handlePlayersTurn(gameService, viewService, game, activePlayer);
 
-            if (viewService.playerWantToDrawCards()) {
-                logger.info("Active player {} wants to draw a card", activePlayer.getName());
-                handleDrawingCards(gameService, viewService, game, activePlayer);
-            } else {
-                handlePlayedCard(gameService, viewService, game, activePlayer);
-
-                if (gameService.isGameOver(game)) {
-                    viewService.showWinnerMessage(activePlayer);
-                    logger.info("Game is over. Player {} won", activePlayer.getName());
-                    break;
-                }
-
-                if (game.hasAskedForSuitWish()) {
-                    gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
-                }
+            if (gameService.isGameOver(game)) {
+                viewService.showWinnerMessage(activePlayer);
+                logger.info("Game is over. Player {} won", activePlayer.getName());
+                break;
             }
+
+            if (game.hasAskedForSuitWish()) {
+                gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
+            }
+
 
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
         }
     }
 
-    private void handlePlayedCard(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
+    private void handlePlayersTurn(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
         while (true) {
             try {
                 Map<Card, Boolean> playedCardAndMau = viewService.getPlayedCard(activePlayer);
+
+                if (Objects.isNull(playedCardAndMau)) {
+                    logger.info("Active player {} wants to draw a card", activePlayer.getName());
+                    handleDrawingCards(gameService, viewService, game, activePlayer);
+                    break;
+                }
 
                 if (playedCardAndMau.values().stream().findFirst().get()) {
                     activePlayer.setSaidMau(true);
@@ -128,11 +130,6 @@ public class AppControllerImpl implements AppController {
             } catch (PlayedCardIsInvalidException e) {
                 viewService.showErrorMessage(e.getMessage());
                 logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
-                if (viewService.playerWantToDrawCards()) {
-                    logger.info("Active player {} wants to draw a card",activePlayer.getName());
-                    handleDrawingCards(gameService, viewService, game, activePlayer);
-                    break;
-                }
             }
         }
     }

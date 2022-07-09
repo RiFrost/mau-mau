@@ -50,15 +50,16 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public void showHandCards(Player player, Suit suit) {
-        int numberOfCard = 1;
+        int numberOfCard = 0;
 
         if (Objects.nonNull(suit)) {
             System.out.printf("\nA suit wish is given. Please choose a card of %s\n", suit);
         }
 
-        System.out.printf("\n%s, here are your hand cards:", player.getName());
+        System.out.printf("\n%s, here are your hand cards:\n", player.getName());
+        System.out.printf("\n%d: DRAW A CARD\n", numberOfCard);
         for (Card card : player.getHandCards()) {
-            System.out.printf("\n%d: %s\n", numberOfCard++, card);
+            System.out.printf("\n%d: %s\n", ++numberOfCard, card);
             System.out.println(getCardImage(card));
         }
     }
@@ -66,8 +67,10 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public Map<Card, Boolean> getPlayedCard(Player player) {
         Map<Card, Boolean> cardAndMau = new HashMap<>();
-        System.out.printf("%s, please choose a card:\n", player.getName());
-        int number = getChosenNumber(1, player.getHandCards().size());
+        System.out.printf("%s, please choose a card tp play or draw a card:\n", player.getName());
+        int number = getChosenNumber(0, player.getHandCards().size());
+
+        if (number == 0) { return null; }
 
         boolean saidMau = saidMau(player);
         cardAndMau.put(player.getHandCards().get(number - 1), saidMau);
@@ -77,7 +80,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public Suit getChosenSuit(Player player, List<Suit> suits) {
-        System.out.printf("%s, please choose a suit:\n", player.getName());
+        System.out.printf("\n%s, please choose a suit:\n", player.getName());
         int numberOfSuit = 1;
         for (Suit suit : suits) {
             System.out.printf("%d: %s\n", numberOfSuit++, suit);
@@ -97,13 +100,6 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public void showDrawnCardMessage(Player player, int numberOfDrawnCards) {
         System.out.printf("\n%s got %d CARD from draw pile!\n", player.getName(), numberOfDrawnCards);
-    }
-
-    @Override
-    public boolean playerWantToDrawCards() {
-        System.out.println("What do you want to do?\n1: PLAY\n2: DRAW");
-        int number = getChosenNumber(1, 2);
-        return number == 2;
     }
 
     @Override

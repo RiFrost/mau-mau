@@ -4,6 +4,7 @@ import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
+import htw.kbe.maumau.controller.dao.GameDao;
 import htw.kbe.maumau.controller.export.AppController;
 import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.controller.fixtures.GameFixture;
@@ -44,6 +45,9 @@ public class AppControllerImplTest {
     private PlayerService playerService;
     @Mock
     private CardService cardService;
+
+    @Mock
+    private GameDao gameDao;
 
     private List<String> playerNames = Arrays.asList("Philipp", "Jasmin", "Richard");
     private Game game;

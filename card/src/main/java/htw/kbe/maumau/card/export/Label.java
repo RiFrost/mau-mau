@@ -1,5 +1,7 @@
 package htw.kbe.maumau.card.export;
 
+import javax.persistence.Entity;
+
 public enum Label {
     ASS(14),
     KING(13),

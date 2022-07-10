@@ -1,6 +1,7 @@
 package htw.kbe.maumau.controller.service;
 
 
+import htw.kbe.maumau.controller.dao.GameDao;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.controller.export.AppController;
@@ -18,8 +19,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -37,6 +41,9 @@ public class AppControllerImpl implements AppController {
 
     @Autowired
     public ViewService viewService;
+
+    @Autowired
+    private GameDao gameDao;
 
     private static Logger logger = LogManager.getLogger(AppControllerImpl.class);
 
@@ -103,6 +110,7 @@ public class AppControllerImpl implements AppController {
                 gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
             }
 
+            gameDao.create(game);
 
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();

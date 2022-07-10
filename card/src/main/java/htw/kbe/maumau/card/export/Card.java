@@ -8,12 +8,13 @@ import java.util.Objects;
 public class Card implements Comparable<Card> {
 
     @Id
-    @Column(name = "card_id")
     @GeneratedValue
     private Long id;
-    @Column(nullable = false)
+//    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private Suit suit;
-    @Column(nullable = false)
+//    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
     private Label label;
 
     public Card() {

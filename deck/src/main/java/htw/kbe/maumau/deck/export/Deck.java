@@ -11,18 +11,19 @@ import java.util.List;
 public class Deck {
 
     @Id
-    @Column(name = "deck_id")
     @GeneratedValue
     private Long id;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = true)
     private List<Card> drawPile;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = true)
     private List<Card> discardPile;
     @Column(nullable = false)
     private long limitOfCardStack = 32;
     @Column(nullable = false)
     private int numberOfInitialCardsPerPlayer = 5;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Card topCard;
 
     public Deck() {

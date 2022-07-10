@@ -10,7 +10,6 @@ import java.util.List;
 public class Player {
 
     @Id
-    @Column(name = "player_id")
     @GeneratedValue
     private Long id;
 
@@ -18,7 +17,6 @@ public class Player {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "card_id")
     private List<Card> handCards;
     @Column(nullable = false)
     private boolean mustSuspend;

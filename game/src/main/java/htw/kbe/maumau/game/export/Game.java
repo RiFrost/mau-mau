@@ -13,7 +13,6 @@ import java.util.Set;
 public class Game {
 
     @Id
-    @Column(name = "game_id")
     @GeneratedValue
     private Long id;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

@@ -21,21 +21,19 @@ public class App {
     public static void main(String[] args) {
             ConfigurableApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
             final AppController controller  = applicationContext.getBean(AppControllerImpl.class);
-            Game game = new Game(List.of(new Player("Detlef"), new Player("Ute")), new Deck());
+//            Game game = new Game(List.of(new Player("Detlef"), new Player("Ute")), new Deck());
 
-         EntityManagerFactory emf = Persistence.createEntityManagerFactory("gameDemo");
-         EntityManager em = emf.createEntityManager();
+//            EntityManagerFactory emf = Persistence.createEntityManagerFactory("gameDemo");
+//            EntityManager em = emf.createEntityManager();
+//
+//            EntityTransaction tx = em.getTransaction();
+//
+//            tx.begin();
+//
+//            em.persist(game);
+//            tx.commit();
 
-
-            EntityTransaction tx = em.getTransaction();
-
-            tx.begin();
-
-            em.persist(game);
-            tx.commit();
-
-
-         //   controller.play();
+            controller.play();
 
             applicationContext.close();
         }

@@ -121,13 +121,11 @@ public class AppControllerImpl implements AppController {
         while (true) {
             try {
                 Card playedCard = viewService.getPlayedCard(activePlayer);
-
                 if (Objects.isNull(playedCard)) {
                     logger.info("Active player {} wants to draw a card", activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
-
                 if (viewService.saidMau(activePlayer)) {
                     activePlayer.setSaidMau(true);
                 }

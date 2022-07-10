@@ -28,7 +28,7 @@ public class Game {
     @Column(nullable = false)
     private int drawCardsCounter = 0;
     @Column(nullable = true)
-    private Suit suitWish = Suit.CLUBS;
+    private Suit suitWish = null;
     @Column(nullable = false)
     private boolean askForSuitWish = false;
     @Column(nullable = false)

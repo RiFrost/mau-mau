@@ -68,7 +68,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public Card getPlayedCard(Player player) {
-        System.out.printf("%s, please choose a card tp play or draw a card:\n", player.getName());
+        System.out.printf("%s, please choose a card to play or draw a card:\n", player.getName());
         int number = getChosenNumber(0, player.getHandCards().size());
 
         return number == 0 ? null : player.getHandCards().get(number - 1);

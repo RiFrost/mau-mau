@@ -1,7 +1,7 @@
 package htw.kbe.maumau.controller.service;
 
 
-import htw.kbe.maumau.controller.dao.GameDao;
+import htw.kbe.maumau.game.dao.GameDao;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.controller.export.AppController;
@@ -19,10 +19,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -42,16 +38,23 @@ public class AppControllerImpl implements AppController {
     @Autowired
     public ViewService viewService;
 
-    @Autowired
-    private GameDao gameDao;
-
     private static Logger logger = LogManager.getLogger(AppControllerImpl.class);
 
     @Override
     public void play() {
+        Game game;
         while (true) {
             try {
-                Game game = initializeGameStart(playerService, gameService, viewService, cardService);
+                if(gameService.hasGame()) {
+                    game = gameService.getGame();
+                    if(!viewService.loadGame(game)){
+                        gameService.deleteGame(game);
+                        game = initializeGameStart(playerService, gameService, viewService, cardService);
+                    }
+                } else {
+                    game = initializeGameStart(playerService, gameService, viewService, cardService);
+                    gameService.saveGame(game);
+                }
                 runGame(gameService, viewService, cardService, game);
             } catch (Exception e) {
                 viewService.showErrorMessage(e.getMessage());
@@ -103,6 +106,7 @@ public class AppControllerImpl implements AppController {
             if (gameService.isGameOver(game)) {
                 viewService.showWinnerMessage(activePlayer);
                 logger.info("Game is over. Player {} won", activePlayer.getName());
+                gameService.deleteGame(gameService.getGame());
                 break;
             }
 
@@ -110,7 +114,7 @@ public class AppControllerImpl implements AppController {
                 gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
             }
 
-            gameDao.create(game);
+            gameService.saveGame(game);
 
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();

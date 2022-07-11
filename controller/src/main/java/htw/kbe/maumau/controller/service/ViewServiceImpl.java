@@ -1,7 +1,9 @@
 package htw.kbe.maumau.controller.service;
 
+import antlr.StringUtils;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Suit;
+import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.controller.export.ViewService;
 import org.springframework.stereotype.Component;
@@ -112,6 +114,15 @@ public class ViewServiceImpl implements ViewService {
         System.out.println("1: YES\n2: NO");
         int number = getChosenNumber(1, 2);
         return number == 1;
+    }
+
+    @Override
+    public boolean loadGame(Game game) {
+        System.out.println("There was a previous Game found!");
+        System.out.printf("%s are the Players and it was %s's turn.%n", StringUtils.stripFrontBack(game.getPlayers().toString(), "[", "]"), game.getActivePlayer());
+        System.out.println("Would you like to continue the previous Game?");
+        System.out.println("1: YES\n2: NO");
+        return getChosenNumber(1, 2) == 1;
     }
 
     private String loadFromFile() {

@@ -198,18 +198,12 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public boolean hasGame() throws DaoException {
-        try {
-            if(gameDao.findGame().size() >= 1) return true;
-            return false;
-        } catch(DaoException e) {
-            logger.warn("Something went wrong when trying to search for an existing Game.");
-            return false;
-        }
+            return gameDao.findGame();
     }
 
     @Override
-    public Game getGame() throws DaoException {
-        return gameDao.findGame().get(0);
+    public Game getGame(long id) throws DaoException {
+        return gameDao.findById(id);
     }
 
 }

@@ -44,12 +44,10 @@ public class AppControllerImpl implements AppController {
         Game game;
         while (true) {
             try {
-                if(gameService.hasGame()) {
-                    game = gameService.getGame();
-                    if(!viewService.loadGame(game)){
-                        gameService.deleteGame(game);
-                        game = initializeGameStart(playerService, gameService, viewService, cardService);
-                    }
+                // ToDo: noch eine while true schleife bauen, für den fall das die game id falsch ist! und das in eine methode auslagern!
+                // toDo: Loggereinträge schreiben!
+                if(gameService.hasGame() && viewService.playerWantsToLoadGame()) {
+                    game = gameService.getGame(viewService.getGameId());
                 } else {
                     game = initializeGameStart(playerService, gameService, viewService, cardService);
                     gameService.saveGame(game);
@@ -105,7 +103,8 @@ public class AppControllerImpl implements AppController {
             if (gameService.isGameOver(game)) {
                 viewService.showWinnerMessage(activePlayer);
                 logger.info("Game is over. Player {} won", activePlayer.getName());
-                gameService.deleteGame(gameService.getGame());
+                // ToDo: Müssen nochmal überlegen, wie wir das Löschen behandeln
+                //gameService.deleteGame(gameService.getGame());
                 break;
             }
 

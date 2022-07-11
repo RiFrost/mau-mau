@@ -2,7 +2,6 @@ package htw.kbe.maumau.controller.export;
 
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.player.export.Player;
 
 import java.util.List;
@@ -88,6 +87,7 @@ public interface ViewService {
          */
         boolean hasNextRound();
 
-        boolean loadGame(Game game);
+        boolean playerWantsToLoadGame();
 
+        long getGameId();
 }

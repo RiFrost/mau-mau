@@ -1,10 +1,11 @@
 package htw.kbe.maumau.game.export;
 
-import java.util.List;
 
 public interface GameDao {
 
-    List<Game> findGame();
+    Game findById(Long id);
+
+    boolean findGame();
 
     void create(Game game);
 

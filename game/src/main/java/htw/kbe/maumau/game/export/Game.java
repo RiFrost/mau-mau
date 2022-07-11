@@ -10,6 +10,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "game")
+@NamedQuery(name="Game.countAll",
+        query="SELECT COUNT(g) FROM Game g")
 public class Game {
 
     @Id

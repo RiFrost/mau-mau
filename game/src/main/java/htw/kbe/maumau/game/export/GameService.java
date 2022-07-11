@@ -91,5 +91,5 @@ public interface GameService {
 
     boolean hasGame() throws DaoException;
 
-    Game getGame() throws DaoException;
+    Game getGame(long id) throws DaoException;
 }

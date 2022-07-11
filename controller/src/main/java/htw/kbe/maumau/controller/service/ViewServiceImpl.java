@@ -1,9 +1,7 @@
 package htw.kbe.maumau.controller.service;
 
-import antlr.StringUtils;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.controller.export.ViewService;
 import org.springframework.stereotype.Component;
@@ -22,7 +20,7 @@ public class ViewServiceImpl implements ViewService {
         System.out.println("Welcome to M(i)au M(i)au!\n\n");
         System.out.println(loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
-        int number = getChosenNumber(2, 4);
+        int number = (int) getChosenNumber(2, 4);
         System.out.printf("The game will start with %d players!\n", number);
         return number;
     }
@@ -69,7 +67,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public Card getPlayedCard(Player player) {
         System.out.printf("%s, please choose a card to play or draw a card:\n", player.getName());
-        int number = getChosenNumber(0, player.getHandCards().size());
+        int number = (int) getChosenNumber(0, player.getHandCards().size());
 
         return number == 0 ? null : player.getHandCards().get(number - 1);
     }
@@ -81,7 +79,7 @@ public class ViewServiceImpl implements ViewService {
         for (Suit suit : suits) {
             System.out.printf("%d: %s\n", numberOfSuit++, suit);
         }
-        int number = getChosenNumber(1, suits.size());
+        int number = (int) getChosenNumber(1, suits.size());
         return suits.get(number - 1);
     }
 
@@ -89,8 +87,7 @@ public class ViewServiceImpl implements ViewService {
     public boolean saidMau(Player player) {
         System.out.printf("\n%s do you want to say 'mau'?\n", player.getName());
         System.out.println("1: YES\n2: NO");
-        int saidMau = getChosenNumber(1, 2);
-        return saidMau == 1;
+        return getChosenNumber(1, 2) == 1;
     }
 
     @Override
@@ -112,17 +109,24 @@ public class ViewServiceImpl implements ViewService {
     public boolean hasNextRound() {
         System.out.print("\nWould you like to start a new round?\n");
         System.out.println("1: YES\n2: NO");
-        int number = getChosenNumber(1, 2);
-        return number == 1;
+        return getChosenNumber(1, 2) == 1;
     }
 
     @Override
-    public boolean loadGame(Game game) {
-        System.out.println("There was a previous Game found!");
-        System.out.printf("%s are the Players and it was %s's turn.%n", StringUtils.stripFrontBack(game.getPlayers().toString(), "[", "]"), game.getActivePlayer());
-        System.out.println("Would you like to continue the previous Game?");
-        System.out.println("1: YES\n2: NO");
+    public boolean playerWantsToLoadGame() {
+        System.out.println("Would you like to load a previous game?");
         return getChosenNumber(1, 2) == 1;
+//        System.out.println("There was a previous Game found!");
+//        System.out.printf("%s are the Players and it was %s's turn.%n", StringUtils.stripFrontBack(game.getPlayers().toString(), "[", "]"), game.getActivePlayer());
+//        System.out.println("Would you like to continue the previous Game?");
+//        System.out.println("1: YES\n2: NO");
+//        return getChosenNumber(1, 2) == 1;
+    }
+
+    @Override
+    public long getGameId() {
+        System.out.println("Please enter the game id to load this game.");
+        return getChosenNumber(1, Long.MAX_VALUE);
     }
 
     private String loadFromFile() {
@@ -179,12 +183,12 @@ public class ViewServiceImpl implements ViewService {
         return name;
     }
 
-    private int getChosenNumber(int min, int max) {
+    private long getChosenNumber(int min, long max) {
         Scanner scanner = new Scanner(System.in);
-        int index;
+        long index;
         while (true) {
             try {
-                index = Integer.parseInt(scanner.next());
+                index = Long.parseLong(scanner.next());
                 if (index < min || index > max) {
                     System.out.printf("Please choose a number between %d and %d:", min, max);
                     continue;

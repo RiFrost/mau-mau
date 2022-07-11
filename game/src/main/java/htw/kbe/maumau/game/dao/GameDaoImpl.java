@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
-import java.util.List;
+
 
 @Component
 public class GameDaoImpl implements GameDao {
@@ -16,10 +16,20 @@ public class GameDaoImpl implements GameDao {
     private EntityManager entityManager;
 
     @Override
-    public List<Game> findGame() {
+    public Game findById(Long id) {
         try {
-            Query query = entityManager.createQuery("SELECT g FROM Game g");
-            return query.getResultList();
+            return entityManager.find(Game.class, id);
+        } catch (PersistenceException exp) {
+            throw new DaoException(exp.getMessage());
+        }
+    }
+
+    @Override
+    public boolean findGame() {
+        try {
+            //Query query = entityManager.createQuery("SELECT COUNT(g) FROM Game g");
+            int number = ((Number)entityManager.createNamedQuery("Game.countAll").getSingleResult()).intValue();
+            return number > 0;
         } catch (PersistenceException e) {
             throw new DaoException(e.getMessage());
         }

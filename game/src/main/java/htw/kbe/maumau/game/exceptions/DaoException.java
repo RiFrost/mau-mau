@@ -1,4 +1,4 @@
-package htw.kbe.maumau.controller.dao;
+package htw.kbe.maumau.game.exceptions;
 
 public class DaoException extends RuntimeException {
 

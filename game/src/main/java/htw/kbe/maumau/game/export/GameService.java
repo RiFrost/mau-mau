@@ -3,6 +3,7 @@ package htw.kbe.maumau.game.export;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import htw.kbe.maumau.game.exceptions.DaoException;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
@@ -83,4 +84,12 @@ public interface GameService {
      * @param game
      */
     void resetPlayersMau(Game game);
+
+    void saveGame(Game game) throws DaoException;
+
+    void deleteGame(Game game) throws DaoException;
+
+    boolean hasGame() throws DaoException;
+
+    Game getGame() throws DaoException;
 }

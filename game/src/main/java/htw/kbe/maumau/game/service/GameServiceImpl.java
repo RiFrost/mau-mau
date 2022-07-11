@@ -6,6 +6,8 @@ import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.export.DeckService;
+import htw.kbe.maumau.game.dao.GameDao;
+import htw.kbe.maumau.game.exceptions.DaoException;
 import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.export.GameService;
@@ -32,6 +34,9 @@ public class GameServiceImpl implements GameService {
     private RulesService rulesService;
     @Autowired
     private PlayerService playerService;
+
+    @Autowired
+    private GameDao gameDao;
 
     private static Logger logger = LogManager.getLogger(GameServiceImpl.class);
 
@@ -173,5 +178,38 @@ public class GameServiceImpl implements GameService {
         logger.info("'Mau' state of active Player {} is reset", game.getActivePlayer().getName());
     }
 
+    @Override
+    public void saveGame(Game game) throws DaoException {
+        try {
+            gameDao.create(game);
+        } catch(DaoException e) {
+            logger.warn("Something went wrong when trying to save the Game."); // WIP
+        }
+    }
+
+    @Override
+    public void deleteGame(Game game) throws DaoException {
+        try {
+            gameDao.delete(game);
+        } catch(DaoException e) {
+            logger.warn("Something went wrong when trying to delete the Game.");
+        }
+    }
+
+    @Override
+    public boolean hasGame() throws DaoException {
+        try {
+            if(gameDao.findGame().size() >= 1) return true;
+            return false;
+        } catch(DaoException e) {
+            logger.warn("Something went wrong when trying to search for an existing Game.");
+            return false;
+        }
+    }
+
+    @Override
+    public Game getGame() throws DaoException {
+        return gameDao.findGame().get(0);
+    }
 
 }

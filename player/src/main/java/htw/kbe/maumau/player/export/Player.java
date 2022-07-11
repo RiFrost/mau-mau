@@ -77,9 +77,6 @@ public class Player {
 
     @Override
     public String toString() {
-        return  "name='" + name + '\'' +
-                ", handCards=" + handCards +
-                ", mustSuspend=" + mustSuspend +
-                ", saidMau=" + saidMau;
+        return name;
     }
 }

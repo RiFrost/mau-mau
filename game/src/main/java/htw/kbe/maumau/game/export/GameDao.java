@@ -1,4 +1,4 @@
-package htw.kbe.maumau.game.dao;
+package htw.kbe.maumau.game.export;
 
 import htw.kbe.maumau.game.export.Game;
 

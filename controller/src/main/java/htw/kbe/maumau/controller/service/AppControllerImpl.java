@@ -1,7 +1,6 @@
 package htw.kbe.maumau.controller.service;
 
 
-import htw.kbe.maumau.game.dao.GameDao;
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.controller.export.AppController;

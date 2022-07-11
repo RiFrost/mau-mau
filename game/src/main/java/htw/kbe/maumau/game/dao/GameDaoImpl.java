@@ -2,6 +2,7 @@ package htw.kbe.maumau.game.dao;
 
 import htw.kbe.maumau.game.exceptions.DaoException;
 import htw.kbe.maumau.game.export.Game;
+import htw.kbe.maumau.game.export.GameDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

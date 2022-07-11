@@ -6,7 +6,7 @@ import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
 import htw.kbe.maumau.deck.export.DeckService;
-import htw.kbe.maumau.game.dao.GameDao;
+import htw.kbe.maumau.game.export.GameDao;
 import htw.kbe.maumau.game.exceptions.DaoException;
 import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;

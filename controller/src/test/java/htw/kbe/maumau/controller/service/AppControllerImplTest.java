@@ -4,7 +4,6 @@ import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.game.dao.GameDao;
 import htw.kbe.maumau.controller.export.AppController;
 import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.controller.fixtures.GameFixture;

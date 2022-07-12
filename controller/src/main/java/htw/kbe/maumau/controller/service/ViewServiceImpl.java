@@ -16,8 +16,12 @@ import java.util.stream.Collectors;
 public class ViewServiceImpl implements ViewService {
 
     @Override
+    public void showWelcomeMessage() {
+        System.out.println("Welcome to M(i)au M(i)au!\n");
+    }
+
+    @Override
     public int getNumberOfPlayer() {
-        System.out.println("Welcome to M(i)au M(i)au!\n\n");
         System.out.println(loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
         int number = (int) getChosenNumber(2, 4);
@@ -70,7 +74,6 @@ public class ViewServiceImpl implements ViewService {
     public Card getPlayedCard(Player player) {
         System.out.printf("%s, please choose a card to play or draw a card:\n", player.getName());
         int number = (int) getChosenNumber(0, player.getHandCards().size());
-
         return number == 0 ? null : player.getHandCards().get(number - 1);
     }
 
@@ -119,11 +122,6 @@ public class ViewServiceImpl implements ViewService {
         System.out.println("Would you like to load a previous game?");
         System.out.println("1: YES\n2: NO");
         return getChosenNumber(1, 2) == 1;
-//        System.out.println("There was a previous Game found!");
-//        System.out.printf("%s are the Players and it was %s's turn.%n", StringUtils.stripFrontBack(game.getPlayers().toString(), "[", "]"), game.getActivePlayer());
-//        System.out.println("Would you like to continue the previous Game?");
-//        System.out.println("1: YES\n2: NO");
-//        return getChosenNumber(1, 2) == 1;
     }
 
     @Override

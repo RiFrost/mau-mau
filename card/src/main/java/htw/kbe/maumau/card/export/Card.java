@@ -10,10 +10,10 @@ public class Card implements Comparable<Card> {
     @Id
     @GeneratedValue
     private Long id;
-//    @Column(nullable = false)
+
     @Enumerated(EnumType.ORDINAL)
     private Suit suit;
-//    @Column(nullable = false)
+
     @Enumerated(EnumType.ORDINAL)
     private Label label;
 

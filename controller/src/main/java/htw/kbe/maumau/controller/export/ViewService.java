@@ -8,7 +8,12 @@ import java.util.List;
 
 public interface ViewService {
 
-        /**
+    /**
+     * shows welcome message
+     */
+    void showWelcomeMessage();
+
+    /**
          * shows gaming instructions
          * asks the player for the desired number of players
          * @return number of players

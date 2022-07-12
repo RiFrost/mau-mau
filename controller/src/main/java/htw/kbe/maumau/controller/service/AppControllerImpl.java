@@ -42,6 +42,7 @@ public class AppControllerImpl implements AppController {
 
     @Override
     public void play() {
+        viewService.showWelcomeMessage();
         while (true) {
             try {
                 runGame(gameService, viewService, cardService, getGame());

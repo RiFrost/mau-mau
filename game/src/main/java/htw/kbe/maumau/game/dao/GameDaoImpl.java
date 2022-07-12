@@ -36,7 +36,6 @@ public class GameDaoImpl implements GameDao {
             logger.error("DaoException is thrown: %s", e.getMessage());
             throw new DaoException(e.getMessage());
         }
-
     }
 
     @Override

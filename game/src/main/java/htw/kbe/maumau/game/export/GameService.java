@@ -85,11 +85,32 @@ public interface GameService {
      */
     void resetPlayersMau(Game game);
 
+    /**
+     * saves a game in a database
+     * @param game game that is to be saved
+     * @throws DaoException
+     */
     void saveGame(Game game) throws DaoException;
 
+    /**
+     * deletes a game from the database
+     * @param game game that is to be deleted
+     * @throws DaoException
+     */
     void deleteGame(Game game) throws DaoException;
 
+    /**
+     * says if at leas one game is saved in the database
+     * @return true if at least one game is saved in the database, false if not
+     * @throws DaoException
+     */
     boolean hasGame() throws DaoException;
 
-    Game getGame(long id) throws DaoException;
+    /**
+     * return the game that belongs to the id
+     * @param id id that belongs to the game
+     * @return saved game
+     * @throws DaoException
+     */
+    Game getSavedGame(long id) throws DaoException;
 }

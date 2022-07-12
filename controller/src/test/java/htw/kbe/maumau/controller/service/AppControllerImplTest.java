@@ -77,7 +77,7 @@ public class AppControllerImplTest {
         when(viewService.getPlayerNames(anyInt())).thenReturn(playerNames);
         when(playerService.createPlayers(anyList())).thenReturn(game.getPlayers());
         doNothing().when(gameService).initialCardDealing(any());
-        doNothing().when(viewService).showStartGameMessage();
+        doNothing().when(viewService).showStartGameMessage(game.getId());
         doNothing().when(viewService).showTopCard(any());
         when(gameService.createGame(any())).thenReturn(game);
         doNothing().when(gameService).applyCardRule(any());
@@ -109,7 +109,7 @@ public class AppControllerImplTest {
         verify(viewService, times(1)).getPlayerNames(intThat(n -> n == 3));
         verify(playerService, times(1)).createPlayers(argThat(names -> names.equals(playerNames)));
         verify(gameService, times(1)).initialCardDealing(argThat(g -> g.equals(game)));
-        verify(viewService, times(1)).showStartGameMessage();
+        verify(viewService, times(1)).showStartGameMessage(game.getId());
         verify(viewService, times(3)).showTopCard(any());
         verify(gameService, times(1)).createGame(argThat(playerList -> playerList.equals(game.getPlayers())));
         verify(gameService, times(2)).applyCardRule(any());
@@ -155,7 +155,7 @@ public class AppControllerImplTest {
         when(viewService.getPlayerNames(anyInt())).thenReturn(playerNames);
         when(playerService.createPlayers(anyList())).thenReturn(game.getPlayers());
         doNothing().when(gameService).initialCardDealing(any());
-        doNothing().when(viewService).showStartGameMessage();
+        doNothing().when(viewService).showStartGameMessage(game.getId());
         doNothing().when(viewService).showTopCard(any());
         when(gameService.createGame(any())).thenReturn(game);
         doNothing().doAnswer(a -> setAskForUserWish()).doNothing().when(gameService).applyCardRule(any());
@@ -186,7 +186,7 @@ public class AppControllerImplTest {
         verify(viewService, times(1)).getPlayerNames(intThat(n -> n == 2));
         verify(playerService, times(1)).createPlayers(argThat(names -> names.equals(playerNames)));
         verify(gameService, times(1)).initialCardDealing(argThat(g -> g.equals(game)));
-        verify(viewService, times(1)).showStartGameMessage();
+        verify(viewService, times(1)).showStartGameMessage(game.getId());
         verify(viewService, times(2)).showTopCard(any());
         verify(gameService, times(1)).createGame(argThat(players -> players.equals(game.getPlayers())));
         verify(gameService, times(3)).applyCardRule(argThat(g -> g.equals(game)));

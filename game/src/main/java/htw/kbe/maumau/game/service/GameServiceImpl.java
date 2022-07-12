@@ -49,6 +49,7 @@ public class GameServiceImpl implements GameService {
         Deck deck = deckService.createDeck(cardService.getCards());
         Game game = new Game(players, deck);
         logger.info("Game is created: {}", game);
+        gameDao.saveGame(game);
         return game;
     }
 
@@ -181,7 +182,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void saveGame(Game game) throws DaoException {
         try {
-            gameDao.create(game);
+            gameDao.saveGame(game);
         } catch(DaoException e) {
             logger.warn("Something went wrong when trying to save the Game."); // WIP
         }

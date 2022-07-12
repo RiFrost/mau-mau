@@ -73,7 +73,7 @@ public class GameDaoImplTest {
         try {
             List<Player> players = List.of(new Player("Horst"), new Player("Karl"));
             Game game = new Game(players, GameFixture.deck());
-            gameDao.create(game);
+            gameDao.saveGame(game);
             assertNotNull(em.find(Game.class, game.getId()));
         } finally {
             deleteEntry(game);

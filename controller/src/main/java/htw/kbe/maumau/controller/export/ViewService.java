@@ -24,8 +24,9 @@ public interface ViewService {
 
         /**
          * lets the player know that the game has started
+         * @param id - game id
          */
-        void showStartGameMessage();
+        void showStartGameMessage(long id);
 
         /**
          * lets the player know which card is on top of the pile

@@ -6,6 +6,7 @@ import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.controller.export.AppController;
 import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import htw.kbe.maumau.game.exceptions.GameNotFoundException;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.export.GameService;
@@ -41,18 +42,10 @@ public class AppControllerImpl implements AppController {
 
     @Override
     public void play() {
-        Game game;
         while (true) {
             try {
-                // ToDo: noch eine while true schleife bauen, für den fall das die game id falsch ist! und das in eine methode auslagern!
                 // toDo: Loggereinträge schreiben!
-                if(gameService.hasGame() && viewService.playerWantsToLoadGame()) {
-                    game = gameService.getGame(viewService.getGameId());
-                } else {
-                    game = initializeGameStart(playerService, gameService, viewService, cardService);
-                    gameService.saveGame(game);
-                }
-                runGame(gameService, viewService, cardService, game);
+                runGame(gameService, viewService, cardService, getGame());
             } catch (Exception e) {
                 viewService.showErrorMessage(e.getMessage());
                 logger.error("Exception was thrown with the following message: {}", e.getMessage());
@@ -66,11 +59,29 @@ public class AppControllerImpl implements AppController {
         logger.info("Game ended");
     }
 
+    private Game getGame() throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
+        Game game;
+        while (true) {
+            try {
+                if (gameService.hasGame() && viewService.playerWantsToLoadGame()) {
+                    game = gameService.getGame(viewService.getGameId());
+                } else {
+                    game = initializeGameStart(playerService, gameService, viewService, cardService);
+                }
+                break;
+            }
+            catch (GameNotFoundException e){
+                viewService.showErrorMessage(e.getMessage());
+            }
+        }
+        return game;
+    }
+
     private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewService, CardService cardService) throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
         List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
         Game game = gameService.createGame(playerService.createPlayers(playerNames));
         gameService.initialCardDealing(game);
-        viewService.showStartGameMessage();
+        viewService.showStartGameMessage(game.getId());
         viewService.showTopCard(game.getCardDeck().getTopCard());
         handleFirstRound(gameService, cardService, game);
         return game;
@@ -103,8 +114,7 @@ public class AppControllerImpl implements AppController {
             if (gameService.isGameOver(game)) {
                 viewService.showWinnerMessage(activePlayer);
                 logger.info("Game is over. Player {} won", activePlayer.getName());
-                // ToDo: Müssen nochmal überlegen, wie wir das Löschen behandeln
-                //gameService.deleteGame(gameService.getGame());
+                gameService.deleteGame(game);
                 break;
             }
 
@@ -112,10 +122,11 @@ public class AppControllerImpl implements AppController {
                 gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
             }
 
-            gameService.saveGame(game);
-
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
+
+            gameService.saveGame(game);
+            logger.info("Game with ID %d saved", game.getId());
         }
     }
 

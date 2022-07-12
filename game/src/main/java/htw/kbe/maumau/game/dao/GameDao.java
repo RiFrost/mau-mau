@@ -9,7 +9,7 @@ public interface GameDao {
 
     boolean findGame();
 
-    void create(Game game);
+    void saveGame(Game game);
 
     void delete(Game game);
 

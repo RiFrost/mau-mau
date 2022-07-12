@@ -38,8 +38,10 @@ public class ViewServiceImpl implements ViewService {
     }
 
     @Override
-    public void showStartGameMessage() {
+    public void showStartGameMessage(long id) {
         System.out.println("\nLet's begin!\n");
+        System.out.printf("Your game ID is %d. Please write it down to load your game later.\n", id);
+        System.out.printf("After each round your game is saved automatically.\n");
     }
 
     @Override
@@ -115,6 +117,7 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public boolean playerWantsToLoadGame() {
         System.out.println("Would you like to load a previous game?");
+        System.out.println("1: YES\n2: NO");
         return getChosenNumber(1, 2) == 1;
 //        System.out.println("There was a previous Game found!");
 //        System.out.printf("%s are the Players and it was %s's turn.%n", StringUtils.stripFrontBack(game.getPlayers().toString(), "[", "]"), game.getActivePlayer());
@@ -125,7 +128,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public long getGameId() {
-        System.out.println("Please enter the game id to load this game.");
+        System.out.println("Please enter the game ID to load this game.");
         return getChosenNumber(1, Long.MAX_VALUE);
     }
 

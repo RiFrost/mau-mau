@@ -40,7 +40,7 @@ public class GameDaoImpl implements GameDao {
     }
 
     @Override
-    public void create(Game game) {
+    public void saveGame(Game game) {
         try {
             entityManager.getTransaction().begin();
             entityManager.persist(game);

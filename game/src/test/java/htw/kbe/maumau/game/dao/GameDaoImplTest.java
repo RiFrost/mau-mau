@@ -32,7 +32,7 @@ public class GameDaoImplTest {
 
 
     @After
-    public void close() {
+    public void tearDown() {
         deleteEntry(this.game);
     }
 
@@ -47,9 +47,8 @@ public class GameDaoImplTest {
     @Test
     public void testFindById() {
         Game actualGame = gameDao.findById(this.game.getId());
-        //ToDo compare methode für Namen schreiben
-        assertEquals(GameFixture.players(), actualGame.getPlayers());
-        assertEquals(GameFixture.deck(), actualGame.getCardDeck());
+        assertEquals(GameFixture.players().toString(), actualGame.getPlayers().toString());
+        assertEquals(GameFixture.deck().toString(), actualGame.getCardDeck().toString());
     }
 
     @Test

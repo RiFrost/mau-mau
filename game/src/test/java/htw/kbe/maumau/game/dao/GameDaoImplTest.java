@@ -30,7 +30,6 @@ public class GameDaoImplTest {
         tx.commit();
     }
 
-
     @After
     public void tearDown() {
         deleteEntry(this.game);
@@ -82,7 +81,7 @@ public class GameDaoImplTest {
 
     @Test
     public void testDeleteGame() {
-        gameDao.delete(this.game);
+        gameDao.deleteGame(this.game);
         em.clear();
         assertNull(em.find(Game.class, this.game.getId()));
     }

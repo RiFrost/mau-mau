@@ -191,7 +191,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public void deleteGame(Game game) throws DaoException {
         try {
-            gameDao.delete(game);
+            gameDao.deleteGame(game);
         } catch(DaoException e) {
             logger.warn("Something went wrong when trying to delete the Game.");
         }

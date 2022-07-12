@@ -44,7 +44,6 @@ public class AppControllerImpl implements AppController {
     public void play() {
         while (true) {
             try {
-                // toDo: Loggereinträge schreiben!
                 runGame(gameService, viewService, cardService, getGame());
             } catch (Exception e) {
                 viewService.showErrorMessage(e.getMessage());
@@ -126,7 +125,6 @@ public class AppControllerImpl implements AppController {
             game.addUpLapCounter();
 
             gameService.saveGame(game);
-            logger.info("Game with ID %d saved", game.getId());
         }
     }
 

@@ -1,18 +1,19 @@
 package htw.kbe.maumau.game.service;
 
 import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
-import htw.kbe.maumau.deck.service.DeckServiceImpl;
+import htw.kbe.maumau.deck.export.DeckService;
+import htw.kbe.maumau.game.dao.GameDao;
 import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.fixtures.GameFixture;
 import htw.kbe.maumau.player.export.Player;
-import htw.kbe.maumau.player.service.PlayerServiceImpl;
+import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
-import htw.kbe.maumau.rule.service.RulesServiceImpl;
+import htw.kbe.maumau.rule.export.RulesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,13 +32,15 @@ public class GameServiceTest {
     @InjectMocks
     private GameServiceImpl service;
     @Mock
-    private DeckServiceImpl deckService;
+    private DeckService deckService;
     @Mock
-    private RulesServiceImpl rulesService;
+    private RulesService rulesService;
     @Mock
-    private CardServiceImpl cardService;
+    private CardService cardService;
     @Mock
-    private PlayerServiceImpl playerService;
+    private PlayerService playerService;
+    @Mock
+    private GameDao gameDao;
 
     private List<Player> players;
     private Game game;
@@ -53,10 +56,12 @@ public class GameServiceTest {
     public void testCreateValidGame() throws IllegalDeckSizeException, InvalidPlayerSizeException {
         when(cardService.getCards()).thenReturn(GameFixture.cards());
         when(deckService.createDeck(anyList())).thenReturn(GameFixture.deck());
+        doNothing().when(gameDao).saveGame(any());
         Game game = service.createGame(players);
 
-        verify(cardService, times(1)).getCards();
-        verify(deckService, times(1)).createDeck(anyList());
+        verify(gameDao).saveGame(argThat(g -> g.equals(game)));
+        verify(cardService).getCards();
+        verify(deckService).createDeck(anyList());
         assertEquals(players, game.getPlayers());
         assertEquals(players.get(0), game.getActivePlayer());
         assertNotEquals(null, game.getCardDeck().getTopCard());
@@ -362,6 +367,45 @@ public class GameServiceTest {
         game.getActivePlayer().setHandCards(List.of(new Card(Suit.CLUBS, Label.JACK)));
 
         assertFalse(service.isGameOver(game));
+    }
+
+    @Test
+    @DisplayName("should return true if games are found in database or false when not")
+    public void hasGame(){
+        when(gameDao.findGame()).thenReturn(true, false);
+
+        assertTrue(service.hasGame());
+        assertFalse(service.hasGame());
+    }
+
+    @Test
+    @DisplayName("should return true if games are found in database or false when not")
+    public void hasGames(){
+        when(gameDao.findGame()).thenReturn(true, false);
+
+        assertTrue(service.hasGame());
+        assertFalse(service.hasGame());
+    }
+
+    @Test
+    @DisplayName("should call delete method from dao service for deleting a game object in database")
+    public void deleteGame(){
+        doNothing().when(gameDao).deleteGame(any());
+
+        service.deleteGame(game);
+
+        verify(gameDao).deleteGame(argThat(g -> g.equals(game)));
+    }
+
+    @Test
+    @DisplayName("should return game that is found by game id from database")
+    public void getGame(){
+        when(gameDao.findById(anyLong())).thenReturn(game);
+
+        Game actualGame = service.getGame(1L);
+
+        verify(gameDao).findById(longThat(id -> id == game.getId()));
+        assertEquals(game, actualGame);
     }
 
 }

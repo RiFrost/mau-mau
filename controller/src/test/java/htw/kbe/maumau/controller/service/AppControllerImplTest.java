@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AppControllerImplTest {
 
     @InjectMocks
-    private AppController appController = new AppControllerImpl();
+    private AppControllerImpl appController;
     @Mock
     private GameService gameService;
     @Mock
@@ -73,6 +73,9 @@ public class AppControllerImplTest {
     @DisplayName("should play 3 rounds and game ends with a winner without exceptions")
     public void runGame() throws InvalidPlayerNameException, IllegalDeckSizeException, InvalidPlayerSizeException, PlayedCardIsInvalidException {
         // initializeGameStart()
+        doNothing().when(viewService).showWelcomeMessage();
+        when(gameService.hasGame()).thenReturn(false);
+        //when(viewService.playerWantsToLoadGame()).thenReturn(false);
         when(viewService.getNumberOfPlayer()).thenReturn(3);
         when(viewService.getPlayerNames(anyInt())).thenReturn(playerNames);
         when(playerService.createPlayers(anyList())).thenReturn(game.getPlayers());
@@ -105,13 +108,16 @@ public class AppControllerImplTest {
 
         assertDoesNotThrow(() -> appController.play());
 
-        verify(viewService, times(1)).getNumberOfPlayer();
-        verify(viewService, times(1)).getPlayerNames(intThat(n -> n == 3));
-        verify(playerService, times(1)).createPlayers(argThat(names -> names.equals(playerNames)));
-        verify(gameService, times(1)).initialCardDealing(argThat(g -> g.equals(game)));
-        verify(viewService, times(1)).showStartGameMessage(game.getId());
+        verify(viewService).showWelcomeMessage();
+        verify(gameService).hasGame();
+//        verify(viewService).playerWantsToLoadGame();
+        verify(viewService).getNumberOfPlayer();
+        verify(viewService).getPlayerNames(intThat(n -> n == 3));
+        verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)));
+        verify(gameService).initialCardDealing(argThat(g -> g.equals(game)));
+        verify(viewService).showStartGameMessage(game.getId());
         verify(viewService, times(3)).showTopCard(any());
-        verify(gameService, times(1)).createGame(argThat(playerList -> playerList.equals(game.getPlayers())));
+        verify(gameService).createGame(argThat(playerList -> playerList.equals(game.getPlayers())));
         verify(gameService, times(2)).applyCardRule(any());
         verify(gameService, times(3)).mustPlayerDrawCards(argThat(g -> g.equals(game)));
         verify(viewService, times(2)).showHandCards(any(), any());
@@ -119,10 +125,10 @@ public class AppControllerImplTest {
         verify(gameService, times(2)).giveDrawnCardsToPlayer(anyInt(), any());
         verify(gameService, times(2)).switchToNextPlayer(argThat(g -> g.equals(game)));
         verify(viewService, times(2)).getPlayedCard(any());
-        verify(viewService, times(1)).saidMau(argThat(player -> player.getName().equals("Richard")));
+        verify(viewService).saidMau(argThat(player -> player.getName().equals("Richard")));
         verify(gameService, times(2)).isGameOver(any());
-        verify(viewService, times(1)).showWinnerMessage(argThat(winner -> winner.getName().equals("Richard")));
-        verify(viewService, times(1)).hasNextRound();
+        verify(viewService).showWinnerMessage(argThat(winner -> winner.getName().equals("Richard")));
+        verify(viewService).hasNextRound();
     }
 
     @Test

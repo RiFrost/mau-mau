@@ -34,7 +34,9 @@ public class GameFixture {
     }
 
     public static Game game() {
-        return new Game(players(), deck());
+        Game game = new Game(players(), deck());
+        game.setId(1L);
+        return game;
     }
 
     public static List<Suit> suits = Arrays.asList(

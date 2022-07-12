@@ -3,7 +3,6 @@ package htw.kbe.maumau.game.dao;
 import htw.kbe.maumau.game.exceptions.DaoException;
 import htw.kbe.maumau.game.exceptions.GameNotFoundException;
 import htw.kbe.maumau.game.export.Game;
-import htw.kbe.maumau.game.service.GameServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,7 @@ public class GameDaoImpl implements GameDao {
         try {
             Game game = entityManager.find(Game.class, id);
             if (Objects.isNull(game)) {
-                logger.info("Game with ID %d is not found", game.getId());
+                logger.info("Game with ID %d is not found", id);
                 throw new GameNotFoundException(String.format("Game with ID %d not found", id));
             }
             logger.info("Game with ID %d is found", game.getId());

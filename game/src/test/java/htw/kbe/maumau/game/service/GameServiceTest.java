@@ -402,7 +402,7 @@ public class GameServiceTest {
     public void getGame(){
         when(gameDao.findById(anyLong())).thenReturn(game);
 
-        Game actualGame = service.getGame(1L);
+        Game actualGame = service.getSavedGame(1L);
 
         verify(gameDao).findById(longThat(id -> id == game.getId()));
         assertEquals(game, actualGame);

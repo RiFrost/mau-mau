@@ -4,10 +4,10 @@ import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.controller.export.AppController;
 import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.controller.fixtures.GameFixture;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import htw.kbe.maumau.game.exceptions.GameNotFoundException;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.export.GameService;
@@ -75,7 +75,6 @@ public class AppControllerImplTest {
         // initializeGameStart()
         doNothing().when(viewService).showWelcomeMessage();
         when(gameService.hasGame()).thenReturn(false);
-        //when(viewService.playerWantsToLoadGame()).thenReturn(false);
         when(viewService.getNumberOfPlayer()).thenReturn(3);
         when(viewService.getPlayerNames(anyInt())).thenReturn(playerNames);
         when(playerService.createPlayers(anyList())).thenReturn(game.getPlayers());
@@ -84,6 +83,7 @@ public class AppControllerImplTest {
         doNothing().when(viewService).showTopCard(any());
         when(gameService.createGame(any())).thenReturn(game);
         doNothing().when(gameService).applyCardRule(any());
+        doNothing().when(gameService).saveGame(any());
 
         // gaming loop starts here
         when(gameService.mustPlayerDrawCards(any())).thenReturn(true, false, false);
@@ -102,6 +102,7 @@ public class AppControllerImplTest {
         doNothing().when(gameService).validateCard(any(), any());
         when(gameService.isGameOver(any())).thenReturn(false, true);
         doNothing().when(viewService).showWinnerMessage(any());
+        doNothing().when(gameService).deleteGame(any());
 
         // a new round of play is not desired
         when(viewService.hasNextRound()).thenReturn(false);
@@ -110,7 +111,6 @@ public class AppControllerImplTest {
 
         verify(viewService).showWelcomeMessage();
         verify(gameService).hasGame();
-//        verify(viewService).playerWantsToLoadGame();
         verify(viewService).getNumberOfPlayer();
         verify(viewService).getPlayerNames(intThat(n -> n == 3));
         verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)));
@@ -124,10 +124,12 @@ public class AppControllerImplTest {
         verify(viewService, times(2)).showDrawnCardMessage(any(), anyInt());
         verify(gameService, times(2)).giveDrawnCardsToPlayer(anyInt(), any());
         verify(gameService, times(2)).switchToNextPlayer(argThat(g -> g.equals(game)));
+        verify(gameService, times(2)).saveGame(argThat(g -> g.equals(game)));
         verify(viewService, times(2)).getPlayedCard(any());
         verify(viewService).saidMau(argThat(player -> player.getName().equals("Richard")));
         verify(gameService, times(2)).isGameOver(any());
         verify(viewService).showWinnerMessage(argThat(winner -> winner.getName().equals("Richard")));
+        verify(gameService).deleteGame(argThat(g -> g.equals(game)));
         verify(viewService).hasNextRound();
     }
 
@@ -135,6 +137,9 @@ public class AppControllerImplTest {
     @DisplayName("should catch any Exception (here InvalidPlayerSizeException) that is thrown during the game")
     public void testCatchException() throws InvalidPlayerNameException, IllegalDeckSizeException, InvalidPlayerSizeException {
         String exceptionMessage = "Number of players is not valid";
+        doNothing().when(viewService).showWelcomeMessage();
+        when(gameService.hasGame()).thenReturn(false);
+
         // initializeGameStart()
         when(viewService.getNumberOfPlayer()).thenReturn(3);
         when(viewService.getPlayerNames(anyInt())).thenReturn(playerNames);
@@ -143,28 +148,28 @@ public class AppControllerImplTest {
 
         assertDoesNotThrow(() -> appController.play());
 
-        verify(viewService, times(1)).getNumberOfPlayer();
-        verify(viewService, times(1)).getPlayerNames(intThat(n -> n == 3));
-        verify(playerService, times(1)).createPlayers(argThat(names -> names.equals(playerNames)));
-        verify(viewService, times(1)).showErrorMessage(argThat(msg -> msg.equals(exceptionMessage)));
+        verify(viewService).showWelcomeMessage();
+        verify(gameService).hasGame();
+        verify(viewService).getNumberOfPlayer();
+        verify(viewService).getPlayerNames(intThat(n -> n == 3));
+        verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)));
+        verify(viewService).showErrorMessage(argThat(msg -> msg.equals(exceptionMessage)));
     }
 
     @Test
     @DisplayName("should only allow valid cards and should set player's suit wish when JACK has been played")
-    public void testCardValidationAndChoseSuit() throws InvalidPlayerNameException, IllegalDeckSizeException, InvalidPlayerSizeException, PlayedCardIsInvalidException {
+    public void testCardValidationAndChoseSuit() throws PlayedCardIsInvalidException, GameNotFoundException {
         String exceptionMessage = "The card cannot be played. Label or suit does not match.";
         game.getPlayers().remove(0);
         game.setActivePlayer(game.getPlayers().get(0));
         playerNames.remove("Phil");
-        // initializeGameStart()
-        when(viewService.getNumberOfPlayer()).thenReturn(2);
-        when(viewService.getPlayerNames(anyInt())).thenReturn(playerNames);
-        when(playerService.createPlayers(anyList())).thenReturn(game.getPlayers());
-        doNothing().when(gameService).initialCardDealing(any());
-        doNothing().when(viewService).showStartGameMessage(game.getId());
-        doNothing().when(viewService).showTopCard(any());
-        when(gameService.createGame(any())).thenReturn(game);
-        doNothing().doAnswer(a -> setAskForUserWish()).doNothing().when(gameService).applyCardRule(any());
+
+        // load game
+        doNothing().when(viewService).showWelcomeMessage();
+        when(gameService.hasGame()).thenReturn(true);
+        when(viewService.playerWantsToLoadGame()).thenReturn(true);
+        when(viewService.getGameId()).thenReturn(1L);
+        when(gameService.getSavedGame(anyLong())).thenReturn(game);
 
         // gaming loop starts here
         doNothing().when(gameService).resetPlayersMau(any());
@@ -180,40 +185,44 @@ public class AppControllerImplTest {
         doNothing().when(viewService).showErrorMessage(exceptionMessage);
         when(gameService.isGameOver(any())).thenReturn(false, true);
         when(cardService.getSuits()).thenReturn(GameFixture.suits);
+        doAnswer(a -> setAskForUserWish()).doNothing().when(gameService).applyCardRule(any());
         when(viewService.getChosenSuit(any(), anyList())).thenReturn(Suit.CLUBS);
         doNothing().when(gameService).setPlayersSuitWish(any(), any());
         doAnswer(p -> setActivePlayer(1)).when(gameService).switchToNextPlayer(any());
+        doNothing().when(gameService).saveGame(any());
         doNothing().when(viewService).showWinnerMessage(any());
+        doNothing().when(gameService).deleteGame(any());
         when(viewService.hasNextRound()).thenReturn(false);
 
         assertDoesNotThrow(() -> appController.play());
 
-        verify(viewService, times(1)).getNumberOfPlayer();
-        verify(viewService, times(1)).getPlayerNames(intThat(n -> n == 2));
-        verify(playerService, times(1)).createPlayers(argThat(names -> names.equals(playerNames)));
-        verify(gameService, times(1)).initialCardDealing(argThat(g -> g.equals(game)));
-        verify(viewService, times(1)).showStartGameMessage(game.getId());
-        verify(viewService, times(2)).showTopCard(any());
-        verify(gameService, times(1)).createGame(argThat(players -> players.equals(game.getPlayers())));
-        verify(gameService, times(3)).applyCardRule(argThat(g -> g.equals(game)));
-        verify(gameService, times(1)).resetPlayersMau(argThat(g -> g.equals(game)));
+        verify(viewService).showWelcomeMessage();
+        verify(gameService).hasGame();
+        verify(viewService).playerWantsToLoadGame();
+        verify(viewService).getGameId();
+        verify(gameService).getSavedGame(longThat(id -> id == game.getId()));
+        verify(viewService).showTopCard(any());
+        verify(gameService, times(2)).applyCardRule(argThat(g -> g.equals(game)));
+        verify(gameService).resetPlayersMau(argThat(g -> g.equals(game)));
         verify(gameService, times(2)).mustPlayerDrawCards(any());
         verify(viewService, times(2)).showHandCards(any(), any());
         verify(viewService, times(3)).getPlayedCard(any());
         verify(viewService, times(3)).saidMau(any());
         verify(gameService, times(3)).validateCard(any(), any());
-        verify(viewService, times(1)).showErrorMessage(argThat(msg -> msg.equals(exceptionMessage)));
+        verify(viewService).showErrorMessage(argThat(msg -> msg.equals(exceptionMessage)));
         verify(gameService, times(2)).isGameOver(argThat(g -> g.equals(game)));
-        verify(cardService, times(1)).getSuits();
-        verify(viewService, times(1)).getChosenSuit(
+        verify(cardService).getSuits();
+        verify(viewService).getChosenSuit(
                 argThat(player -> player.getName().equals("Jasmin")),
                 argThat(suits -> suits.equals(GameFixture.suits)));
-        verify(gameService, times(1)).setPlayersSuitWish(
+        verify(gameService).setPlayersSuitWish(
                 argThat(suit -> suit.equals(Suit.CLUBS)),
                 argThat(g -> g.equals(game)));
-        verify(gameService, times(1)).switchToNextPlayer(argThat(g -> g.equals(game)));
-        verify(viewService, times(1)).showWinnerMessage(argThat(winner -> winner.getName().equals("Richard")));
-        verify(viewService, times(1)).hasNextRound();
+        verify(gameService).switchToNextPlayer(argThat(g -> g.equals(game)));
+        verify(gameService, times(1)).saveGame(any());
+        verify(viewService).showWinnerMessage(argThat(winner -> winner.getName().equals("Richard")));
+        verify(gameService).deleteGame(argThat(g -> g.equals(game)));
+        verify(viewService).hasNextRound();
     }
 
 }

@@ -203,7 +203,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game getGame(long id) throws DaoException {
+    public Game getSavedGame(long id) throws DaoException {
         return gameDao.findById(id);
     }
 

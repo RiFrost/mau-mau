@@ -64,7 +64,8 @@ public class AppControllerImpl implements AppController {
         while (true) {
             try {
                 if (gameService.hasGame() && viewService.playerWantsToLoadGame()) {
-                    game = gameService.getGame(viewService.getGameId());
+                    long h = viewService.getGameId();
+                    game = gameService.getSavedGame(h);
                 } else {
                     game = initializeGameStart(playerService, gameService, viewService, cardService);
                 }
@@ -101,6 +102,7 @@ public class AppControllerImpl implements AppController {
                 handleDrawingCards(gameService, viewService, game, activePlayer);
                 gameService.switchToNextPlayer(game);
                 game.addUpLapCounter();
+                gameService.saveGame(game);
                 continue;
             }
 

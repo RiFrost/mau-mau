@@ -112,7 +112,7 @@ public class AppControllerImpl implements AppController {
             if (gameService.isGameOver(game)) {
                 viewService.showWinnerMessage(activePlayer);
                 logger.info("Game is over. Player {} won", activePlayer.getName());
-                //gameService.deleteGame(game);
+                gameService.deleteGame(game);
                 break;
             }
 
@@ -123,7 +123,7 @@ public class AppControllerImpl implements AppController {
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
 
-            //gameService.saveGame(game);
+            gameService.saveGame(game);
         }
     }
 

@@ -16,7 +16,7 @@ import java.util.Objects;
 
 
 public class GameDaoImplTest {
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("gameDemo");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("MauMau");
     private EntityManager em = emf.createEntityManager();
     private EntityTransaction tx = em.getTransaction();
     private Game game;

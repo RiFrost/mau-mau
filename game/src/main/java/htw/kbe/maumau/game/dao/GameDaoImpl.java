@@ -6,17 +6,17 @@ import htw.kbe.maumau.game.export.Game;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 
-@Component
+@Repository
 public class GameDaoImpl implements GameDao {
 
     //Todo: Funktioniert nicht mit Autowired in Kombi mit Tests???
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("gameDemo");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("MauMau");
     private EntityManager entityManager = emf.createEntityManager();
 
     private static Logger logger = LogManager.getLogger(GameDaoImpl.class);
@@ -27,7 +27,7 @@ public class GameDaoImpl implements GameDao {
             Game game = entityManager.find(Game.class, id);
             if (Objects.isNull(game)) {
                 logger.info("Game with ID %d is not found", id);
-                throw new GameNotFoundException(String.format("Game with ID %d not found", id));
+                throw new GameNotFoundException(String.format("Game with ID %d not found.", id));
             }
             logger.info("Game with ID %d is found", game.getId());
             return game;

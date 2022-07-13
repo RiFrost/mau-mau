@@ -67,8 +67,7 @@ public class AppControllerImpl implements AppController {
                 } else {
                     return initializeGameStart(playerService, gameService, viewService, cardService);
                 }
-            }
-            catch (GameNotFoundException e){
+            } catch (GameNotFoundException e) {
                 viewService.showErrorMessage(e.getMessage());
             }
         }
@@ -96,33 +95,28 @@ public class AppControllerImpl implements AppController {
             if (gameService.mustPlayerDrawCards(game)) {
                 logger.info("Active player {} must draw cards", activePlayer.getName());
                 handleDrawingCards(gameService, viewService, game, activePlayer);
-                gameService.switchToNextPlayer(game);
-                game.addUpLapCounter();
-                gameService.saveGame(game);
-                continue;
-            }
+            } else {
+                if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
+                    viewService.showTopCard(game.getCardDeck().getTopCard());
+                }
 
-            if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
-                viewService.showTopCard(game.getCardDeck().getTopCard());
-            }
+                viewService.showHandCards(activePlayer, game.getSuitWish());
+                handlePlayersTurn(gameService, viewService, game, activePlayer);
 
-            viewService.showHandCards(activePlayer, game.getSuitWish());
-            handlePlayersTurn(gameService, viewService, game, activePlayer);
+                if (gameService.isGameOver(game)) {
+                    viewService.showWinnerMessage(activePlayer);
+                    logger.info("Game is over. Player {} won", activePlayer.getName());
+                    gameService.deleteGame(game);
+                    break;
+                }
 
-            if (gameService.isGameOver(game)) {
-                viewService.showWinnerMessage(activePlayer);
-                logger.info("Game is over. Player {} won", activePlayer.getName());
-                gameService.deleteGame(game);
-                break;
-            }
-
-            if (game.hasAskedForSuitWish()) {
-                gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
+                if (game.hasAskedForSuitWish()) {
+                    gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
+                }
             }
 
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
-
             gameService.saveGame(game);
         }
     }

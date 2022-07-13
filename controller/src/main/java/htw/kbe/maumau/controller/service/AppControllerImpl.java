@@ -77,7 +77,7 @@ public class AppControllerImpl implements AppController {
         List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
         Game game = gameService.createGame(playerService.createPlayers(playerNames));
         gameService.initialCardDealing(game);
-        viewService.showStartGameMessage(1L);
+        viewService.showStartGameMessage(game.getId());
         viewService.showTopCard(game.getCardDeck().getTopCard());
         handleFirstRound(gameService, cardService, game);
         return game;

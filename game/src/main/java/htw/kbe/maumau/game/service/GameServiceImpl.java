@@ -34,7 +34,6 @@ public class GameServiceImpl implements GameService {
     private RulesService rulesService;
     @Autowired
     private PlayerService playerService;
-
     @Autowired
     private GameDao gameDao;
 

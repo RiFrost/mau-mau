@@ -60,29 +60,25 @@ public class AppControllerImpl implements AppController {
     }
 
     private Game getGame() throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
-        Game game;
         while (true) {
             try {
                 if (gameService.hasGame() && viewService.playerWantsToLoadGame()) {
-                    long h = viewService.getGameId();
-                    game = gameService.getSavedGame(h);
+                    return gameService.getSavedGame(viewService.getGameId());
                 } else {
-                    game = initializeGameStart(playerService, gameService, viewService, cardService);
+                    return initializeGameStart(playerService, gameService, viewService, cardService);
                 }
-                break;
             }
             catch (GameNotFoundException e){
                 viewService.showErrorMessage(e.getMessage());
             }
         }
-        return game;
     }
 
     private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewService, CardService cardService) throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
         List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
         Game game = gameService.createGame(playerService.createPlayers(playerNames));
         gameService.initialCardDealing(game);
-        viewService.showStartGameMessage(game.getId());
+        viewService.showStartGameMessage(1L);
         viewService.showTopCard(game.getCardDeck().getTopCard());
         handleFirstRound(gameService, cardService, game);
         return game;
@@ -116,7 +112,7 @@ public class AppControllerImpl implements AppController {
             if (gameService.isGameOver(game)) {
                 viewService.showWinnerMessage(activePlayer);
                 logger.info("Game is over. Player {} won", activePlayer.getName());
-                gameService.deleteGame(game);
+                //gameService.deleteGame(game);
                 break;
             }
 
@@ -127,7 +123,7 @@ public class AppControllerImpl implements AppController {
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
 
-            gameService.saveGame(game);
+            //gameService.saveGame(game);
         }
     }
 

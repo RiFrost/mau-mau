@@ -15,7 +15,7 @@ public class Name {
     );
 
     public static String getRandomName() {
-        return aiNames.get(((int) Math.random() * aiNames.size()));
+        return aiNames.get((int) (Math.random() * aiNames.size()));
     }
 
 }

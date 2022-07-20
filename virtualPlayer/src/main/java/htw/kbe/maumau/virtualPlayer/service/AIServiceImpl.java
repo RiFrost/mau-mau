@@ -11,13 +11,13 @@ public class AIServiceImpl implements AIService {
 
     @Override
     public Card playCard(Player AI) {
-        int rndIdx = (int) Math.random() * AI.getHandCards().size();
+        int rndIdx = (int) (Math.random() * AI.getHandCards().size());
         return AI.getHandCards().get(rndIdx);
     }
 
     @Override
     public boolean sayMau(Player AI) {
-        return AI.getHandCards().size() == 1 ? true : false;
+        return AI.getHandCards().size() == 1;
     }
 
     @Override

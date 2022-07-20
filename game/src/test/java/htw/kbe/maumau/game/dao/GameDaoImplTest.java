@@ -4,41 +4,44 @@ import htw.kbe.maumau.game.exceptions.GameNotFoundException;
 import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.fixtures.GameFixture;
 import htw.kbe.maumau.player.export.Player;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.util.List;
 import java.util.Objects;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class GameDaoImplTest {
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("MauMau");
-    private EntityManager em = emf.createEntityManager();
-    private EntityTransaction tx = em.getTransaction();
+    private EntityManager entityManager = emf.createEntityManager();
+
+    private EntityTransaction tx = entityManager.getTransaction();
     private Game game;
     private GameDao gameDao = new GameDaoImpl();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    public void init() {
         tx.begin();
         this.game = new Game(GameFixture.players(), GameFixture.deck());
-        em.persist(this.game);
+        entityManager.persist(this.game);
         tx.commit();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         deleteEntry(this.game);
     }
 
     private void deleteEntry(Game game) {
-        if (Objects.nonNull(em.find(Game.class, game.getId()))) {
+        if (Objects.nonNull(entityManager.find(Game.class, game.getId()))) {
             tx.begin();
-            em.remove(game);
+            entityManager.remove(game);
             tx.commit();
         }
     }
@@ -73,7 +76,7 @@ public class GameDaoImplTest {
             List<Player> players = List.of(new Player("Horst"), new Player("Karl"));
             Game game = new Game(players, GameFixture.deck());
             gameDao.saveGame(game);
-            assertNotNull(em.find(Game.class, game.getId()));
+            assertNotNull(entityManager.find(Game.class, game.getId()));
         } finally {
             deleteEntry(game);
         }
@@ -82,7 +85,7 @@ public class GameDaoImplTest {
     @Test
     public void testDeleteGame() {
         gameDao.deleteGame(this.game);
-        em.clear();
-        assertNull(em.find(Game.class, this.game.getId()));
+        entityManager.clear();
+        assertNull(entityManager.find(Game.class, this.game.getId()));
     }
 }

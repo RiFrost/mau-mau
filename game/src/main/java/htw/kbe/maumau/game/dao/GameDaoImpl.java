@@ -19,6 +19,9 @@ public class GameDaoImpl implements GameDao {
     private EntityManagerFactory emf = Persistence.createEntityManagerFactory("MauMau");
     private EntityManager entityManager = emf.createEntityManager();
 
+//    @Autowired
+//    private EntityManager entityManager;
+
     private static Logger logger = LogManager.getLogger(GameDaoImpl.class);
 
     @Override

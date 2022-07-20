@@ -1,12 +1,39 @@
 package htw.kbe.maumau.card.export;
 
+import javax.persistence.*;
 import java.util.Objects;
+
+@Entity
+@Table(name = "card")
 public class Card implements Comparable<Card> {
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Enumerated(EnumType.ORDINAL)
     private Suit suit;
+
+    @Enumerated(EnumType.ORDINAL)
     private Label label;
+
+    public Card() {
+    }
 
     public Card(Suit suit, Label label) {
         this.suit = suit;
+        this.label = label;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setSuit(Suit suit) {
+        this.suit = suit;
+    }
+
+    public void setLabel(Label label) {
         this.label = label;
     }
 

@@ -6,6 +6,7 @@ import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.controller.export.AppController;
 import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import htw.kbe.maumau.game.exceptions.GameNotFoundException;
 import htw.kbe.maumau.game.exceptions.InvalidPlayerSizeException;
 import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.export.GameService;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 
@@ -42,10 +42,10 @@ public class AppControllerImpl implements AppController {
 
     @Override
     public void play() {
+        viewService.showWelcomeMessage();
         while (true) {
             try {
-                Game game = initializeGameStart(playerService, gameService, viewService, cardService);
-                runGame(gameService, viewService, cardService, game);
+                runGame(gameService, viewService, cardService, getGame());
             } catch (Exception e) {
                 viewService.showErrorMessage(e.getMessage());
                 logger.error("Exception was thrown with the following message: {}", e.getMessage());
@@ -59,11 +59,25 @@ public class AppControllerImpl implements AppController {
         logger.info("Game ended");
     }
 
+    private Game getGame() throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
+        while (true) {
+            try {
+                if (gameService.hasGame() && viewService.playerWantsToLoadGame()) {
+                    return gameService.getSavedGame(viewService.getGameId());
+                } else {
+                    return initializeGameStart(playerService, gameService, viewService, cardService);
+                }
+            } catch (GameNotFoundException e) {
+                viewService.showErrorMessage(e.getMessage());
+            }
+        }
+    }
+
     private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewService, CardService cardService) throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
         List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
         Game game = gameService.createGame(playerService.createPlayers(playerNames));
         gameService.initialCardDealing(game);
-        viewService.showStartGameMessage();
+        viewService.showStartGameMessage(game.getId());
         viewService.showTopCard(game.getCardDeck().getTopCard());
         handleFirstRound(gameService, cardService, game);
         return game;
@@ -81,31 +95,29 @@ public class AppControllerImpl implements AppController {
             if (gameService.mustPlayerDrawCards(game)) {
                 logger.info("Active player {} must draw cards", activePlayer.getName());
                 handleDrawingCards(gameService, viewService, game, activePlayer);
-                gameService.switchToNextPlayer(game);
-                game.addUpLapCounter();
-                continue;
+            } else {
+                if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
+                    viewService.showTopCard(game.getCardDeck().getTopCard());
+                }
+
+                viewService.showHandCards(activePlayer, game.getSuitWish());
+                handlePlayersTurn(gameService, viewService, game, activePlayer);
+
+                if (gameService.isGameOver(game)) {
+                    viewService.showWinnerMessage(activePlayer);
+                    logger.info("Game is over. Player {} won", activePlayer.getName());
+                    gameService.deleteGame(game);
+                    break;
+                }
+
+                if (game.hasAskedForSuitWish()) {
+                    gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
+                }
             }
-
-            if (game.getLapCounter() != 1) {  // when round is equal 1, top card was shown in handleFirstRound()
-                viewService.showTopCard(game.getCardDeck().getTopCard());
-            }
-
-            viewService.showHandCards(activePlayer, game.getSuitWish());
-            handlePlayersTurn(gameService, viewService, game, activePlayer);
-
-            if (gameService.isGameOver(game)) {
-                viewService.showWinnerMessage(activePlayer);
-                logger.info("Game is over. Player {} won", activePlayer.getName());
-                break;
-            }
-
-            if (game.hasAskedForSuitWish()) {
-                gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
-            }
-
 
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
+            gameService.saveGame(game);
         }
     }
 
@@ -113,13 +125,11 @@ public class AppControllerImpl implements AppController {
         while (true) {
             try {
                 Card playedCard = viewService.getPlayedCard(activePlayer);
-
                 if (Objects.isNull(playedCard)) {
                     logger.info("Active player {} wants to draw a card", activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
-
                 if (viewService.saidMau(activePlayer)) {
                     activePlayer.setSaidMau(true);
                 }

@@ -1,11 +1,12 @@
 package htw.kbe.maumau.deck.service;
 
 import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
-import htw.kbe.maumau.card.service.CardServiceImpl;
 import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
+import htw.kbe.maumau.deck.export.DeckService;
 import htw.kbe.maumau.deck.fixtures.CardsFixture;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,7 @@ public class DeckServiceTest {
     @InjectMocks
     private DeckServiceImpl service;
     @Mock
-    private CardServiceImpl cardService;
+    private CardService cardService;
 
     private List<Card> cards;
 

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+
+    <persistence-unit name="MauMau" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>htw.kbe.maumau.game.export.Game</class>
+        <class>htw.kbe.maumau.player.export.Player</class>
+        <class>htw.kbe.maumau.card.export.Card</class>
+        <class>htw.kbe.maumau.deck.export.Deck</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@oradbs03.f4.htw-berlin.de:1521:oradb1" />
+            <property name="javax.persistence.jdbc.user" value="u572897" />
+            <property name="javax.persistence.jdbc.password" value="p572897" />
+            <property name="hibernate.dialect"
+                      value="org.hibernate.dialect.Oracle9iDialect" />
+
+            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.generate_statistics" value="false" />
+            <property name="hibernate.use_sql_comments" value="false" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+        </properties>
+    </persistence-unit>
+</persistence>
+
+

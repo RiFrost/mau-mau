@@ -2,20 +2,45 @@ package htw.kbe.maumau.deck.export;
 
 import htw.kbe.maumau.card.export.Card;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name = "deck")
 public class Deck {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = true)
     private List<Card> drawPile;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(nullable = true)
     private List<Card> discardPile;
+    @Column(nullable = false)
     private long limitOfCardStack = 32;
+    @Column(nullable = false)
     private int numberOfInitialCardsPerPlayer = 5;
+    @OneToOne(cascade = CascadeType.ALL)
     private Card topCard;
 
     public Deck() {
         this.drawPile = new ArrayList<>();
         this.discardPile = new ArrayList<>();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setLimitOfCardStack(long limitOfCardStack) {
+        this.limitOfCardStack = limitOfCardStack;
+    }
+
+    public void setNumberOfInitialCardsPerPlayer(int numberOfInitialCardsPerPlayer) {
+        this.numberOfInitialCardsPerPlayer = numberOfInitialCardsPerPlayer;
     }
 
     public List<Card> getDrawPile() {
@@ -52,7 +77,7 @@ public class Deck {
 
     @Override
     public String toString() {
-        return  "drawPile=" + drawPile +
+        return "drawPile=" + drawPile +
                 ", discardPile=" + discardPile +
                 ", limitOfCardStack=" + limitOfCardStack +
                 ", numberOfInitialCardsPerPlayer=" + numberOfInitialCardsPerPlayer +

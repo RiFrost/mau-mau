@@ -4,18 +4,40 @@ import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.deck.export.Deck;
 import htw.kbe.maumau.player.export.Player;
 
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
+@Entity
+@Table(name = "game")
+@NamedQuery(name="Game.countAll",
+        query="SELECT COUNT(g) FROM Game g")
 public class Game {
 
+    @Id
+    @GeneratedValue
+    private Long id;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Player> players;
+
+    @OneToOne(cascade = CascadeType.ALL)
     private Player activePlayer;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "deck_id")
     private Deck cardDeck;
+    @Column(nullable = false)
     private boolean clockWise = true;
+    @Column(nullable = false)
     private int drawCardsCounter = 0;
+    @Column(nullable = true)
     private Suit suitWish = null;
+    @Column(nullable = false)
     private boolean askForSuitWish = false;
+    @Column(nullable = false)
     private int lapCounter = 1;
+
+    public Game() {
+    }
 
     public Game(List<Player> players, Deck cardDeck) {
         this.players = players;
@@ -25,6 +47,28 @@ public class Game {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+
+    public void setCardDeck(Deck cardDeck) {
+        this.cardDeck = cardDeck;
+    }
+
+    public void setClockWise(boolean clockWise) {
+        this.clockWise = clockWise;
+    }
+
+    public void setLapCounter(int lapCounter) {
+        this.lapCounter = lapCounter;
     }
 
     public Deck getCardDeck() {
@@ -85,7 +129,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return  "players=" + players +
+        return "players=" + players +
                 ", activePlayer=" + activePlayer +
                 ", cardDeck=" + cardDeck +
                 ", clockWise=" + clockWise +

@@ -35,7 +35,7 @@ public class PlayerServiceTest {
     public void testCreateValidPlayers() throws InvalidPlayerNameException {
         List<String> validNames = new ArrayList<>(Arrays.asList("Jasmin", "Richard", "Philipp", "Maria"));
 
-        List<Player> expectedPlayers = service.createPlayers(validNames);
+        List<Player> expectedPlayers = service.createPlayers(validNames,0);
 
         assertEquals(4, expectedPlayers.size());
         assertEquals("Jasmin", expectedPlayers.get(0).getName());

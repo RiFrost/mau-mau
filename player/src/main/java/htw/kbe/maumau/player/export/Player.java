@@ -3,6 +3,7 @@ package htw.kbe.maumau.player.export;
 import htw.kbe.maumau.card.export.Card;
 
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlAccessorOrder;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
@@ -12,22 +13,28 @@ public class Player {
     @Id
     @GeneratedValue
     private Long id;
-
     @Column(nullable = false)
     private String name;
-
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Card> handCards;
     @Column(nullable = false)
     private boolean mustSuspend;
     @Column(nullable = false)
     private boolean saidMau;
+    @Column(nullable = false)
+    private boolean isAI = false;
 
     public Player() {
     }
 
     public Player(String name) {
         this.name = name;
+        this.handCards = new ArrayList<>();
+    }
+
+    public Player(String name, boolean isAI) {
+        this.name = name;
+        this.isAI = isAI;
         this.handCards = new ArrayList<>();
     }
 
@@ -67,6 +74,10 @@ public class Player {
         this.saidMau = hasSaidMauMau;
     }
 
+    public boolean isAI() {
+        return isAI;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,4 +90,5 @@ public class Player {
     public String toString() {
         return name;
     }
+
 }

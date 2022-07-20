@@ -56,9 +56,9 @@ public interface RulesService {
     boolean isCardJack(Card topCard);
 
     /**
-     * Checks if card was NINE and game direction has to change
+     * Checks if card was EIGHT and game direction has to change
      * @param topCard - card on top of discard pile
-     * @return true if card was NINE, false if not
+     * @return true if card was EIGHT, false if not
      */
     boolean changeGameDirection(Card topCard);
 

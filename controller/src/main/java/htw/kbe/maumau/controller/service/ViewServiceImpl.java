@@ -25,7 +25,16 @@ public class ViewServiceImpl implements ViewService {
         System.out.println(loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
         int number = (int) getChosenNumber(2, 4);
-        System.out.printf("The game will start with %d players!\n", number);
+//        System.out.printf("The game will start with %d players!\n", number);
+        return number;
+    }
+
+    @Override
+    public int getNumberOfAI(int totalNumPlayers) {
+        System.out.println(loadFromFile());
+        System.out.println("\n\nHow many AI players you would like to have?");
+        int number = (int) getChosenNumber(0, totalNumPlayers - 1);
+        System.out.printf("The game will start with %d players!\n", totalNumPlayers - number);
         return number;
     }
 

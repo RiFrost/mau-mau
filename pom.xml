@@ -20,7 +20,8 @@
 		<module>JaCoCo</module>
 		<module>controller</module>
         <module>gamePlay</module>
-    </modules>
+		<module>virtualPlayer</module>
+	</modules>
 
 		<dependencies>
 			<dependency>

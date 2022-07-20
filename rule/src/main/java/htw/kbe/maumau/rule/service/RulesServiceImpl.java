@@ -71,7 +71,7 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean changeGameDirection(Card topCard) {
-        return topCard.getLabel().equals(Label.NINE);
+        return topCard.getLabel().equals(Label.EIGHT);
     }
 
     @Override

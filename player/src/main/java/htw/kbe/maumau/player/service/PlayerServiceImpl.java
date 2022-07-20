@@ -1,6 +1,7 @@
 package htw.kbe.maumau.player.service;
 
 import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.player.Name;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import htw.kbe.maumau.player.export.PlayerService;
@@ -17,11 +18,14 @@ public class PlayerServiceImpl implements PlayerService {
     private static Logger logger = LogManager.getLogger(PlayerServiceImpl.class);
 
     @Override
-    public List<Player> createPlayers(List<String> names) throws InvalidPlayerNameException {
+    public List<Player> createPlayers(List<String> names, int aiPlayer) throws InvalidPlayerNameException {
         List<Player> players = new ArrayList();
         for (String name : names) {
             validateName(name, names);
             players.add(new Player(name));
+        }
+        for(int i = 0; i < aiPlayer; i++) {
+            players.add(new Player(Name.getRandomName() + " [AI]", true));
         }
         logger.info("The following players were created: {}", players);
         return players;

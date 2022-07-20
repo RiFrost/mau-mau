@@ -21,6 +21,8 @@ public interface ViewService {
      */
     int getNumberOfPlayer();
 
+    int getNumberOfAI(int totalNumPlayers);
+
     /**
      * asks for player names depending on the number of players
      *

@@ -6,8 +6,20 @@ import htw.kbe.maumau.player.export.Player;
 
 public interface AIService {
 
-    Card playCard(Player AI);
+    /**
+     * returns a valid card to play or null when it's not available
+     * @param AI AI player who is in turn
+     * @param topCard card that is on top of discard pile
+     * @param suitWish suit that may have been requested
+     * @return card if valid or null when invalid
+     */
+    Card getPlayedCard(Player AI, Card topCard, Suit suitWish);
 
+    /**
+     * returns 'mau' state of AI player
+     * @param AI AI player who is in turn
+     * @return true when player has only one hand card left, false if not
+     */
     boolean sayMau(Player AI);
 
     /**

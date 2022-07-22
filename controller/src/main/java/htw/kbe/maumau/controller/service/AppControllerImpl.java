@@ -127,11 +127,9 @@ public class AppControllerImpl implements AppController {
     }
 
     private void handlePlayersTurn(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
-        int aiCounter = 0;
         while (true) {
             try {
-                Card playedCard = activePlayer.isAI() ? aiService.playCard(activePlayer) : viewService.getPlayedCard(activePlayer);
-                if(aiCounter == 10) playedCard = null;
+                Card playedCard = activePlayer.isAI() ? aiService.getPlayedCard(activePlayer, game.getCardDeck().getTopCard(), game.getSuitWish()) : viewService.getPlayedCard(activePlayer);
                 if (Objects.isNull(playedCard)) {
                     logger.info("Active player {} wants to draw a card", activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);
@@ -143,12 +141,8 @@ public class AppControllerImpl implements AppController {
                 break;
 
             } catch (PlayedCardIsInvalidException e) {
-                if(!activePlayer.isAI()) {
                     viewService.showErrorMessage(e.getMessage());
                     logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
-                } else {
-                    aiCounter++;
-                }
             }
         }
     }

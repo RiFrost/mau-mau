@@ -116,7 +116,7 @@ public class AppControllerImpl implements AppController {
                 }
 
                 if (game.hasAskedForSuitWish()) {
-                    gameService.setPlayersSuitWish(activePlayer.isAI() ? aiService.suitWish() : viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
+                    gameService.setPlayersSuitWish(activePlayer.isAI() ? aiService.getSuitWish(activePlayer) : viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
                 }
             }
 

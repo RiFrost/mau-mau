@@ -10,6 +10,11 @@ public interface AIService {
 
     boolean sayMau(Player AI);
 
-    Suit suitWish();
+    /**
+     * returns a suit wish that is also available in the AI player's hand cards
+     * @param AI AI player who is in turn
+     * @return suit wish
+     */
+    Suit getSuitWish(Player AI);
 
 }

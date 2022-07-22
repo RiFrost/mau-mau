@@ -1,13 +1,21 @@
-package htw.kbe.maumau.virtualPlayer.service;
+package htw.kbe.maumau.virtualPlayer;
 
 import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.virtualPlayer.export.AIService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AIServiceImpl implements AIService {
+
+    @Autowired
+    private CardService cardService;
 
     @Override
     public Card playCard(Player AI) {
@@ -21,8 +29,9 @@ public class AIServiceImpl implements AIService {
     }
 
     @Override
-    public Suit suitWish() {
-        return Suit.values()[((int) Math.random() * 4)];
+    public Suit getSuitWish(Player AI) {
+        List<Suit> validSuits = AI.getHandCards().stream().map(Card::getSuit).filter(item -> cardService.getSuits().contains(item)).collect(Collectors.toList());
+        return validSuits.get((int) (Math.random()*validSuits.size()));
     }
 
 }

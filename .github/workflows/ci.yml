@@ -26,7 +26,7 @@ jobs:
         - name: Change wrapper permissions
           run: chmod +x ./mvnw
         - name: Run Tests
-          run: ./mvnw test -ntp
+          run: ./mvnw test -Dtest=!GameDaoImplTest -ntp
         - name: Publish Test Results
           id: test-results
           uses: EnricoMi/publish-unit-test-result-action/composite@master

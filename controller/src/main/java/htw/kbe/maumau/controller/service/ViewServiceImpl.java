@@ -81,7 +81,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public Card getPlayedCard(Player player) {
-        System.out.printf("%s, please choose a card to play or draw a card:\n", player.getName());
+        System.out.printf("\n%s, please choose a card to play or draw a card:\n", player.getName());
         int number = (int) getChosenNumber(0, player.getHandCards().size());
         return number == 0 ? null : player.getHandCards().get(number - 1);
     }
@@ -107,6 +107,16 @@ public class ViewServiceImpl implements ViewService {
     @Override
     public void showDrawnCardMessage(Player player, int numberOfDrawnCards) {
         System.out.printf("\n%s got %d CARD from draw pile!\n", player.getName(), numberOfDrawnCards);
+    }
+
+    @Override
+    public void showAiPlayedCardMessage(Player player, Card card) {
+        System.out.printf("\n%s has played %s\n", player.getName(), card.toString());
+    }
+
+    @Override
+    public void showAiPlayedSaidMau(Player player) {
+        System.out.printf("\n%s has said mau\n", player.getName());
     }
 
     @Override

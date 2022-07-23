@@ -138,6 +138,10 @@ public class AppControllerImpl implements AppController {
                 activePlayer.setSaidMau(activePlayer.isAI() ? aiService.sayMau(activePlayer) : viewService.saidMau(activePlayer));
                 gameService.validateCard(playedCard, game);
                 gameService.applyCardRule(game);
+                if(activePlayer.isAI()) {
+                    viewService.showAiPlayedCardMessage(activePlayer, playedCard);
+                    if(activePlayer.saidMau()) viewService.showAiPlayedSaidMau(activePlayer);
+                }
                 break;
 
             } catch (PlayedCardIsInvalidException e) {

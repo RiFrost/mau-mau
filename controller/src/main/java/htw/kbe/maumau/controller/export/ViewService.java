@@ -86,6 +86,10 @@ public interface ViewService {
      */
     void showDrawnCardMessage(Player player, int numberOfDrawnCards);
 
+    void showAiPlayedCardMessage(Player player, Card card);
+
+    void showAiPlayedSaidMau(Player player);
+
     /**
      * lets the player know want went wrong in the game
      *

@@ -77,7 +77,7 @@ public class AppControllerImplTest {
         when(gameService.hasGame()).thenReturn(false);
         when(viewService.getNumberOfPlayer()).thenReturn(3);
         when(viewService.getPlayerNames(anyInt())).thenReturn(playerNames);
-        when(playerService.createPlayers(anyList())).thenReturn(game.getPlayers());
+        when(playerService.createPlayers(anyList(), anyInt())).thenReturn(game.getPlayers());
         doNothing().when(gameService).initialCardDealing(any());
         doNothing().when(viewService).showStartGameMessage(game.getId());
         doNothing().when(viewService).showTopCard(any());
@@ -113,7 +113,7 @@ public class AppControllerImplTest {
         verify(gameService).hasGame();
         verify(viewService).getNumberOfPlayer();
         verify(viewService).getPlayerNames(intThat(n -> n == 3));
-        verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)));
+        verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)), anyInt());
         verify(gameService).initialCardDealing(argThat(g -> g.equals(game)));
         verify(viewService).showStartGameMessage(game.getId());
         verify(viewService, times(3)).showTopCard(any());
@@ -152,7 +152,7 @@ public class AppControllerImplTest {
         verify(gameService).hasGame();
         verify(viewService).getNumberOfPlayer();
         verify(viewService).getPlayerNames(intThat(n -> n == 3));
-        verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)));
+        verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)), anyInt());
         verify(viewService).showErrorMessage(argThat(msg -> msg.equals(exceptionMessage)));
     }
 

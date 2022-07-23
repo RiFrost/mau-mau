@@ -129,7 +129,7 @@ public class AppControllerImpl implements AppController {
     private void handlePlayersTurn(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
         while (true) {
             try {
-                Card playedCard = activePlayer.isAI() ? aiService.getPlayedCard(activePlayer, game.getCardDeck().getTopCard(), game.getSuitWish()) : viewService.getPlayedCard(activePlayer);
+                Card playedCard = activePlayer.isAI() ? aiService.getPlayedCard(activePlayer, game.getCardDeck().getTopCard(), game.getSuitWish(), game.getDrawCardsCounter()) : viewService.getPlayedCard(activePlayer);
                 if (Objects.isNull(playedCard)) {
                     logger.info("Active player {} wants to draw a card", activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);

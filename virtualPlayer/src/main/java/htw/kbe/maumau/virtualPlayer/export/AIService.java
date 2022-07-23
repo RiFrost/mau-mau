@@ -11,9 +11,10 @@ public interface AIService {
      * @param AI AI player who is in turn
      * @param topCard card that is on top of discard pile
      * @param suitWish suit that may have been requested
+     * @param drawCounter counter that gives the number of drawn cards
      * @return card if valid or null when invalid
      */
-    Card getPlayedCard(Player AI, Card topCard, Suit suitWish);
+    Card getPlayedCard(Player AI, Card topCard, Suit suitWish, int drawCounter);
 
     /**
      * returns 'mau' state of AI player

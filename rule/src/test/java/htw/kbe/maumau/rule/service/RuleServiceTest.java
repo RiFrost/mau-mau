@@ -139,6 +139,27 @@ class RuleServiceTest {
     }
 
     @Test
+    @DisplayName("should return true if top label is SEVEN, draw counter is greater than 0 and label of played Card is SEVEN")
+    public void checkCanPlaySeven() {
+
+        assertTrue(rulesService.canPlaySeven(spadesSeven.getLabel(), clubsSeven.getLabel(), 2));
+    }
+
+    @Test
+    @DisplayName("should return false if top label is SEVEN, draw counter is equal 0")
+    public void checkCannotPlaySeven() {
+
+        assertFalse(rulesService.canPlaySeven(clubsEight.getLabel(), clubsSeven.getLabel(), 0));
+    }
+
+    @Test
+    @DisplayName("should return false if top label is SEVEN, draw counter is greater than 0 but label of played card is NOT a SEVEN")
+    public void checkCannotPlaySeven1() {
+
+        assertFalse(rulesService.canPlaySeven(clubsEight.getLabel(), clubsSeven.getLabel(), 2));
+    }
+
+    @Test
     @DisplayName("player must draw cards when hand card is not a SEVEN but top card is a SEVEN and draw counter is greater or equal 2")
     public void checkMustDrawCards1() {
         int drawCounter = 2;

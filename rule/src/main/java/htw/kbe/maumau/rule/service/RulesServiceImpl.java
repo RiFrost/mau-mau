@@ -20,25 +20,49 @@ public class RulesServiceImpl implements RulesService {
     @Override
     public void validateCard(Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException {
         Suit playedSuit = playedCard.getSuit();
-        Suit topSuit = topCard.getSuit();
         Label playedLabel = playedCard.getLabel();
         Label topLabel = topCard.getLabel();
-        if (drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN)) {
+        if (hasToPlaySeven(drawCounter, playedLabel, topLabel)) {
             logger.info("Card {} is not valid, because a SEVEN must be played", playedCard);
             throw new PlayedCardIsInvalidException("You have to play a SEVEN.");
         }
-        if (playedLabel.equals(topLabel) && topLabel.equals(Label.JACK)) {
+        if (isJackOnJack(playedLabel, topLabel)) {
             logger.info("Card {} is not valid, because JACK on Jack is not allowed", playedCard);
             throw new PlayedCardIsInvalidException("JACK on JACK is not allowed.");
         }
-        if (!(playedLabel.equals(topLabel) || playedSuit.equals(topSuit)) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish)) {
+        if (!matchLabelOrSuit(playedCard, topCard) && !playedLabel.equals(Label.JACK) && Objects.isNull(userWish)) {
             logger.info("Card {} is not valid, because Label or suit does not match", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
         }
-        if (Objects.nonNull(userWish) && !playedSuit.equals(userWish)) {
+        if (!isSuitWishValid(userWish, playedSuit)) {
             logger.info("Card {} is not valid, because Suit does not match players wish", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
         }
+    }
+
+    @Override
+    public boolean matchLabelOrSuit(Card playedCard, Card topCard) {
+        return playedCard.getLabel().equals(topCard.getLabel()) || playedCard.getSuit().equals(topCard.getSuit());
+    }
+
+    @Override
+    public boolean hasToPlaySeven(int drawCounter, Label playedLabel, Label topLabel) {
+        return drawCounter >= getDefaultNumberOfDrawnCards() && topLabel.equals(Label.SEVEN) && !playedLabel.equals(Label.SEVEN);
+    }
+
+    @Override
+    public boolean canPlaySeven(Label playedLabel, Label topCardLabel, int drawCounter) {
+        return topCardLabel.equals(Label.SEVEN) && playedLabel.equals(topCardLabel) && drawCounter >= getDefaultNumberOfDrawnCards();
+    }
+
+    @Override
+    public boolean isSuitWishValid(Suit userWish, Suit playedSuit) {
+        return Objects.nonNull(userWish) ? playedSuit.equals(userWish) : true;
+    }
+
+    @Override
+    public boolean isJackOnJack(Label playedLabel, Label topLabel) {
+        return playedLabel.equals(topLabel) && topLabel.equals(Label.JACK);
     }
 
     @Override
@@ -71,7 +95,7 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean changeGameDirection(Card topCard) {
-        return topCard.getLabel().equals(Label.EIGHT);
+        return topCard.getLabel().equals(Label.NINE);
     }
 
     @Override

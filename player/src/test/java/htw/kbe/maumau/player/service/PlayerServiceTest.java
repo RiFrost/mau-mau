@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -42,6 +43,20 @@ public class PlayerServiceTest {
         assertEquals("Richard", expectedPlayers.get(1).getName());
         assertEquals("Philipp", expectedPlayers.get(2).getName());
         assertEquals("Maria", expectedPlayers.get(3).getName());
+    }
+
+    @Test
+    @DisplayName("should return a list of players and ai players")
+    public void testCreateValidPlayersAndAiPlayers() throws InvalidPlayerNameException {
+        List<String> validNames = new ArrayList<>(Arrays.asList("Jasmin", "Maria"));
+
+        List<Player> expectedPlayers = service.createPlayers(validNames,2);
+
+        assertEquals(4, expectedPlayers.size());
+        assertEquals("Jasmin", expectedPlayers.get(0).getName());
+        assertEquals("Maria", expectedPlayers.get(1).getName());
+        assertTrue(Pattern.matches(".* \\[AI\\]", expectedPlayers.get(2).getName()));
+        assertTrue(Pattern.matches(".* \\[AI\\]", expectedPlayers.get(3).getName()));
     }
 
     @ParameterizedTest

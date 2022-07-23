@@ -26,8 +26,11 @@ public class AIServiceImpl implements AIService {
     public Card getPlayedCard(Player AI, Card topCard, Suit suitWish, int drawCounter) {
         for (Card card: AI.getHandCards()) {
             if (rulesService.matchLabelOrSuit(card, topCard) || rulesService.isSuitWishValid(suitWish, card.getSuit())) {
-                if (rulesService.canPlaySeven(card.getLabel(), topCard.getLabel(), drawCounter)) {
-                    return card;
+                if (topCard.getLabel().equals(Label.SEVEN) && drawCounter >= rulesService.getDefaultNumberOfDrawnCards()) {
+                    if (rulesService.canPlaySeven(card.getLabel(), topCard.getLabel(), drawCounter)) {
+                        return card;
+                    }
+                    continue;
                 }
                 if (!rulesService.isJackOnJack(card.getLabel(), topCard.getLabel()) ) {
                     return card;

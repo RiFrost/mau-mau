@@ -107,6 +107,19 @@ public class VirtualPlayerServiceImplTest {
         assertEquals(new Card(Suit.CLUBS, Label.SEVEN), aiService.getPlayedCard(aiPlayer, topCard, null, 2));
     }
 
+    @Test
+    @DisplayName("should return null when ai player cannot play a SEVEN but top card and draw counter requires it")
+    public void testMustPlaySevenButCannot() {
+        List<Card> cards = Arrays.asList(new Card(Suit.SPADES, Label.ASS), new Card(Suit.HEARTS, Label.EIGHT));
+        aiPlayer.setHandCards(cards);
+        Card topCard = new Card(Suit.HEARTS, Label.SEVEN);
+        when(rulesService.matchLabelOrSuit(any(), any())).thenReturn(false, true);
+        when(rulesService.isSuitWishValid(any(), any())).thenReturn(false, false);
+        when(rulesService.canPlaySeven(any(), any(), anyInt())).thenReturn(false,false);
+
+        assertNull(aiService.getPlayedCard(aiPlayer, topCard, null, 2));
+    }
+
 
     @Test
     @DisplayName("should return true when ai player has only one hand card left")

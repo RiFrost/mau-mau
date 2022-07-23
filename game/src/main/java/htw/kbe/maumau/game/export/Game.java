@@ -6,7 +6,6 @@ import htw.kbe.maumau.player.export.Player;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "game")
@@ -53,22 +52,6 @@ public class Game {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
-    public void setCardDeck(Deck cardDeck) {
-        this.cardDeck = cardDeck;
-    }
-
-    public void setClockWise(boolean clockWise) {
-        this.clockWise = clockWise;
-    }
-
-    public void setLapCounter(int lapCounter) {
-        this.lapCounter = lapCounter;
     }
 
     public Deck getCardDeck() {

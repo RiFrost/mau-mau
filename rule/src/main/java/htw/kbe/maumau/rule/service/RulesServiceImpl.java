@@ -34,7 +34,7 @@ public class RulesServiceImpl implements RulesService {
             logger.info("Card {} is not valid, because Label or suit does not match", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Label or suit does not match.");
         }
-        if (!isSuitWishValid(userWish, playedSuit)) {
+        if (userWish != null && !isSuitWishValid(userWish, playedSuit)) {
             logger.info("Card {} is not valid, because Suit does not match players wish", playedCard);
             throw new PlayedCardIsInvalidException("The card cannot be played. Suit does not match players wish.");
         }
@@ -57,7 +57,7 @@ public class RulesServiceImpl implements RulesService {
 
     @Override
     public boolean isSuitWishValid(Suit userWish, Suit playedSuit) {
-        return Objects.nonNull(userWish) ? playedSuit.equals(userWish) : true;
+        return Objects.nonNull(userWish) && playedSuit.equals(userWish);
     }
 
     @Override

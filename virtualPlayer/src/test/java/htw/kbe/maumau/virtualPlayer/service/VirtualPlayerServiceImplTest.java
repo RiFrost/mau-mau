@@ -49,8 +49,6 @@ public class VirtualPlayerServiceImplTest {
         Card topCard = new Card(Suit.HEARTS, Label.NINE);
         when(rulesService.matchLabelOrSuit(any(), any())).thenReturn(false, true);
         when(rulesService.isSuitWishValid(any(), any())).thenReturn(false, false);
-        when(rulesService.canPlaySeven(any(), any(), anyInt())).thenReturn(false);
-        when(rulesService.isJackOnJack(any(), any())).thenReturn(false);
 
         assertEquals(new Card(Suit.DIAMONDS, Label.NINE), aiService.getPlayedCard(aiPlayer, topCard, null, 0));
     }
@@ -62,8 +60,6 @@ public class VirtualPlayerServiceImplTest {
         aiPlayer.setHandCards(cards);
         Card topCard = new Card(Suit.CLUBS, Label.NINE);
         when(rulesService.matchLabelOrSuit(any(), any())).thenReturn(true);
-        when(rulesService.canPlaySeven(any(), any(), anyInt())).thenReturn(false);
-        when(rulesService.isJackOnJack(any(), any())).thenReturn(false);
 
         assertEquals(new Card(Suit.CLUBS, Label.SEVEN), aiService.getPlayedCard(aiPlayer, topCard, null, 0));
     }
@@ -88,8 +84,6 @@ public class VirtualPlayerServiceImplTest {
         Card topCard = new Card(Suit.HEARTS, Label.JACK);
         when(rulesService.matchLabelOrSuit(any(), any())).thenReturn(false, true);
         when(rulesService.isSuitWishValid(any(), any())).thenReturn(false, true);
-        when(rulesService.canPlaySeven(any(), any(), anyInt())).thenReturn(false);
-        when(rulesService.isJackOnJack(any(), any())).thenReturn(false);
 
         assertEquals(new Card(Suit.SPADES, Label.ASS), aiService.getPlayedCard(aiPlayer, topCard, Suit.SPADES, 0));
     }
@@ -102,7 +96,7 @@ public class VirtualPlayerServiceImplTest {
         Card topCard = new Card(Suit.HEARTS, Label.SEVEN);
         when(rulesService.matchLabelOrSuit(any(), any())).thenReturn(false, true);
         when(rulesService.isSuitWishValid(any(), any())).thenReturn(false, false);
-        when(rulesService.canPlaySeven(any(), any(), anyInt())).thenReturn(false,true);
+        when(rulesService.canPlaySeven(any(), any(), anyInt())).thenReturn(true);
 
         assertEquals(new Card(Suit.CLUBS, Label.SEVEN), aiService.getPlayedCard(aiPlayer, topCard, null, 2));
     }
@@ -122,18 +116,18 @@ public class VirtualPlayerServiceImplTest {
 
 
     @Test
-    @DisplayName("should return true when ai player has only one hand card left")
+    @DisplayName("should return true when ai player has only two hand cards left") // Because ai has two say mau before the card leaves the 'hand' so in order to be correct it has to say mau with 2 cards eft in 'hand'
     public void testMauState() {
-        List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN));
+        List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS));
         aiPlayer.setHandCards(cards);
 
         assertTrue(aiService.sayMau(aiPlayer));
     }
 
     @Test
-    @DisplayName("should return false when ai player has more than one hand card left")
+    @DisplayName("should return false when ai player has more than two hand card left")
     public void testMauState1() {
-        List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN), new Card(Suit.SPADES, Label.ASS));
+        List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN), new Card(Suit.SPADES, Label.ASS), new Card(Suit.SPADES, Label.KING));
         aiPlayer.setHandCards(cards);
 
         assertFalse(aiService.sayMau(aiPlayer));
@@ -144,7 +138,6 @@ public class VirtualPlayerServiceImplTest {
     public void testSuitWish() {
         List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN));
         aiPlayer.setHandCards(cards);
-        when(cardService.getSuits()).thenReturn(CardsFixture.suits);
 
         assertEquals(Suit.CLUBS, aiService.getSuitWish(aiPlayer));
     }

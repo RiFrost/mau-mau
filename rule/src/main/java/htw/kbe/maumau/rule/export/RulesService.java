@@ -1,6 +1,7 @@
 package htw.kbe.maumau.rule.export;
 
 import htw.kbe.maumau.card.export.Card;
+import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
@@ -18,8 +19,50 @@ public interface RulesService {
     void validateCard(Card playedCard, Card topCard, Suit userWish, int drawCounter) throws PlayedCardIsInvalidException;
 
     /**
+     * checks if suit or label of played card matches suit or label of top card
+     * @param playedCard card to be played
+     * @param topCard card on top of discard pile
+     * @return true when label or suit matches, false if not
+     */
+    boolean matchLabelOrSuit(Card playedCard, Card topCard);
+
+    /**
+     * checks if player must play a SEVEN (only for normal player)
+     * @param drawCounter number of drawn cards
+     * @param playedLabel label of the card to be played
+     * @param topLabel label of card on top of discard pile
+     * @return true if player must play SEVEN, but he didn't, false if not
+     */
+    boolean hasToPlaySeven(int drawCounter, Label playedLabel, Label topLabel);
+
+    /**
+     * checks if player can play a SEVEN (only for AI player)
+     * @param playedLabel label of the card to be played
+     * @param topCardLabel label of card on top of discard pile
+     * @param drawCounter number of drawn cards
+     * @return true if player can play SEVEN, false if not
+     */
+    boolean canPlaySeven(Label playedLabel, Label topCardLabel, int drawCounter);
+
+    /**
+     * checks if suit wish matches suit of played card (if suit wish is given)
+     * @param userWish suit wish to be played
+     * @param playedSuit suit to be played
+     * @return true if suit of played card matches suit wish or suit wish is not given, false if not
+     */
+    boolean isSuitWishValid(Suit userWish, Suit playedSuit);
+
+    /**
+     * checks if label of played Card is JACK and label of top card too
+     * @param playedLabel label of the card to be played
+     * @param topLabel label of card on top of discard pile
+     * @return true if label JACK is of played Card matches label of top card, false if not
+     */
+    boolean isJackOnJack(Label playedLabel, Label topLabel);
+
+    /**
      * Checks if a player needs to draw cards
-     * @param topCard - card on top of discard pile
+     * @param topCard card on top of discard pile
      * @return true if card has label SEVEN, false when not
      */
     boolean mustDrawCards(Card topCard);
@@ -58,7 +101,7 @@ public interface RulesService {
     /**
      * Checks if card was NINE and game direction has to change
      * @param topCard - card on top of discard pile
-     * @return true if card was NINE, false if not
+     * @return true if card was EIGHT, false if not
      */
     boolean changeGameDirection(Card topCard);
 

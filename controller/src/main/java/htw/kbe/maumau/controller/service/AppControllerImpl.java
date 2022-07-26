@@ -1,6 +1,5 @@
 package htw.kbe.maumau.controller.service;
 
-
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.controller.export.AppController;
@@ -14,6 +13,7 @@ import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
+import htw.kbe.maumau.virtualPlayer.export.AIService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,10 @@ public class AppControllerImpl implements AppController {
     private PlayerService playerService;
 
     @Autowired
-    public ViewService viewService;
+    private ViewService viewService;
+
+    @Autowired
+    private AIService aiService;
 
     private static Logger logger = LogManager.getLogger(AppControllerImpl.class);
 
@@ -74,8 +77,10 @@ public class AppControllerImpl implements AppController {
     }
 
     private Game initializeGameStart(PlayerService playerService, GameService gameService, ViewService viewService, CardService cardService) throws IllegalDeckSizeException, InvalidPlayerNameException, InvalidPlayerSizeException {
-        List<String> playerNames = viewService.getPlayerNames(viewService.getNumberOfPlayer());
-        Game game = gameService.createGame(playerService.createPlayers(playerNames));
+        int totalNumPlayers = viewService.getNumberOfPlayer();
+        int numAIPlayers = viewService.getNumberOfAI(totalNumPlayers);
+        List<String> playerNames = viewService.getPlayerNames(totalNumPlayers - numAIPlayers);
+        Game game = gameService.createGame(playerService.createPlayers(playerNames, numAIPlayers));
         gameService.initialCardDealing(game);
         viewService.showStartGameMessage(game.getId());
         viewService.showTopCard(game.getCardDeck().getTopCard());
@@ -100,7 +105,7 @@ public class AppControllerImpl implements AppController {
                     viewService.showTopCard(game.getCardDeck().getTopCard());
                 }
 
-                viewService.showHandCards(activePlayer, game.getSuitWish());
+                if(!activePlayer.isAI()) viewService.showHandCards(activePlayer, game.getSuitWish());
                 handlePlayersTurn(gameService, viewService, game, activePlayer);
 
                 if (gameService.isGameOver(game)) {
@@ -111,7 +116,7 @@ public class AppControllerImpl implements AppController {
                 }
 
                 if (game.hasAskedForSuitWish()) {
-                    gameService.setPlayersSuitWish(viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
+                    gameService.setPlayersSuitWish(activePlayer.isAI() ? aiService.getSuitWish(activePlayer) : viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
                 }
             }
 
@@ -124,22 +129,24 @@ public class AppControllerImpl implements AppController {
     private void handlePlayersTurn(GameService gameService, ViewService viewService, Game game, Player activePlayer) {
         while (true) {
             try {
-                Card playedCard = viewService.getPlayedCard(activePlayer);
+                Card playedCard = activePlayer.isAI() ? aiService.getPlayedCard(activePlayer, game.getCardDeck().getTopCard(), game.getSuitWish(), game.getDrawCardsCounter()) : viewService.getPlayedCard(activePlayer);
                 if (Objects.isNull(playedCard)) {
                     logger.info("Active player {} wants to draw a card", activePlayer.getName());
                     handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
-                if (viewService.saidMau(activePlayer)) {
-                    activePlayer.setSaidMau(true);
-                }
+                activePlayer.setSaidMau(activePlayer.isAI() ? aiService.sayMau(activePlayer) : viewService.saidMau(activePlayer));
                 gameService.validateCard(playedCard, game);
                 gameService.applyCardRule(game);
+                if(activePlayer.isAI()) {
+                    viewService.showAiPlayedCardMessage(activePlayer, playedCard);
+                    if(activePlayer.saidMau()) viewService.showAiPlayedSaidMau(activePlayer);
+                }
                 break;
 
             } catch (PlayedCardIsInvalidException e) {
-                viewService.showErrorMessage(e.getMessage());
-                logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
+                    viewService.showErrorMessage(e.getMessage());
+                    logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
             }
         }
     }

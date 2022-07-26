@@ -21,6 +21,8 @@ public interface ViewService {
      */
     int getNumberOfPlayer();
 
+    int getNumberOfAI(int totalNumPlayers);
+
     /**
      * asks for player names depending on the number of players
      *
@@ -83,6 +85,10 @@ public interface ViewService {
      * @param numberOfDrawnCards number of cards to be drawn
      */
     void showDrawnCardMessage(Player player, int numberOfDrawnCards);
+
+    void showAiPlayedCardMessage(Player player, Card card);
+
+    void showAiPlayedSaidMau(Player player);
 
     /**
      * lets the player know want went wrong in the game

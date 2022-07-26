@@ -3,7 +3,7 @@
 Ass
 skips the next player's turn
 --------
-Eight
+Nine
 When this card is discarded, it reverses the direction of the game. If the direction was clockwise, it becomes anti-clockwise and vice-versa.
 --------
 Jack

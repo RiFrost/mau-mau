@@ -11,10 +11,11 @@ public interface PlayerService {
     /**
      * initializes new players
      * @param names - list of player names
+     * @param aiPlayers - number of virtual players
      * @return list of players
      * @throws InvalidPlayerNameException when the name is empty, blanks only or longer then 15 symbols
      */
-    List<Player> createPlayers(List<String> names) throws InvalidPlayerNameException;
+    List<Player> createPlayers(List<String> names, int aiPlayers) throws InvalidPlayerNameException;
 
     /**
      * adds drawn card(s) to hand cards to given player and hand cards are sorted by suit (from black to red)

@@ -30,7 +30,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public int getNumberOfAI(int totalNumPlayers) {
-        System.out.println("\n\nHow many AI players you would like to have?");
+        System.out.println("\nHow many AI players you would like to have?");
         int number = (int) getChosenNumber(0, totalNumPlayers - 1);
         System.out.printf("The game will start with %d players!\n", totalNumPlayers - number);
         return number;
@@ -114,12 +114,12 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public void showAiPlayedCardMessage(Player player, Card card) {
-        System.out.printf("\n%s has played %s\n\n", player.getName(), card.toString());
+        System.out.printf("\n%s has played %s!\n", player.getName(), card.toString());
     }
 
     @Override
     public void showAiPlayedSaidMau(Player player) {
-        System.out.printf("\n%s has said mau\n", player.getName());
+        System.out.printf("\n%s has said 'MAU'!\n", player.getName());
     }
 
     @Override

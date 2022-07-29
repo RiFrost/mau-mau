@@ -118,7 +118,7 @@ public class ViewServiceImpl implements ViewService {
     }
 
     @Override
-    public void showAiPlayedSaidMau(Player player) {
+    public void showPlayersMau(Player player) {
         System.out.printf("\n%s has said 'MAU'!\n", player.getName());
     }
 

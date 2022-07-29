@@ -30,4 +30,10 @@ public interface AIService {
      */
     Suit getSuitWish(Player AI);
 
+    /**
+     * removes card that was played from hand card of AI player
+     * @param AI - AI player who played the given card
+     * @param card - played card to be removed
+     */
+    void removePlayedCard(Player AI, Card card);
 }

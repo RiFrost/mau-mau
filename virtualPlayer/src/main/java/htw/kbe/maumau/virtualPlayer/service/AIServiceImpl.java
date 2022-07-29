@@ -4,7 +4,6 @@ import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
-import htw.kbe.maumau.player.service.PlayerServiceImpl;
 import htw.kbe.maumau.rule.export.RulesService;
 import htw.kbe.maumau.virtualPlayer.export.AIService;
 import org.apache.logging.log4j.LogManager;
@@ -21,13 +20,12 @@ public class AIServiceImpl implements AIService {
     @Autowired
     private RulesService rulesService;
 
-    private static Logger logger = LogManager.getLogger(PlayerServiceImpl.class);
+    private static Logger logger = LogManager.getLogger(AIServiceImpl.class);
 
     @Override
     public Card getPlayedCard(Player AI, Card topCard, Suit suitWish, int drawCounter) {
         for (Card card : AI.getHandCards()) {
             if (rulesService.isSuitWishValid(suitWish, card.getSuit()) && !rulesService.isJackOnJack(card.getLabel(), topCard.getLabel())) {
-                logger.info("{} is removed from deck of player {}", card, AI.getName());
                 return card;
             }
             if (rulesService.matchLabelOrSuit(card, topCard) && Objects.isNull(suitWish)) {
@@ -38,11 +36,9 @@ public class AIServiceImpl implements AIService {
                     }
                     continue;
                 }
-                logger.info("{} is removed from deck of player {}", card, AI.getName());
                 return card;
             }
         }
-        logger.info("No card is played from {}", AI.getName());
         return null;
     }
 
@@ -56,6 +52,12 @@ public class AIServiceImpl implements AIService {
     public Suit getSuitWish(Player AI) {
         List<Suit> validSuits = AI.getHandCards().stream().map(Card::getSuit).distinct().toList();
         return validSuits.get((int) (Math.random() * validSuits.size()));
+    }
+
+    @Override
+    public void removePlayedCard(Player AI, Card card) {
+        AI.getHandCards().remove(card);
+        logger.info("{} is removed from deck of player {}", card, AI.getName());
     }
 
 }

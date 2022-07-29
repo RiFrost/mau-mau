@@ -15,6 +15,7 @@ import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.export.RulesService;
+import htw.kbe.maumau.virtualPlayer.export.AIService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class GameServiceImpl implements GameService {
     private RulesService rulesService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private AIService aiService;
     @Autowired
     private GameDao gameDao;
 
@@ -125,7 +128,13 @@ public class GameServiceImpl implements GameService {
         Card topCard = deck.getTopCard();
         rulesService.validateCard(card, topCard, game.getSuitWish(), game.getDrawCardsCounter());
         deckService.setCardToTopCard(deck, card);
-        playerService.removePlayedCard(game.getActivePlayer(), card);
+
+        if (game.getActivePlayer().isAI()) {
+            aiService.removePlayedCard(game.getActivePlayer(), card);
+        } else {
+            playerService.removePlayedCard(game.getActivePlayer(), card);
+        }
+
         logger.info("Card {} passed the validation", card);
         if (Objects.nonNull(game.getSuitWish())) {
             game.setSuitWish(null);

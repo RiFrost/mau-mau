@@ -106,7 +106,7 @@ public interface ViewService {
      *
      * @param player            player(AI) who said mau
      */
-    void showAiPlayedSaidMau(Player player);
+    void showPlayersMau(Player player);
 
     /**
      * lets the player know want went wrong in the game

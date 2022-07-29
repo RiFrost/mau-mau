@@ -30,7 +30,6 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public int getNumberOfAI(int totalNumPlayers) {
-        System.out.println(loadFromFile());
         System.out.println("\n\nHow many AI players you would like to have?");
         int number = (int) getChosenNumber(0, totalNumPlayers - 1);
         System.out.printf("The game will start with %d players!\n", totalNumPlayers - number);

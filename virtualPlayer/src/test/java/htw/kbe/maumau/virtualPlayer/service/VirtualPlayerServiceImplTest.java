@@ -1,13 +1,10 @@
 package htw.kbe.maumau.virtualPlayer.service;
 
 import htw.kbe.maumau.card.export.Card;
-import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.export.RulesService;
-import htw.kbe.maumau.rule.service.RulesServiceImpl;
-import htw.kbe.maumau.virtualPlayer.fixtures.CardsFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

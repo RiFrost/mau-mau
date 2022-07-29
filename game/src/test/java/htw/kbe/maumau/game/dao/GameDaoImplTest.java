@@ -41,7 +41,7 @@ public class GameDaoImplTest {
     private void deleteEntry(Game game) {
         if (Objects.nonNull(entityManager.find(Game.class, game.getId()))) {
             tx.begin();
-            entityManager.remove(game);
+            entityManager.remove(entityManager.contains(game) ? game : entityManager.merge(game));
             tx.commit();
         }
     }
@@ -72,13 +72,13 @@ public class GameDaoImplTest {
 
     @Test
     public void testCreateGame() {
+        List<Player> players = List.of(new Player("Horst"), new Player("Karl"));
+        Game newGame = new Game(players, GameFixture.deck());
         try {
-            List<Player> players = List.of(new Player("Horst"), new Player("Karl"));
-            Game game = new Game(players, GameFixture.deck());
-            gameDao.saveGame(game);
-            assertNotNull(entityManager.find(Game.class, game.getId()));
+            gameDao.saveGame(newGame);
+            assertNotNull(entityManager.find(Game.class, newGame.getId()));
         } finally {
-            deleteEntry(game);
+            deleteEntry(newGame);
         }
     }
 

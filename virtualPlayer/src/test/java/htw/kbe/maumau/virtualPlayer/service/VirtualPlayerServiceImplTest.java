@@ -6,6 +6,7 @@ import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.export.RulesService;
+import htw.kbe.maumau.rule.service.RulesServiceImpl;
 import htw.kbe.maumau.virtualPlayer.fixtures.CardsFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,9 +28,6 @@ public class VirtualPlayerServiceImplTest {
 
     @InjectMocks
     private AIServiceImpl aiService;
-
-    @Mock
-    private CardService cardService;
 
     @Mock
     private RulesService rulesService;
@@ -86,6 +84,18 @@ public class VirtualPlayerServiceImplTest {
         when(rulesService.isSuitWishValid(any(), any())).thenReturn(false, true);
 
         assertEquals(new Card(Suit.SPADES, Label.ASS), aiService.getPlayedCard(aiPlayer, topCard, Suit.SPADES, 0));
+    }
+
+    @Test
+    @DisplayName("should return null when no suits of hand cards matches suit wish")
+    public void testPlayValidCardWithGivenSuitWish1() {
+        List<Card> cards = Arrays.asList(new Card(Suit.SPADES, Label.JACK), new Card(Suit.HEARTS, Label.ASS));
+        aiPlayer.setHandCards(cards);
+        Card topCard = new Card(Suit.HEARTS, Label.JACK);
+        when(rulesService.isSuitWishValid(any(), any())).thenReturn(false, false);
+        when(rulesService.matchLabelOrSuit(any(), any())).thenReturn(false, false);
+
+        assertEquals(null, aiService.getPlayedCard(aiPlayer, topCard, Suit.DIAMONDS, 0));
     }
 
     @Test

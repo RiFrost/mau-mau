@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AIServiceImpl implements AIService {
@@ -20,14 +21,17 @@ public class AIServiceImpl implements AIService {
     @Override
     public Card getPlayedCard(Player AI, Card topCard, Suit suitWish, int drawCounter) {
         for (Card card : AI.getHandCards()) {
-            if (rulesService.matchLabelOrSuit(card, topCard) || rulesService.isSuitWishValid(suitWish, card.getSuit())) {
+            if (rulesService.isSuitWishValid(suitWish, card.getSuit())) {
+                return card;
+            }
+            if (rulesService.matchLabelOrSuit(card, topCard) && Objects.isNull(suitWish)) {
                 if (topCard.getLabel().equals(Label.SEVEN) && drawCounter >= rulesService.getDefaultNumberOfDrawnCards()) {
                     if (rulesService.canPlaySeven(card.getLabel(), topCard.getLabel(), drawCounter)) {
                         return card;
                     }
                     continue;
                 }
-                if (!rulesService.isJackOnJack(card.getLabel(), topCard.getLabel()) ) {
+                if (!rulesService.isJackOnJack(card.getLabel(), topCard.getLabel())) {
                     return card;
                 }
             }

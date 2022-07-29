@@ -58,10 +58,10 @@ public class GameDaoImpl implements GameDao {
             entityManager.getTransaction().begin();
             entityManager.persist(game);
             entityManager.getTransaction().commit();
-            logger.info("Game with ID %d is saved", game.getId());
+            logger.info("Game with ID {} is saved", game.getId());
         } catch (PersistenceException e) {
             entityManager.getTransaction().rollback();
-            logger.error("DaoException is thrown: %s", e.getMessage());
+            logger.error("DaoException is thrown: {}", e.getMessage());
             throw new DaoException(e.getMessage());
         }
     }
@@ -72,10 +72,10 @@ public class GameDaoImpl implements GameDao {
             entityManager.getTransaction().begin();
             entityManager.remove(entityManager.merge(game));
             entityManager.getTransaction().commit();
-            logger.info("Game with ID %d is deleted", game.getId());
+            logger.info("Game with ID {} is deleted", game.getId());
         } catch (PersistenceException e) {
             entityManager.getTransaction().rollback();
-            logger.error("DaoException is thrown: %s", e.getMessage());
+            logger.error("DaoException is thrown: {}", e.getMessage());
             throw new DaoException(e.getMessage());
         }
     }

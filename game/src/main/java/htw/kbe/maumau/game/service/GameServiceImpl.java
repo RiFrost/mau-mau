@@ -152,7 +152,7 @@ public class GameServiceImpl implements GameService {
         }
         if (rulesService.changeGameDirection(topCard)) {
             game.switchDirection();
-            logger.info("Direction is switched");
+            logger.info("Direction is switched to {}", game.isClockWise() ? "clockwise": "counterclockwise");
         }
     }
 

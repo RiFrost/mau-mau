@@ -105,12 +105,12 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public void showDirectionOfRotation(boolean isClockwise) {
-        System.out.printf("Game direction is now %s\n!", isClockwise ? "CLOCKWISE": "COUNTERCLOCKWISE");
+        System.out.printf("Game direction is now %s!\n\n", isClockwise ? "CLOCKWISE": "COUNTERCLOCKWISE");
     }
 
     @Override
     public void showDrawnCardMessage(Player player, int numberOfDrawnCards) {
-        System.out.printf("\n%s got %d CARD from draw pile!\n", player.getName(), numberOfDrawnCards);
+        System.out.printf("\n%s got %d CARD from draw pile!\n\n", player.getName(), numberOfDrawnCards);
     }
 
     @Override

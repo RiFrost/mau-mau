@@ -26,31 +26,29 @@ public class AIServiceImpl implements AIService {
     @Override
     public Card getPlayedCard(Player AI, Card topCard, Suit suitWish, int drawCounter) {
         for (Card card : AI.getHandCards()) {
-            if (rulesService.isSuitWishValid(suitWish, card.getSuit())) {
-                logger.info("{} is removed from deck of player {} [AI]", card, AI.getName());
+            if (rulesService.isSuitWishValid(suitWish, card.getSuit()) && !rulesService.isJackOnJack(card.getLabel(), topCard.getLabel())) {
+                logger.info("{} is removed from deck of player {}", card, AI.getName());
                 return card;
             }
             if (rulesService.matchLabelOrSuit(card, topCard) && Objects.isNull(suitWish)) {
                 if (topCard.getLabel().equals(Label.SEVEN) && drawCounter >= rulesService.getDefaultNumberOfDrawnCards()) {
                     if (rulesService.canPlaySeven(card.getLabel(), topCard.getLabel(), drawCounter)) {
-                        logger.info("{} is removed from deck of player {} [AI]", card, AI.getName());
+                        logger.info("{} is removed from deck of player {}", card, AI.getName());
                         return card;
                     }
                     continue;
                 }
-                if (!rulesService.isJackOnJack(card.getLabel(), topCard.getLabel())) {
-                    logger.info("{} is removed from deck of player {} [AI]", card, AI.getName());
-                    return card;
-                }
+                logger.info("{} is removed from deck of player {}", card, AI.getName());
+                return card;
             }
         }
-        logger.info("No card is played from {} [AI]", AI.getName());
+        logger.info("No card is played from {}", AI.getName());
         return null;
     }
 
     @Override
     public boolean sayMau(Player AI) {
-        logger.info("{} [AI] said 'mau': ", AI.getName(), AI.getHandCards().size() == 2);
+        logger.info("{} said 'mau': ", AI.getName(), AI.getHandCards().size() == 2);
         return AI.getHandCards().size() == 2;
     }
 

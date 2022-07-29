@@ -25,7 +25,6 @@ public class ViewServiceImpl implements ViewService {
         System.out.println(loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
         int number = (int) getChosenNumber(2, 4);
-//        System.out.printf("The game will start with %d players!\n", number);
         return number;
     }
 
@@ -54,7 +53,7 @@ public class ViewServiceImpl implements ViewService {
     public void showStartGameMessage(long id) {
         System.out.println("\nLet's begin!\n");
         System.out.printf("Your game ID is %d. Please write it down to load your game later.\n", id);
-        System.out.printf("After each round your game is saved automatically.\n");
+        System.out.printf("After each round your game is saved automatically.\n\n");
     }
 
     @Override
@@ -102,6 +101,11 @@ public class ViewServiceImpl implements ViewService {
         System.out.printf("\n%s do you want to say 'mau'?\n", player.getName());
         System.out.println("1: YES\n2: NO");
         return getChosenNumber(1, 2) == 1;
+    }
+
+    @Override
+    public void showDirectionOfRotation(boolean isClockwise) {
+        System.out.printf("Game direction is now %s\n!", isClockwise ? "CLOCKWISE": "COUNTERCLOCKWISE");
     }
 
     @Override
@@ -156,7 +160,7 @@ public class ViewServiceImpl implements ViewService {
              BufferedReader buffer = new BufferedReader(in)) {
             instructions = buffer.lines().collect(Collectors.joining("\n"));
         } catch (Exception e) {
-            System.out.println("Game instructions could not be loaded");
+            System.out.println("Game instructions could not be loaded.");
         }
         return instructions;
     }

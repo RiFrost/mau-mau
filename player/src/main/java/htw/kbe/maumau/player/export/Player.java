@@ -78,6 +78,10 @@ public class Player {
         return isAI;
     }
 
+    public void setAI(boolean AI) {
+        isAI = AI;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

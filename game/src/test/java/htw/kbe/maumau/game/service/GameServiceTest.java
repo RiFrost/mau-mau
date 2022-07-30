@@ -14,6 +14,7 @@ import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.export.RulesService;
+import htw.kbe.maumau.virtualPlayer.export.AIService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,8 @@ public class GameServiceTest {
     private CardService cardService;
     @Mock
     private PlayerService playerService;
+    @Mock
+    private AIService aiService;
     @Mock
     private GameDao gameDao;
 
@@ -98,28 +101,60 @@ public class GameServiceTest {
 
     @Test
     @DisplayName("should call rulesService, deckService and playerService when validate played card")
-    public void validateCard() throws PlayedCardIsInvalidException {
+    public void validateCardOfPlayer() throws PlayedCardIsInvalidException {
         Card expectedTopCard = new Card(Suit.CLUBS, Label.KING);
         Card playedCard = new Card(Suit.CLUBS, Label.SEVEN);
         Suit userWish = Suit.CLUBS;
         game.setSuitWish(userWish);
         game.getCardDeck().setTopCard(expectedTopCard);
+        doNothing().when(playerService).removePlayedCard(game.getActivePlayer(), playedCard);
 
         service.validateCard(playedCard, game);
 
         assertNull(game.getSuitWish());
-        verify(rulesService, times(1)).validateCard(
+        verify(rulesService).validateCard(
                 argThat(card -> card.equals(playedCard)),
                 argThat(topCard -> topCard.equals(expectedTopCard)),
                 argThat(suit -> suit.equals(userWish)),
                 intThat(drawCounter -> drawCounter == game.getDrawCardsCounter())
         );
 
-        verify(deckService, times(1)).setCardToTopCard(
+        verify(deckService).setCardToTopCard(
                 argThat(deck -> deck.equals(game.getCardDeck())),
                 argThat(card -> card.equals(playedCard))
         );
-        verify(playerService, times(1)).removePlayedCard(
+        verify(playerService).removePlayedCard(
+                argThat(player -> player.equals(game.getActivePlayer())),
+                argThat(card -> card.equals(playedCard))
+        );
+    }
+
+    @Test
+    @DisplayName("should call rulesService, deckService and aiService when validate played card")
+    public void validateCardOfAIPlayer() throws PlayedCardIsInvalidException {
+        game.getActivePlayer().setAI(true);
+        Card expectedTopCard = new Card(Suit.CLUBS, Label.KING);
+        Card playedCard = new Card(Suit.CLUBS, Label.SEVEN);
+        Suit userWish = Suit.CLUBS;
+        game.setSuitWish(userWish);
+        game.getCardDeck().setTopCard(expectedTopCard);
+        doNothing().when(aiService).removePlayedCard(game.getActivePlayer(), playedCard);
+
+        service.validateCard(playedCard, game);
+
+        assertNull(game.getSuitWish());
+        verify(rulesService).validateCard(
+                argThat(card -> card.equals(playedCard)),
+                argThat(topCard -> topCard.equals(expectedTopCard)),
+                argThat(suit -> suit.equals(userWish)),
+                intThat(drawCounter -> drawCounter == game.getDrawCardsCounter())
+        );
+
+        verify(deckService).setCardToTopCard(
+                argThat(deck -> deck.equals(game.getCardDeck())),
+                argThat(card -> card.equals(playedCard))
+        );
+        verify(aiService).removePlayedCard(
                 argThat(player -> player.equals(game.getActivePlayer())),
                 argThat(card -> card.equals(playedCard))
         );
@@ -300,20 +335,38 @@ public class GameServiceTest {
     @Test
     @DisplayName("should add drawn cards from discard pile to players hand cards")
     public void dealCardsToPlayer() {
-        Player activePlayer = players.get(0);
-        game.setActivePlayer(activePlayer);
         List<Card> drawnCards = List.of(new Card(Suit.SPADES, Label.SEVEN), new Card(Suit.CLUBS, Label.EIGHT));
         when(deckService.getCardsFromDrawPile(any(), anyInt())).thenReturn(drawnCards);
         doNothing().when(playerService).addDrawnCards(any(), anyList());
 
         service.giveDrawnCardsToPlayer(2, game);
 
-        verify(deckService, times(1)).getCardsFromDrawPile(argThat(
+        verify(deckService).getCardsFromDrawPile(argThat(
                         deck -> deck.equals(game.getCardDeck())),
                 intThat(numberOfDrawnCards -> numberOfDrawnCards == 2)
         );
-        verify(playerService, times(1)).addDrawnCards(argThat(
-                        player -> player.equals(activePlayer)),
+        verify(playerService).addDrawnCards(argThat(
+                        player -> player.equals(game.getActivePlayer())),
+                argThat(cards -> cards.equals(drawnCards))
+        );
+    }
+
+    @Test
+    @DisplayName("should add drawn cards from discard pile to AI players hand cards")
+    public void dealCardsToAIPlayer() {
+        game.getActivePlayer().setAI(true);
+        List<Card> drawnCards = List.of(new Card(Suit.SPADES, Label.SEVEN), new Card(Suit.CLUBS, Label.EIGHT));
+        when(deckService.getCardsFromDrawPile(any(), anyInt())).thenReturn(drawnCards);
+        doNothing().when(aiService).addDrawnCards(any(), anyList());
+
+        service.giveDrawnCardsToPlayer(2, game);
+
+        verify(deckService).getCardsFromDrawPile(argThat(
+                        deck -> deck.equals(game.getCardDeck())),
+                intThat(numberOfDrawnCards -> numberOfDrawnCards == 2)
+        );
+        verify(aiService).addDrawnCards(argThat(
+                        player -> player.equals(game.getActivePlayer())),
                 argThat(cards -> cards.equals(drawnCards))
         );
     }
@@ -321,13 +374,17 @@ public class GameServiceTest {
     @Test
     @DisplayName("should call 'initialCardDealing' and call 'drawCards' for each player in game")
     public void shouldDrawInitialHandCards() {
+        game.getPlayers().get(0).setAI(true);
+        game.getPlayers().get(1).setAI(true);
         when(deckService.initialCardDealing(any())).thenReturn(GameFixture.cards().subList(0, 5));
+        doNothing().when(aiService).addDrawnCards(any(), anyList());
         doNothing().when(playerService).addDrawnCards(any(), anyList());
 
         service.initialCardDealing(game);
 
         verify(deckService, times(4)).initialCardDealing(any());
-        verify(playerService, times(4)).addDrawnCards(any(), anyList());
+        verify(aiService, times(2)).addDrawnCards(any(), anyList());
+        verify(playerService, times(2)).addDrawnCards(any(), anyList());
     }
 
     @Test

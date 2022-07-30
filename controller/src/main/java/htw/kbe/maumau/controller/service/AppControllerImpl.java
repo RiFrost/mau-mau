@@ -147,6 +147,7 @@ public class AppControllerImpl implements AppController {
                 }
                 gameService.validateCard(playedCard, game);
                 gameService.applyCardRule(game);
+                viewService.showPlayedCard(activePlayer, playedCard);
                 if (activePlayer.saidMau()) viewService.showPlayersMau(activePlayer);
                 break;
 

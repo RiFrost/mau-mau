@@ -79,6 +79,13 @@ public interface ViewService {
     boolean saidMau(Player player);
 
     /**
+     * shows played card from player
+     * @param player player who is in turn
+     * @param card card that was played
+     */
+    void showPlayedCard(Player player, Card card);
+
+    /**
      * shows the game direction when changed
      *
      * @param isClockwise true if direction is clockwise, false if counterclockwise

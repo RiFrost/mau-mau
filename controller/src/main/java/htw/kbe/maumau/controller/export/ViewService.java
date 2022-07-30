@@ -94,12 +94,11 @@ public interface ViewService {
     void showDrawnCardMessage(Player player, int numberOfDrawnCards);
 
     /**
-     * lets the player know which card was played by AI
+     * shows player name who is in turn
      *
      * @param player            player(AI) who is in turn
-     * @param card              card which was played
      */
-    void showAiPlayedCardMessage(Player player, Card card);
+    void showActivePlayer(Player player);
 
     /**
      * shows the player that AI has one card left and therefore said mau

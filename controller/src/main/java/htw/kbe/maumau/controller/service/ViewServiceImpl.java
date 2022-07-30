@@ -109,7 +109,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public void showDrawnCardMessage(Player player, int numberOfDrawnCards) {
-        System.out.printf("\n%s got %d CARD from draw pile!\n\n", player.getName(), numberOfDrawnCards);
+        System.out.printf("\n%s got %d CARD from draw pile!\n", player.getName(), numberOfDrawnCards);
     }
 
     @Override

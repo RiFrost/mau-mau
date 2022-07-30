@@ -89,8 +89,14 @@ public class AppControllerImpl implements AppController {
     }
 
     private void runGame(GameService gameService, ViewService viewService, CardService cardService, Game game) {
+        boolean isClockwise = game.isClockWise();
         while (true) {
-            boolean isClockwise = game.isClockWise();
+
+            if (game.isClockWise() != isClockwise) {
+                viewService.showDirectionOfRotation(game.isClockWise());
+                isClockwise = !isClockwise;
+            }
+
             logger.info("Current round: {}", game.getLapCounter());
             Player activePlayer = game.getActivePlayer();
             viewService.showActivePlayer(activePlayer);
@@ -120,9 +126,6 @@ public class AppControllerImpl implements AppController {
                 if (game.hasAskedForSuitWish()) {
                     gameService.setPlayersSuitWish(activePlayer.isAI() ? aiService.getSuitWish(activePlayer) : viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
                 }
-            }
-            if (game.isClockWise() != isClockwise) {
-                viewService.showDirectionOfRotation(isClockwise);
             }
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();

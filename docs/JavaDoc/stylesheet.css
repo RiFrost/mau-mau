@@ -621,7 +621,7 @@ ul.ui-autocomplete  li {
     font-weight:bold;
 }
 #search-input {
-    background-image:url('resources/glass.png');
+    background-image:url('IdeaProjects/mau-mau/docs/JavaDoc/resources/glass.png');
     background-size:13px;
     background-repeat:no-repeat;
     background-position:2px 3px;
@@ -632,7 +632,7 @@ ul.ui-autocomplete  li {
 }
 #reset-button {
     background-color: rgb(255,255,255);
-    background-image:url('resources/x.png');
+    background-image:url('IdeaProjects/mau-mau/docs/JavaDoc/resources/x.png');
     background-position:center;
     background-repeat:no-repeat;
     background-size:12px;

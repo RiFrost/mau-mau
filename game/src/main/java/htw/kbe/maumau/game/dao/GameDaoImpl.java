@@ -15,12 +15,15 @@ import java.util.Objects;
 @Repository
 public class GameDaoImpl implements GameDao {
 
-    //Todo: Funktioniert nicht mit Autowired in Kombi mit Tests???
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("MauMau");
-    private EntityManager entityManager = emf.createEntityManager();
+    private EntityManagerFactory emf;
+    private EntityManager entityManager;
 
-//    @Autowired
-//    private EntityManager entityManager;
+    // Note: we have to instantiate in this way because of spring context in combination with tests
+    @Autowired
+    GameDaoImpl(EntityManagerFactory emf) {
+        this.emf = Persistence.createEntityManagerFactory("MauMau");
+        this.entityManager = emf.createEntityManager();
+    }
 
     private static Logger logger = LogManager.getLogger(GameDaoImpl.class);
 

@@ -52,7 +52,7 @@ jobs:
         run: ./mvnw -B -ntp package -Dtest=!GameDaoImplTest -DfailIfNoTests=false --file pom.xml
 
       - name: Verify with Maven for Code-Coverage
-        run: ./mvnw -ntp verify -Dtest=!GameDaoImplTest -DfailIfNoTests=false
+        run: ./mvnw -ntp verify
 
       - name: Generate JaCoCo Badge
         id: jacoco

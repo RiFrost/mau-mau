@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +44,7 @@ public class AIServiceImpl implements AIService {
     }
 
     @Override
-    public boolean sayMau(Player AI) {
+    public boolean saidMau(Player AI) {
         logger.info("{} said 'mau': ", AI.getName(), AI.getHandCards().size() == 2);
         return AI.getHandCards().size() == 2;
     }
@@ -58,6 +59,13 @@ public class AIServiceImpl implements AIService {
     public void removePlayedCard(Player AI, Card card) {
         AI.getHandCards().remove(card);
         logger.info("{} is removed from deck of player {}", card, AI.getName());
+    }
+
+    @Override
+    public void addDrawnCards(Player AI, List<Card> cards) {
+        AI.getHandCards().addAll(cards);
+        Collections.sort(AI.getHandCards());
+        logger.info("{} is added to deck of player {}", cards, AI.getName());
     }
 
 }

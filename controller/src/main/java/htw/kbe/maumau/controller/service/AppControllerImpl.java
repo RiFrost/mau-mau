@@ -2,8 +2,6 @@ package htw.kbe.maumau.controller.service;
 
 import htw.kbe.maumau.card.export.Card;
 import htw.kbe.maumau.card.export.CardService;
-import htw.kbe.maumau.card.export.Label;
-import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.controller.export.AppController;
 import htw.kbe.maumau.controller.export.ViewService;
 import htw.kbe.maumau.deck.exceptions.IllegalDeckSizeException;
@@ -140,7 +138,7 @@ public class AppControllerImpl implements AppController {
                     handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
-                if (activePlayer.isAI() ? aiService.sayMau(activePlayer) : viewService.saidMau(activePlayer)) {
+                if (activePlayer.isAI() ? aiService.saidMau(activePlayer) : viewService.saidMau(activePlayer)) {
                     activePlayer.setSaidMau(true);
                 }
                 gameService.validateCard(playedCard, game);

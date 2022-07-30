@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -128,7 +129,7 @@ public class VirtualPlayerServiceImplTest {
         List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS));
         aiPlayer.setHandCards(cards);
 
-        assertTrue(aiService.sayMau(aiPlayer));
+        assertTrue(aiService.saidMau(aiPlayer));
     }
 
     @Test
@@ -137,7 +138,7 @@ public class VirtualPlayerServiceImplTest {
         List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN), new Card(Suit.SPADES, Label.ASS), new Card(Suit.SPADES, Label.KING));
         aiPlayer.setHandCards(cards);
 
-        assertFalse(aiService.sayMau(aiPlayer));
+        assertFalse(aiService.saidMau(aiPlayer));
     }
 
     @Test
@@ -147,5 +148,28 @@ public class VirtualPlayerServiceImplTest {
         aiPlayer.setHandCards(cards);
 
         assertEquals(Suit.CLUBS, aiService.getSuitWish(aiPlayer));
+    }
+
+    @Test
+    @DisplayName("should remove played card from hand cards")
+    public void testRemovePlayedCardFromHandCards(){
+        List <Card> handCards = new ArrayList<>(Arrays.asList(new Card(Suit.HEARTS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS)));
+        aiPlayer.setHandCards(handCards);
+
+        aiService.removePlayedCard(aiPlayer, new Card(Suit.HEARTS, Label.SEVEN));
+
+        assertEquals(1, aiPlayer.getHandCards().size());
+        assertEquals(Arrays.asList(new Card(Suit.CLUBS, Label.ASS)), aiPlayer.getHandCards());
+    }
+
+    @Test
+    @DisplayName("should add drawn cards to hand cards")
+    public void testAddDrawnCardsToHandCards(){
+        List <Card> handCards = new ArrayList<>(Arrays.asList(new Card(Suit.HEARTS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS)));
+        aiPlayer.setHandCards(handCards);
+
+        aiService.addDrawnCards(aiPlayer, Arrays.asList(new Card(Suit.SPADES, Label.EIGHT)));
+
+        assertEquals(3, aiPlayer.getHandCards().size());
     }
 }

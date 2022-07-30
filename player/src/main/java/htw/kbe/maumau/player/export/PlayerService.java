@@ -10,8 +10,8 @@ public interface PlayerService {
 
     /**
      * initializes new players
-     * @param names - list of player names
-     * @param aiPlayers - number of virtual players
+     * @param names list of player names
+     * @param aiPlayers number of virtual players
      * @return list of players
      * @throws InvalidPlayerNameException when the name is empty, blanks only or longer then 15 symbols
      */
@@ -20,22 +20,22 @@ public interface PlayerService {
     /**
      * adds drawn card(s) to hand cards to given player and hand cards are sorted by suit (from black to red)
      * and label (from ASS to SEVEN).
-     * @param player - who gets drawn cards
-     * @param card - card that was drawn
+     * @param player who gets drawn cards
+     * @param cards card(s) that was drawn
      */
-    void addDrawnCards(Player player, List<Card> card);
+    void addDrawnCards(Player player, List<Card> cards);
 
     /**
      * removes card that was played from hand card of player
-     * @param player - player who played the given card
-     * @param card - played card to be removed
+     * @param player player who played the given card
+     * @param card played card to be removed
      */
     void removePlayedCard(Player player, Card card);
 
     /**
      * validates name
-     * @param name - that has to be validated
-     * @param names - list of names that is needed to check if names duplicate
+     * @param name that has to be validated
+     * @param names list of names that is needed to check if names duplicate
      * @throws InvalidPlayerNameException when String name is empty, has whitespaces, is too long or names duplicate
      */
     void validateName(String name, List<String> names) throws InvalidPlayerNameException;

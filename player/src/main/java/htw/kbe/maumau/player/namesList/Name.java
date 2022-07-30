@@ -1,4 +1,4 @@
-package htw.kbe.maumau.player;
+package htw.kbe.maumau.player.namesList;
 
 import java.util.Arrays;
 import java.util.List;

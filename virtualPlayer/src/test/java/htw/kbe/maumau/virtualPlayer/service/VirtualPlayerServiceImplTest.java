@@ -1,12 +1,10 @@
 package htw.kbe.maumau.virtualPlayer.service;
 
 import htw.kbe.maumau.card.export.Card;
-import htw.kbe.maumau.card.export.CardService;
 import htw.kbe.maumau.card.export.Label;
 import htw.kbe.maumau.card.export.Suit;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.rule.export.RulesService;
-import htw.kbe.maumau.virtualPlayer.fixtures.CardsFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,9 +26,6 @@ public class VirtualPlayerServiceImplTest {
 
     @InjectMocks
     private AIServiceImpl aiService;
-
-    @Mock
-    private CardService cardService;
 
     @Mock
     private RulesService rulesService;
@@ -89,6 +85,18 @@ public class VirtualPlayerServiceImplTest {
     }
 
     @Test
+    @DisplayName("should return null when no suits of hand cards matches suit wish")
+    public void testPlayValidCardWithGivenSuitWish1() {
+        List<Card> cards = Arrays.asList(new Card(Suit.SPADES, Label.JACK), new Card(Suit.HEARTS, Label.ASS));
+        aiPlayer.setHandCards(cards);
+        Card topCard = new Card(Suit.HEARTS, Label.JACK);
+        when(rulesService.isSuitWishValid(any(), any())).thenReturn(false, false);
+        when(rulesService.matchLabelOrSuit(any(), any())).thenReturn(false, false);
+
+        assertEquals(null, aiService.getPlayedCard(aiPlayer, topCard, Suit.DIAMONDS, 0));
+    }
+
+    @Test
     @DisplayName("should play card with label SEVEN when top card label is SEVEN too and draw counter is greater than 0")
     public void testMustPlaySeven() {
         List<Card> cards = Arrays.asList(new Card(Suit.SPADES, Label.ASS), new Card(Suit.CLUBS, Label.SEVEN));
@@ -121,7 +129,7 @@ public class VirtualPlayerServiceImplTest {
         List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS));
         aiPlayer.setHandCards(cards);
 
-        assertTrue(aiService.sayMau(aiPlayer));
+        assertTrue(aiService.saidMau(aiPlayer));
     }
 
     @Test
@@ -130,7 +138,7 @@ public class VirtualPlayerServiceImplTest {
         List<Card> cards = Arrays.asList(new Card(Suit.CLUBS, Label.SEVEN), new Card(Suit.SPADES, Label.ASS), new Card(Suit.SPADES, Label.KING));
         aiPlayer.setHandCards(cards);
 
-        assertFalse(aiService.sayMau(aiPlayer));
+        assertFalse(aiService.saidMau(aiPlayer));
     }
 
     @Test
@@ -140,5 +148,28 @@ public class VirtualPlayerServiceImplTest {
         aiPlayer.setHandCards(cards);
 
         assertEquals(Suit.CLUBS, aiService.getSuitWish(aiPlayer));
+    }
+
+    @Test
+    @DisplayName("should remove played card from hand cards")
+    public void testRemovePlayedCardFromHandCards(){
+        List <Card> handCards = new ArrayList<>(Arrays.asList(new Card(Suit.HEARTS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS)));
+        aiPlayer.setHandCards(handCards);
+
+        aiService.removePlayedCard(aiPlayer, new Card(Suit.HEARTS, Label.SEVEN));
+
+        assertEquals(1, aiPlayer.getHandCards().size());
+        assertEquals(Arrays.asList(new Card(Suit.CLUBS, Label.ASS)), aiPlayer.getHandCards());
+    }
+
+    @Test
+    @DisplayName("should add drawn cards to hand cards")
+    public void testAddDrawnCardsToHandCards(){
+        List <Card> handCards = new ArrayList<>(Arrays.asList(new Card(Suit.HEARTS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS)));
+        aiPlayer.setHandCards(handCards);
+
+        aiService.addDrawnCards(aiPlayer, Arrays.asList(new Card(Suit.SPADES, Label.EIGHT)));
+
+        assertEquals(3, aiPlayer.getHandCards().size());
     }
 }

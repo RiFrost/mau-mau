@@ -25,14 +25,12 @@ public class ViewServiceImpl implements ViewService {
         System.out.println(loadFromFile());
         System.out.println("\n\nHow many players will take part? Please choose a number from 2 to 4.");
         int number = (int) getChosenNumber(2, 4);
-//        System.out.printf("The game will start with %d players!\n", number);
         return number;
     }
 
     @Override
     public int getNumberOfAI(int totalNumPlayers) {
-        System.out.println(loadFromFile());
-        System.out.println("\n\nHow many AI players you would like to have?");
+        System.out.println("\nHow many AI players you would like to have?");
         int number = (int) getChosenNumber(0, totalNumPlayers - 1);
         System.out.printf("The game will start with %d players!\n", totalNumPlayers - number);
         return number;
@@ -54,7 +52,7 @@ public class ViewServiceImpl implements ViewService {
     public void showStartGameMessage(long id) {
         System.out.println("\nLet's begin!\n");
         System.out.printf("Your game ID is %d. Please write it down to load your game later.\n", id);
-        System.out.printf("After each round your game is saved automatically.\n");
+        System.out.printf("After each round your game is saved automatically.\n\n");
     }
 
     @Override
@@ -105,18 +103,23 @@ public class ViewServiceImpl implements ViewService {
     }
 
     @Override
+    public void showDirectionOfRotation(boolean isClockwise) {
+        System.out.printf("\nGame direction is now %s!\n", isClockwise ? "CLOCKWISE": "COUNTERCLOCKWISE");
+    }
+
+    @Override
     public void showDrawnCardMessage(Player player, int numberOfDrawnCards) {
         System.out.printf("\n%s got %d CARD from draw pile!\n", player.getName(), numberOfDrawnCards);
     }
 
     @Override
-    public void showAiPlayedCardMessage(Player player, Card card) {
-        System.out.printf("\n%s has played %s\n", player.getName(), card.toString());
+    public void showActivePlayer(Player player) {
+        System.out.printf("\nIt's %s turn!\n", player.getName());
     }
 
     @Override
-    public void showAiPlayedSaidMau(Player player) {
-        System.out.printf("\n%s has said mau\n", player.getName());
+    public void showPlayersMau(Player player) {
+        System.out.printf("\n%s has said 'MAU'!\n", player.getName());
     }
 
     @Override
@@ -156,7 +159,7 @@ public class ViewServiceImpl implements ViewService {
              BufferedReader buffer = new BufferedReader(in)) {
             instructions = buffer.lines().collect(Collectors.joining("\n"));
         } catch (Exception e) {
-            System.out.println("Game instructions could not be loaded");
+            System.out.println("Game instructions could not be loaded.");
         }
         return instructions;
     }

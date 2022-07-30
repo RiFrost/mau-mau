@@ -1,7 +1,7 @@
 package htw.kbe.maumau.player.service;
 
 import htw.kbe.maumau.card.export.Card;
-import htw.kbe.maumau.player.Name;
+import htw.kbe.maumau.player.namesList.Name;
 import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.exceptions.InvalidPlayerNameException;
 import htw.kbe.maumau.player.export.PlayerService;

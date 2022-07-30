@@ -15,6 +15,7 @@ import htw.kbe.maumau.player.export.Player;
 import htw.kbe.maumau.player.export.PlayerService;
 import htw.kbe.maumau.rule.exceptions.PlayedCardIsInvalidException;
 import htw.kbe.maumau.rule.export.RulesService;
+import htw.kbe.maumau.virtualPlayer.export.AIService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class GameServiceImpl implements GameService {
     private RulesService rulesService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private AIService aiService;
     @Autowired
     private GameDao gameDao;
 
@@ -55,10 +58,14 @@ public class GameServiceImpl implements GameService {
     @Override
     public void initialCardDealing(Game game) {
         Deck deck = game.getCardDeck();
-        List<Player> players = game.getPlayers();
-        for (Player player : players) {
-            playerService.addDrawnCards(player, deckService.initialCardDealing(deck));
-            logger.info("Player {} got 5 initial hand cards: {}", player.getName(), player.getHandCards());
+        for (Player player : game.getPlayers()) {
+            if (player.isAI()) {
+                aiService.addDrawnCards(player, deckService.initialCardDealing(deck));
+                logger.info("Player {} got 5 initial hand cards: {}", player.getName(), player.getHandCards());
+            } else {
+                playerService.addDrawnCards(player, deckService.initialCardDealing(deck));
+                logger.info("Player {} got 5 initial hand cards: {}", player.getName(), player.getHandCards());
+            }
         }
     }
 
@@ -98,8 +105,17 @@ public class GameServiceImpl implements GameService {
         Player activePlayer = game.getActivePlayer();
         logger.info("Player {} has to draw {} cards", activePlayer.getName(), numberOfDrawnCards);
         List<Card> drawCards = deckService.getCardsFromDrawPile(game.getCardDeck(), numberOfDrawnCards);
-        playerService.addDrawnCards(activePlayer, drawCards);
 
+        if (activePlayer.isAI()) {
+            aiService.addDrawnCards(activePlayer, drawCards);
+        } else {
+            playerService.addDrawnCards(activePlayer, drawCards);
+        }
+
+        resetDrawCounter(game);
+    }
+
+    private void resetDrawCounter(Game game) {
         if (game.getDrawCardsCounter() > 0) {
             game.setDrawCardsCounter(0);
             logger.info("draw counter is set to 0");
@@ -125,7 +141,13 @@ public class GameServiceImpl implements GameService {
         Card topCard = deck.getTopCard();
         rulesService.validateCard(card, topCard, game.getSuitWish(), game.getDrawCardsCounter());
         deckService.setCardToTopCard(deck, card);
-        playerService.removePlayedCard(game.getActivePlayer(), card);
+
+        if (game.getActivePlayer().isAI()) {
+            aiService.removePlayedCard(game.getActivePlayer(), card);
+        } else {
+            playerService.removePlayedCard(game.getActivePlayer(), card);
+        }
+
         logger.info("Card {} passed the validation", card);
         if (Objects.nonNull(game.getSuitWish())) {
             game.setSuitWish(null);
@@ -152,7 +174,7 @@ public class GameServiceImpl implements GameService {
         }
         if (rulesService.changeGameDirection(topCard)) {
             game.switchDirection();
-            logger.info("Direction is switched");
+            logger.info("Direction is switched to {}", game.isClockWise() ? "clockwise" : "counterclockwise");
         }
     }
 
@@ -182,7 +204,7 @@ public class GameServiceImpl implements GameService {
     public void saveGame(Game game) throws DaoException {
         try {
             gameDao.saveGame(game);
-        } catch(DaoException e) {
+        } catch (DaoException e) {
             logger.warn("Something went wrong when trying to save the Game."); // WIP
         }
     }
@@ -191,14 +213,14 @@ public class GameServiceImpl implements GameService {
     public void deleteGame(Game game) throws DaoException {
         try {
             gameDao.deleteGame(game);
-        } catch(DaoException e) {
+        } catch (DaoException e) {
             logger.warn("Something went wrong when trying to delete the Game.");
         }
     }
 
     @Override
     public boolean hasGame() throws DaoException {
-            return gameDao.findGame();
+        return gameDao.findGame();
     }
 
     @Override

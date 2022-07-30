@@ -79,6 +79,13 @@ public interface ViewService {
     boolean saidMau(Player player);
 
     /**
+     * shows the game direction when changed
+     *
+     * @param isClockwise true if direction is clockwise, false if counterclockwise
+     */
+    void showDirectionOfRotation(boolean isClockwise);
+
+    /**
      * lets the player know how many cards he has drawn
      *
      * @param player             player who is in turn
@@ -87,19 +94,18 @@ public interface ViewService {
     void showDrawnCardMessage(Player player, int numberOfDrawnCards);
 
     /**
-     * lets the player know which card was played by AI
+     * shows player name who is in turn
      *
      * @param player            player(AI) who is in turn
-     * @param card              card which was played
      */
-    void showAiPlayedCardMessage(Player player, Card card);
+    void showActivePlayer(Player player);
 
     /**
      * shows the player that AI has one card left and therefore said mau
      *
      * @param player            player(AI) who said mau
      */
-    void showAiPlayedSaidMau(Player player);
+    void showPlayersMau(Player player);
 
     /**
      * lets the player know want went wrong in the game

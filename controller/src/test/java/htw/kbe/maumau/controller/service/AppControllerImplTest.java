@@ -86,6 +86,7 @@ public class AppControllerImplTest {
         doNothing().when(gameService).saveGame(any());
 
         // gaming loop starts here
+        doNothing().when(viewService).showActivePlayer(any());
         when(gameService.mustPlayerDrawCards(any())).thenReturn(true, false, false);
 
         // Player 1 has to draw cards because of a SEVEN
@@ -100,6 +101,7 @@ public class AppControllerImplTest {
         when(viewService.getPlayedCard(any())).thenReturn(null, new Card(Suit.CLUBS, Label.KING));
         when(viewService.saidMau(any())).thenReturn(false);
         doNothing().when(gameService).validateCard(any(), any());
+        doNothing().when(viewService).showPlayersMau(any());
         when(gameService.isGameOver(any())).thenReturn(false, true);
         doNothing().when(viewService).showWinnerMessage(any());
         doNothing().when(gameService).deleteGame(any());
@@ -116,8 +118,11 @@ public class AppControllerImplTest {
         verify(playerService).createPlayers(argThat(names -> names.equals(playerNames)), anyInt());
         verify(gameService).initialCardDealing(argThat(g -> g.equals(game)));
         verify(viewService).showStartGameMessage(game.getId());
+        verify(viewService, times(3)).showActivePlayer(any());
         verify(viewService, times(3)).showTopCard(any());
         verify(gameService).createGame(argThat(playerList -> playerList.equals(game.getPlayers())));
+        verify(viewService).showPlayersMau(argThat(player -> player.getName().equals("Richard")));
+        verify(gameService).validateCard(argThat(card -> card.equals(new Card(Suit.CLUBS, Label.KING))), argThat(g -> g.equals(game)));
         verify(gameService, times(2)).applyCardRule(any());
         verify(gameService, times(3)).mustPlayerDrawCards(argThat(g -> g.equals(game)));
         verify(viewService, times(2)).showHandCards(any(), any());
@@ -172,6 +177,7 @@ public class AppControllerImplTest {
         when(gameService.getSavedGame(anyLong())).thenReturn(game);
 
         // gaming loop starts here
+        doNothing().when(viewService).showActivePlayer(any());
         doNothing().when(gameService).resetPlayersMau(any());
         when(gameService.mustPlayerDrawCards(any())).thenReturn(false, false);
         doNothing().when(viewService).showHandCards(any(), any());
@@ -200,6 +206,7 @@ public class AppControllerImplTest {
         verify(gameService).hasGame();
         verify(viewService).playerWantsToLoadGame();
         verify(viewService).getGameId();
+        verify(viewService, times(2)).showActivePlayer(any());
         verify(gameService).getSavedGame(longThat(id -> id == game.getId()));
         verify(viewService).showTopCard(any());
         verify(gameService, times(2)).applyCardRule(argThat(g -> g.equals(game)));

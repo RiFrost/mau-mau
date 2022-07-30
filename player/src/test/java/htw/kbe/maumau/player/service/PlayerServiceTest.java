@@ -28,7 +28,7 @@ public class PlayerServiceTest {
     public void setUp() {
         this.service = new PlayerServiceImpl();
         this.player = new Player("Jasmin");
-        this.handCards = new ArrayList<>(Arrays.asList(new Card(Suit.HEARTS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS))); // ADD FIXTURES
+        this.handCards = new ArrayList<>(Arrays.asList(new Card(Suit.HEARTS, Label.SEVEN), new Card(Suit.CLUBS, Label.ASS)));
     }
 
     @Test

@@ -89,9 +89,17 @@ public class AppControllerImpl implements AppController {
     }
 
     private void runGame(GameService gameService, ViewService viewService, CardService cardService, Game game) {
+        boolean isClockwise = game.isClockWise();
         while (true) {
+
+            if (game.isClockWise() != isClockwise) {
+                viewService.showDirectionOfRotation(game.isClockWise());
+                isClockwise = !isClockwise;
+            }
+
             logger.info("Current round: {}", game.getLapCounter());
             Player activePlayer = game.getActivePlayer();
+            viewService.showActivePlayer(activePlayer);
 
             if (activePlayer.getHandCards().size() > 1) {
                 gameService.resetPlayersMau(game);
@@ -105,7 +113,7 @@ public class AppControllerImpl implements AppController {
                     viewService.showTopCard(game.getCardDeck().getTopCard());
                 }
 
-                if(!activePlayer.isAI()) viewService.showHandCards(activePlayer, game.getSuitWish());
+                if (!activePlayer.isAI()) viewService.showHandCards(activePlayer, game.getSuitWish());
                 handlePlayersTurn(gameService, viewService, game, activePlayer);
 
                 if (gameService.isGameOver(game)) {
@@ -119,7 +127,6 @@ public class AppControllerImpl implements AppController {
                     gameService.setPlayersSuitWish(activePlayer.isAI() ? aiService.getSuitWish(activePlayer) : viewService.getChosenSuit(activePlayer, cardService.getSuits()), game);
                 }
             }
-
             gameService.switchToNextPlayer(game);
             game.addUpLapCounter();
             gameService.saveGame(game);
@@ -135,18 +142,17 @@ public class AppControllerImpl implements AppController {
                     handleDrawingCards(gameService, viewService, game, activePlayer);
                     break;
                 }
-                activePlayer.setSaidMau(activePlayer.isAI() ? aiService.sayMau(activePlayer) : viewService.saidMau(activePlayer));
+                if (activePlayer.isAI() ? aiService.saidMau(activePlayer) : viewService.saidMau(activePlayer)) {
+                    activePlayer.setSaidMau(true);
+                }
                 gameService.validateCard(playedCard, game);
                 gameService.applyCardRule(game);
-                if(activePlayer.isAI()) {
-                    viewService.showAiPlayedCardMessage(activePlayer, playedCard);
-                    if(activePlayer.saidMau()) viewService.showAiPlayedSaidMau(activePlayer);
-                }
+                if (activePlayer.saidMau()) viewService.showPlayersMau(activePlayer);
                 break;
 
             } catch (PlayedCardIsInvalidException e) {
-                    viewService.showErrorMessage(e.getMessage());
-                    logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
+                viewService.showErrorMessage(e.getMessage());
+                logger.info("Played card is not valid to play. Player has to choose another card or draw a card");
             }
         }
     }
@@ -166,6 +172,7 @@ public class AppControllerImpl implements AppController {
             int rdmNumber = new Random().nextInt(cardService.getSuits().size());
             gameService.setPlayersSuitWish(cardService.getSuits().get(rdmNumber), game);
         } else if (!game.isClockWise()) {
+            viewService.showDirectionOfRotation(game.isClockWise());
             gameService.switchToNextPlayer(game);
         } else if (game.getActivePlayer().mustSuspend()) {  // Here the active player must suspend not the next player!
             game.getActivePlayer().setMustSuspend(false);

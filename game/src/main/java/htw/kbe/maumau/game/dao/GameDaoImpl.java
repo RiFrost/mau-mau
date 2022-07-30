@@ -16,14 +16,9 @@ import java.util.Objects;
 public class GameDaoImpl implements GameDao {
 
     private EntityManagerFactory emf;
-    private EntityManager entityManager;
 
-    // Note: we have to instantiate in this way because of spring context in combination with tests
     @Autowired
-    GameDaoImpl(EntityManagerFactory emf) {
-        this.emf = Persistence.createEntityManagerFactory("MauMau");
-        this.entityManager = emf.createEntityManager();
-    }
+    private EntityManager entityManager;
 
     private static Logger logger = LogManager.getLogger(GameDaoImpl.class);
 
@@ -81,5 +76,10 @@ public class GameDaoImpl implements GameDao {
             logger.error("DaoException is thrown: {}", e.getMessage());
             throw new DaoException(e.getMessage());
         }
+    }
+
+    // Note: we have to instantiate in this way because of spring context in combination with tests (otherwise entity manager is null)
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 }

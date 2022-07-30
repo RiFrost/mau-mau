@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ViewServiceImplTest {
 
-
     private ViewService service;
 
     @BeforeEach

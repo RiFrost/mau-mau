@@ -25,11 +25,12 @@ public class GameDaoImplTest {
 
     private EntityTransaction tx = entityManager.getTransaction();
     private Game game;
-    private GameDao gameDao;
+    private GameDaoImpl gameDao;
 
     @BeforeEach
     public void init() {
-        this.gameDao = new GameDaoImpl(Persistence.createEntityManagerFactory("MauMau"));
+        this.gameDao = new GameDaoImpl();
+        this.gameDao.setEntityManager(entityManager);
         tx.begin();
         this.game = new Game(GameFixture.players(), GameFixture.deck());
         entityManager.persist(this.game);

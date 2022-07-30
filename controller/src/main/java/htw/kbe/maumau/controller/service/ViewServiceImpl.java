@@ -57,7 +57,7 @@ public class ViewServiceImpl implements ViewService {
 
     @Override
     public void showTopCard(Card topCard) {
-        System.out.printf("The top card is %s\n", topCard);
+        System.out.printf("\nThe top card is %s\n", topCard);
         System.out.println(getCardImage(topCard));
     }
 
@@ -66,7 +66,7 @@ public class ViewServiceImpl implements ViewService {
         int numberOfCard = 0;
 
         if (Objects.nonNull(suit)) {
-            System.out.printf("\nA suit wish is given. Please choose a card of %s\n", suit);
+            System.out.printf("\nA suit wish is given. Please choose a card of %s!\n", suit);
         }
 
         System.out.printf("\n%s, here are your hand cards:\n", player.getName());
@@ -100,6 +100,11 @@ public class ViewServiceImpl implements ViewService {
         System.out.printf("\n%s do you want to say 'mau'?\n", player.getName());
         System.out.println("1: YES\n2: NO");
         return getChosenNumber(1, 2) == 1;
+    }
+
+    @Override
+    public void showPlayedCard(Player player, Card card) {
+        System.out.printf("\n%s played %s!\n", player.getName(), card);
     }
 
     @Override

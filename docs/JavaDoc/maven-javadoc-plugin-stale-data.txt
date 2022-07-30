@@ -1,0 +1,82 @@
+@options
+@packages
+--class-path
+'/Users/rf/Desktop/htw/kba/mau-mau/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/game/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/card/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/deck/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/rule/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/player/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/JaCoCo/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/controller/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/gamePlay/target/classes:/Users/rf/Desktop/htw/kba/mau-mau/virtualPlayer/target/classes:/Users/rf/.m2/repository/org/springframework/spring-context/5.3.20/spring-context-5.3.20.jar:/Users/rf/.m2/repository/org/springframework/spring-aop/5.3.20/spring-aop-5.3.20.jar:/Users/rf/.m2/repository/org/springframework/spring-beans/5.3.20/spring-beans-5.3.20.jar:/Users/rf/.m2/repository/org/springframework/spring-core/5.3.20/spring-core-5.3.20.jar:/Users/rf/.m2/repository/org/springframework/spring-jcl/5.3.20/spring-jcl-5.3.20.jar:/Users/rf/.m2/repository/org/springframework/spring-expression/5.3.20/spring-expression-5.3.20.jar:/Users/rf/.m2/repository/net/bytebuddy/byte-buddy/1.12.9/byte-buddy-1.12.9.jar:/Users/rf/.m2/repository/org/apache/logging/log4j/log4j-api/2.17.2/log4j-api-2.17.2.jar:/Users/rf/.m2/repository/org/apache/logging/log4j/log4j-core/2.17.2/log4j-core-2.17.2.jar:/Users/rf/.m2/repository/org/hibernate/hibernate-entitymanager/5.6.1.Final/hibernate-entitymanager-5.6.1.Final.jar:/Users/rf/.m2/repository/org/jboss/logging/jboss-logging/3.4.2.Final/jboss-logging-3.4.2.Final.jar:/Users/rf/.m2/repository/org/hibernate/hibernate-core/5.6.1.Final/hibernate-core-5.6.1.Final.jar:/Users/rf/.m2/repository/antlr/antlr/2.7.7/antlr-2.7.7.jar:/Users/rf/.m2/repository/org/jboss/jandex/2.2.3.Final/jandex-2.2.3.Final.jar:/Users/rf/.m2/repository/com/fasterxml/classmate/1.5.1/classmate-1.5.1.jar:/Users/rf/.m2/repository/javax/activation/javax.activation-api/1.2.0/javax.activation-api-1.2.0.jar:/Users/rf/.m2/repository/javax/xml/bind/jaxb-api/2.3.1/jaxb-api-2.3.1.jar:/Users/rf/.m2/repository/org/glassfish/jaxb/jaxb-runtime/2.3.1/jaxb-runtime-2.3.1.jar:/Users/rf/.m2/repository/org/glassfish/jaxb/txw2/2.3.1/txw2-2.3.1.jar:/Users/rf/.m2/repository/com/sun/istack/istack-commons-runtime/3.0.7/istack-commons-runtime-3.0.7.jar:/Users/rf/.m2/repository/org/jvnet/staxex/stax-ex/1.8/stax-ex-1.8.jar:/Users/rf/.m2/repository/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar:/Users/rf/.m2/repository/org/hibernate/common/hibernate-commons-annotations/5.1.2.Final/hibernate-commons-annotations-5.1.2.Final.jar:/Users/rf/.m2/repository/org/jboss/spec/javax/transaction/jboss-transaction-api_1.2_spec/1.1.1.Final/jboss-transaction-api_1.2_spec-1.1.1.Final.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/ojdbc8/19.3.0.0/ojdbc8-19.3.0.0.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/ucp/19.3.0.0/ucp-19.3.0.0.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/oraclepki/19.3.0.0/oraclepki-19.3.0.0.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/osdt_cert/19.3.0.0/osdt_cert-19.3.0.0.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/osdt_core/19.3.0.0/osdt_core-19.3.0.0.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/simplefan/19.3.0.0/simplefan-19.3.0.0.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/ons/19.3.0.0/ons-19.3.0.0.jar:/Users/rf/.m2/repository/javax/persistence/javax.persistence-api/2.2/javax.persistence-api-2.2.jar:/Users/rf/.m2/repository/com/oracle/ojdbc/oraclepki/19.3.0.0/oraclepki-19.3.0.0.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/rf/Desktop/htw/kba/mau-mau/game/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/game/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/card/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/card/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/deck/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/deck/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/rule/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/rule/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/player/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/player/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/JaCoCo/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/JaCoCo/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/controller/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/controller/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/gamePlay/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/gamePlay/target/generated-sources/annotations:/Users/rf/Desktop/htw/kba/mau-mau/virtualPlayer/src/main/java:/Users/rf/Desktop/htw/kba/mau-mau/virtualPlayer/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2022. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'mau-mau 0.0.1-SNAPSHOT API'
+-use
+-version
+-windowtitle
+'mau-mau 0.0.1-SNAPSHOT API'
+htw.kbe.maumau.game.dao
+htw.kbe.maumau.game.exceptions
+htw.kbe.maumau.game.export
+htw.kbe.maumau.game.service
+htw.kbe.maumau.card.export
+htw.kbe.maumau.card.service
+htw.kbe.maumau.deck.exceptions
+htw.kbe.maumau.deck.export
+htw.kbe.maumau.deck.service
+htw.kbe.maumau.rule.exceptions
+htw.kbe.maumau.rule.export
+htw.kbe.maumau.rule.service
+htw.kbe.maumau.player.exceptions
+htw.kbe.maumau.player.namesList
+htw.kbe.maumau.player.export
+htw.kbe.maumau.player.service
+htw.kbe.maumau.controller.export
+htw.kbe.maumau.controller.service
+htw.kbe.app
+htw.kbe.config
+htw.kbe.maumau.virtualPlayer.export
+htw.kbe.maumau.virtualPlayer.service
+/Users/rf/Desktop/htw/kba/mau-mau/game/src/main/java = 1657527168405
+/Users/rf/Desktop/htw/kba/mau-mau/game/target/generated-sources/annotations = 1659133137789
+/Users/rf/Desktop/htw/kba/mau-mau/card/src/main/java = 1652653318561
+/Users/rf/Desktop/htw/kba/mau-mau/card/target/generated-sources/annotations = 1659133122115
+/Users/rf/Desktop/htw/kba/mau-mau/deck/src/main/java = 1652653318564
+/Users/rf/Desktop/htw/kba/mau-mau/deck/target/generated-sources/annotations = 1659133125981
+/Users/rf/Desktop/htw/kba/mau-mau/rule/src/main/java = 1652653318578
+/Users/rf/Desktop/htw/kba/mau-mau/rule/target/generated-sources/annotations = 1659133132255
+/Users/rf/Desktop/htw/kba/mau-mau/player/src/main/java = 1652653318574
+/Users/rf/Desktop/htw/kba/mau-mau/player/target/generated-sources/annotations = 1659133129778
+/Users/rf/Desktop/htw/kba/mau-mau/JaCoCo/src/main/java = 1653749279137
+/Users/rf/Desktop/htw/kba/mau-mau/JaCoCo/target/generated-sources/annotations = 1659186840377
+/Users/rf/Desktop/htw/kba/mau-mau/controller/src/main/java = 1654841755026
+/Users/rf/Desktop/htw/kba/mau-mau/controller/target/generated-sources/annotations = 1659186840113
+/Users/rf/Desktop/htw/kba/mau-mau/gamePlay/src/main/java = 1654841755035
+/Users/rf/Desktop/htw/kba/mau-mau/gamePlay/target/generated-sources/annotations = 1659186840393
+/Users/rf/Desktop/htw/kba/mau-mau/virtualPlayer/src/main/java = 1659185363519
+/Users/rf/Desktop/htw/kba/mau-mau/virtualPlayer/target/generated-sources/annotations = 1659133134556
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/tag-search-index.js = 1659186844946
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/overview-tree.html = 1659186844902
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/module-search-index.js = 1659186844943
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/index.html = 1659186844906
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/package-search-index.js = 1659186844944
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/jquery-ui.overrides.css = 1659186844996
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/serialized-form.html = 1659186844749
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/index-all.html = 1659186844977
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/allpackages-index.html = 1659186844942
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/member-search-index.js = 1659186844945
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/script.js = 1659186844983
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/stylesheet.css = 1659186844982
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/overview-summary.html = 1659186844978
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/help-doc.html = 1659186844981
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/element-list = 1659186844655
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/allclasses-index.html = 1659186844940
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/type-search-index.js = 1659186844944
+/Users/rf/Desktop/htw/kba/mau-mau/target/site/apidocs/search.js = 1659186844986

@@ -49,7 +49,7 @@ jobs:
         run: chmod +x ./mvnw
 
       - name: Build with Maven
-        run: ./mvnw -B -ntp package --file pom.xml
+        run: ./mvnw -B -ntp package -Dtest=!GameDaoImplTest -DfailIfNoTests=false --file pom.xml
 
       - name: Verify with Maven for Code-Coverage
         run: ./mvnw -ntp verify

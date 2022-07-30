@@ -83,6 +83,7 @@ public class AppControllerImplTest {
         doNothing().when(viewService).showTopCard(any());
         when(gameService.createGame(any())).thenReturn(game);
         doNothing().when(gameService).applyCardRule(any());
+        doNothing().when(viewService).showPlayedCard(any(), any());
         doNothing().when(gameService).saveGame(any());
 
         // gaming loop starts here
@@ -124,6 +125,7 @@ public class AppControllerImplTest {
         verify(viewService).showPlayersMau(argThat(player -> player.getName().equals("Richard")));
         verify(gameService).validateCard(argThat(card -> card.equals(new Card(Suit.CLUBS, Label.KING))), argThat(g -> g.equals(game)));
         verify(gameService, times(2)).applyCardRule(any());
+        verify(viewService).showPlayedCard(argThat(player -> player.getName().equals("Richard")), argThat(card -> card.equals(new Card(Suit.CLUBS, Label.KING))));
         verify(gameService, times(3)).mustPlayerDrawCards(argThat(g -> g.equals(game)));
         verify(viewService, times(2)).showHandCards(any(), any());
         verify(viewService, times(2)).showDrawnCardMessage(any(), anyInt());
@@ -192,6 +194,7 @@ public class AppControllerImplTest {
         when(gameService.isGameOver(any())).thenReturn(false, true);
         when(cardService.getSuits()).thenReturn(GameFixture.suits);
         doAnswer(a -> setAskForUserWish()).doNothing().when(gameService).applyCardRule(any());
+        doNothing().when(viewService).showPlayedCard(any(), any());
         when(viewService.getChosenSuit(any(), anyList())).thenReturn(Suit.CLUBS);
         doNothing().when(gameService).setPlayersSuitWish(any(), any());
         doAnswer(p -> setActivePlayer(1)).when(gameService).switchToNextPlayer(any());
@@ -210,6 +213,7 @@ public class AppControllerImplTest {
         verify(gameService).getSavedGame(longThat(id -> id == game.getId()));
         verify(viewService).showTopCard(any());
         verify(gameService, times(2)).applyCardRule(argThat(g -> g.equals(game)));
+        verify(viewService, times(2)).showPlayedCard(any(), any());
         verify(gameService).resetPlayersMau(argThat(g -> g.equals(game)));
         verify(gameService, times(2)).mustPlayerDrawCards(any());
         verify(viewService, times(2)).showHandCards(any(), any());

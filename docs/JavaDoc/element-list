@@ -14,9 +14,9 @@ htw.kbe.maumau.game.exceptions
 htw.kbe.maumau.game.export
 htw.kbe.maumau.game.fixtures
 htw.kbe.maumau.game.service
-htw.kbe.maumau.player
 htw.kbe.maumau.player.exceptions
 htw.kbe.maumau.player.export
+htw.kbe.maumau.player.namesList
 htw.kbe.maumau.player.service
 htw.kbe.maumau.rule.exceptions
 htw.kbe.maumau.rule.export

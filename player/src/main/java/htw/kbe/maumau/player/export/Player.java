@@ -3,12 +3,11 @@ package htw.kbe.maumau.player.export;
 import htw.kbe.maumau.card.export.Card;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlAccessorOrder;
 import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Table(name = "player")
-public class Player {
+public class Player implements Comparable<Player> {
 
     @Id
     @GeneratedValue
@@ -95,4 +94,8 @@ public class Player {
         return name;
     }
 
+    @Override
+    public int compareTo(Player o) {
+        return this.name.compareToIgnoreCase(o.name);
+    }
 }

@@ -93,6 +93,7 @@ public class AppControllerImpl implements AppController {
             boolean isClockwise = game.isClockWise();
             logger.info("Current round: {}", game.getLapCounter());
             Player activePlayer = game.getActivePlayer();
+            viewService.showActivePlayer(activePlayer);
 
             if (activePlayer.getHandCards().size() > 1) {
                 gameService.resetPlayersMau(game);
@@ -143,7 +144,6 @@ public class AppControllerImpl implements AppController {
                 }
                 gameService.validateCard(playedCard, game);
                 gameService.applyCardRule(game);
-                if (activePlayer.isAI()) viewService.showAiPlayedCardMessage(activePlayer, playedCard);
                 if (activePlayer.saidMau()) viewService.showPlayersMau(activePlayer);
                 break;
 

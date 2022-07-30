@@ -113,8 +113,8 @@ public class ViewServiceImpl implements ViewService {
     }
 
     @Override
-    public void showAiPlayedCardMessage(Player player, Card card) {
-        System.out.printf("\n%s has played %s!\n", player.getName(), card.toString());
+    public void showActivePlayer(Player player) {
+        System.out.printf("\nIt's %s turn!\n", player.getName());
     }
 
     @Override

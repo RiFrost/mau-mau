@@ -5,13 +5,11 @@ import htw.kbe.maumau.game.export.Game;
 import htw.kbe.maumau.game.fixtures.GameFixture;
 import htw.kbe.maumau.player.export.Player;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
